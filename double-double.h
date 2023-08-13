@@ -20,15 +20,17 @@
 
 #pragma once
 
-#include <stdio.h>
+#include <cstdio>
 #include <limits>
 #include <cmath>
 #include <iostream>
+#include <algorithm>
+#include <iomanip>
 
 template <class T>
 class Double {
 
-    constexpr static bool useFma = true;
+    constexpr static bool useFma = false;
 
     T x, y;
 
@@ -43,6 +45,31 @@ public:
     Double<T>(T x, T y) noexcept : x(x), y(y) { }
     Double<T>(const Double<T>& other) noexcept : Double<T>() { x = other.x; y = other.y; }
     Double<T>(Double<T>&& other) noexcept : Double<T>() { swap(*this, other); }
+
+    Double<T>(const std::string &s) noexcept : Double<T>()
+    {
+        Double<T> l, r;
+        bool neg = false;
+
+        std::string copy(s);
+
+        for (auto &ch : copy) {
+
+            if (ch == '-') neg = !neg;
+            if (ch == '.') break;
+            if (ch >= '0' && ch <= '9') l = l * 10 + (ch - '0');
+        }
+
+        if (auto pos = copy.find("."); pos != std::string::npos) {
+
+            std::reverse(copy.begin() + pos + 1, copy.end());
+            for (auto &ch : copy) {
+
+                if (ch >= '0' && ch <= '9') r = (r + (ch - '0')) / 10;
+            }
+        }
+        *this = neg ? -(l + r) : (l + r);
+    }
 
     friend void swap(Double<T>& first, Double<T>& second) noexcept
     {
@@ -61,10 +88,9 @@ public:
     // Constants
     //
 
-    // TODO: How can we treat T properly here?
-    Double<T> e() const {
-        return { (T)3.141592653589793, (T)1.2246467991473532e-16 };
-    }
+    static const Double<T> e;
+    static const Double<T> ln2;
+    static const Double<T> pi;
 
 
     //
@@ -92,6 +118,37 @@ public:
     long double asLongDouble() const
     {
         return (long double)x + (long double)y;
+    }
+    std::string asString(int digits) const
+    {
+        std::string result;
+
+        // Split number l.r into pre-decimal and fractional part
+        Double<T> l;
+        Double<T> r = modf(&l);
+
+        // std::cout << "left: " << l << " right: " << r << std::endl;
+
+        for (int i = 0; i < 100; i++) {
+
+            Double<T> ii;
+            if (l.abs() < 1) break;
+            l /= 10;
+            ii = l.modf(&l);
+            result = std::to_string(int(std::round(ii.asDouble() * 10))) + result;
+        }
+
+        result += '.';
+        for (int i = 0; i < digits; i++) {
+
+            Double<T> ii;
+            r *= 10;
+            r = r.modf(&ii);
+            // std::cout << "ii = " << ii << std::endl;
+            result = result + std::to_string(int(ii.asDouble()));
+        }
+
+        return result;
     }
 
 
@@ -129,12 +186,6 @@ public:
         return !(*this < rhs);
     }
 
-    /*
-    operator bool() const
-    {
-        return x && y;
-    }
-    */
 
     //
     // Calculating
@@ -198,7 +249,7 @@ public:
     Double<T> &operator+=(const Double<T> &rhs)
     {
         auto sum = twoSum(x, rhs.x);
-        sum.y = y + rhs.y;
+        sum.y += y + rhs.y;
         *this = quickTwoSum(sum.x, sum.y);
         return *this;
     }
@@ -261,6 +312,11 @@ public:
         return result;
     }
 
+    Double<T> abs() const
+    {
+        return *this < 0 ? -*this : *this;
+    }
+
     Double<T> pow(const Double<T> &rhs) const
     {
         return exp(log() * rhs);
@@ -313,6 +369,17 @@ public:
 
         return r;
     }
+
+    Double<T> modf(Double<T> *iptr) const
+    {
+        T ix, iy;
+
+        auto fx = std::modf(x, &ix);
+        auto fy = std::modf(y, &iy);
+
+        *iptr = Double<T>(ix, iy);
+        return Double<T>(fx, fy);
+    }
 };
 
 template <class T>
@@ -328,13 +395,24 @@ std::ostream& operator<<(std::ostream& os, const Double<T>& obj)
 template <class T>
 std::istream& operator>>(std::istream& is, Double<T>& obj)
 {
-    // read obj from stream
+    char c;
+    while(is >> c) {
 
-    // if( /* no valid object of T found in stream */ )
-    //  is.setstate(std::ios::failbit);
+        printf("c = %c\n", c); 
+    }
+
+    // read obj from stream
 
     return is;
 }
 
-typedef Double<double> doubledouble; 
+typedef Double<float> doublefloat;
+typedef Double<double> doubledouble;
 typedef Double<long double> longdoubledouble;
+
+template <class T> inline const Double<T>
+Double<T>::e  ("2.71828182 84590452 35360287 47135266 24977572 47093699 95957496 69676277");
+template <class T> inline const Double<T>
+Double<T>::ln2("0.69314718 05599453 09417232 12145817 65680755 00134360 25525412 06800195");
+template <class T> inline const Double<T>
+Double<T>::pi ("3.14159265 35897932 38462643 38327950 28841971 69399375 10582097 49445923");

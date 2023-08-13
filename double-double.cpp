@@ -6,4 +6,3 @@
 //
 
 #include "double-double.h"
-

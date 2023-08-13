@@ -11,6 +11,7 @@
 		5051DEF02A876D1D00EED9D7 /* double-double.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5051DEEE2A876D1D00EED9D7 /* double-double.cpp */; };
 		5051DEF62A8785D800EED9D7 /* comparison.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5051DEF52A8785D800EED9D7 /* comparison.cpp */; };
 		5051DEF72A87864000EED9D7 /* arithmetic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5051DEF22A876E8300EED9D7 /* arithmetic.cpp */; };
+		5051DEF92A8901E700EED9D7 /* parsing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5051DEF82A8901E700EED9D7 /* parsing.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -35,6 +36,7 @@
 		5051DEF32A87738C00EED9D7 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		5051DEF42A877BD400EED9D7 /* doctest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = doctest.h; sourceTree = "<group>"; };
 		5051DEF52A8785D800EED9D7 /* comparison.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = comparison.cpp; sourceTree = "<group>"; };
+		5051DEF82A8901E700EED9D7 /* parsing.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = parsing.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,6 +77,7 @@
 				5051DEE72A876C4800EED9D7 /* main.cpp */,
 				5051DEF22A876E8300EED9D7 /* arithmetic.cpp */,
 				5051DEF52A8785D800EED9D7 /* comparison.cpp */,
+				5051DEF82A8901E700EED9D7 /* parsing.cpp */,
 			);
 			path = unittests;
 			sourceTree = "<group>";
@@ -137,6 +140,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5051DEE82A876C4800EED9D7 /* main.cpp in Sources */,
+				5051DEF92A8901E700EED9D7 /* parsing.cpp in Sources */,
 				5051DEF72A87864000EED9D7 /* arithmetic.cpp in Sources */,
 				5051DEF62A8785D800EED9D7 /* comparison.cpp in Sources */,
 				5051DEF02A876D1D00EED9D7 /* double-double.cpp in Sources */,

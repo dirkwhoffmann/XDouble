@@ -23,6 +23,7 @@
 #include <cstdio>
 #include <limits>
 #include <cmath>
+#include <cfenv>
 #include <iostream>
 #include <algorithm>
 #include <iomanip>
@@ -37,7 +38,7 @@ class Double {
 public:
 
     //
-    // Constructing
+    // Constructors
     //
 
     Double<T>() noexcept : x(0), y(0) { }
@@ -71,16 +72,18 @@ public:
         *this = neg ? -(l + r) : (l + r);
     }
 
-    friend void swap(Double<T>& first, Double<T>& second) noexcept
-    {
-        std::swap(first.x, second.x);
-        std::swap(first.y, second.y);
-    }
-
     Double<T>& operator=(Double<T> rhs)
     {
         swap(*this, rhs);
         return *this;
+    }
+
+private:
+
+    friend void swap(Double<T>& first, Double<T>& second) noexcept
+    {
+        std::swap(first.x, second.x);
+        std::swap(first.y, second.y);
     }
 
 
@@ -88,10 +91,29 @@ public:
     // Constants
     //
 
+public:
+
+    // DEPRECATED
     static const Double<T> e;
     static const Double<T> ln2;
     static const Double<T> ln10;
     static const Double<T> pi;
+
+    static const Double<T> e_v;
+    static const Double<T> log2e_v;
+    static const Double<T> log10e_v;
+    static const Double<T> pi_v;
+    static const Double<T> inv_pi_v;
+    static const Double<T> inv_sqrtpi_v;
+    static const Double<T> ln2_v;
+    static const Double<T> ln10_v;
+    static const Double<T> sqrt2_v;
+    static const Double<T> sqrt3_v;
+    static const Double<T> inv_sqrt3_v;
+    static const Double<T> egamma_v;
+    static const Double<T> phi_v;
+
+    static const Double<T> nan;
 
 
     //
@@ -100,18 +122,6 @@ public:
 
     T getX() const { return x; }
     T getY() const { return y; }
-
-
-    //
-    // Analyzers
-    //
-
-    bool signbit() const { return x < 0.0; }
-
-    bool is_zero() const { return (x == 0.0); }
-    bool is_one() const { return x == 1.0 && y == 0.0; }
-    bool is_positive() const {  return x > 0.0; }
-    bool is_negative() const {  return x < 0.0; }
 
 
     //
@@ -159,7 +169,7 @@ public:
 
 
     //
-    // Comparison functions
+    // Comparison operators
     //
 
     bool operator==(const Double<T>& rhs) const
@@ -318,6 +328,26 @@ public:
         return result;
     }
 
+    void operator++()
+    {
+        *this += 1.0;
+    }
+
+    void operator++(int)
+    {
+        *this += 1.0;
+    }
+
+    void operator--()
+    {
+        *this -= 1.0;
+    }
+
+    void operator--(int)
+    {
+        *this -= 1.0;
+    }
+
 
     //
     // Trigonometric functions
@@ -352,7 +382,21 @@ public:
                     23465490048000) * w + 154872234316800) * w -
                   647647525324800) * w + 1295295050649600;
 
-        return e().power(n) * (u / v);
+        return e.power(n) * (u / v);
+    }
+
+    Double<T> frexp(int *exp) const
+    {
+        auto r = std::frexp(x, exp);
+        auto e = y.ldexp(-(*exp));
+
+        return Double<T>(r, e);
+    }
+
+    Double<T> frexp10(int *exp) const
+    {
+        *exp = is_zero() ? 0 : 1 + int(fabs().log10().floor());
+        return pow(static_cast<Double<T>>(10.0), -(*exp));
     }
 
     Double<T> ldexp(int exp) const
@@ -369,15 +413,28 @@ public:
         return r;
     }
 
+    Double<T> log10() const
+    {
+        return log() / ln10_v;
+    }
+
     Double<T> modf(Double<T> *iptr) const
     {
-        T ix, iy;
+        int save_round = std::fegetround();
+        std::fesetround(FE_TOWARDZERO);
+        *iptr = nearbyint();
+        std::fesetround(save_round);
+        return std::copysign(isinf() ? 0.0 : (*this) - (*iptr), (*this));
+    }
 
-        auto fx = std::modf(x, &ix);
-        auto fy = std::modf(y, &iy);
+    Double<T> exp2() const
+    {
+        return ((*this) * ln2_v).exp();
+    }
 
-        *iptr = Double<T>(ix, iy);
-        return Double<T>(fx, fy);
+    Double<T> log2() const
+    {
+        return log() * log2e_v;
     }
 
 
@@ -385,12 +442,7 @@ public:
     // Power functions
     //
 
-    Double<T> pow(const Double<T> &rhs) const
-    {
-        return exp(log() * rhs);
-    }
-
-    Double<T> power(int n) const
+    Double<T> pow(int n) const
     {
         Double<T> result = 1;
         auto b = *this;
@@ -403,6 +455,33 @@ public:
 
         return n < 0 ? 1.0 / result : result;
     }
+
+    Double<T> pow(const Double<T> &rhs) const
+    {
+        return exp(log() * rhs);
+    }
+
+    Double<T> sqrt() const
+    {
+        if (is_zero()) return 0.0;
+        if (is_negative()) return nan;
+
+        auto r = Double<T>(1.0) / std::sqrt(x);
+        auto h = mul_pwr2((*this), 0.5);
+
+        r += ((0.5 - h * sqr(r)) * r);
+        r += ((0.5 - h * sqr(r)) * r);
+        r += ((0.5 - h * sqr(r)) * r);
+
+        // TODO
+    }
+
+
+    //
+    // Error and gamma functions
+    //
+
+    // Not implemented
 
 
     //
@@ -439,19 +518,50 @@ public:
         }
     }
 
+    //
+    // Floating-point manipulation functions
+    //
+
+    Double<T> copySign(const Double<T> y) const
+    {
+        return (y.signbit()) ? -(*this) : (*this);
+    }
+
+
+    //
+    // Minimum, maximum, difference functions
+    //
+
+    Double<T> fdim(const Double<T> y) const
+    {
+        return ((*this) > y) ? (*this) - y : Double<T>();
+    }
+
+    Double<T> fmax(const Double<T> y) const
+    {
+        if (isnan()) return y;
+        if (y.isnan()) return *this;
+        return *this > y : *this : y;
+    }
+
+    Double<T> fmin(const Double<T> y) const
+    {
+        return y.fmax(*this);
+    }
+
 
     //
     // Other functions
     //
 
-    Double<T> abs() const
+    Double<T> fabs() const
     {
         return is_negative() ? -(*this) : (*this);
     }
 
-    Double<T> fabs() const
+    Double<T> abs() const
     {
-        return abs();
+        return fabs();
     }
 
     Double<T> fma(const Double<T> &y, const Double<T> &z) const
@@ -459,7 +569,7 @@ public:
         return (*this) * y + z;
     }
 
-    Double<T> nearbyInt() const
+    Double<T> nearbyint() const
     {
         T hi = std::nearbyint(x);
 
@@ -476,6 +586,22 @@ public:
             return Double<T>(hi);
         }
     }
+
+
+    //
+    // Classification functions
+    //
+
+    bool isfinite() const { return std::isfinite(x); }
+    bool isinf() const { return std::isinf(x); }
+    bool isnan() const { return std::isnan(x); }
+    bool isnormal() const { return std::isnormal(x); }
+    bool signbit() const { return x < 0.0; }
+
+    bool is_zero() const { return (x == 0.0); }
+    bool is_one() const { return x == 1.0 && y == 0.0; }
+    bool is_positive() const {  return x > 0.0; }
+    bool is_negative() const {  return x < 0.0; }
 };
 
 template <class T>
@@ -500,3 +626,9 @@ template <class T> inline const Double<T>
 Double<T>::ln10("2.30258509 29940456 84017991 45468436 42076011 01488628 77297603 33279010");
 template <class T> inline const Double<T>
 Double<T>::pi  ("3.14159265 35897932 38462643 38327950 28841971 69399375 10582097 49445923");
+
+template <class T> inline const Double<T>
+Double<T>::ln10_v  ("2.3025 85092994 04568401 79914546 84364207 60110148 86287729 76033328");
+
+template <class T> inline const Double<T>
+Double<T>::nan = Double<T>(std::numeric_limits<double>::quiet_NaN());

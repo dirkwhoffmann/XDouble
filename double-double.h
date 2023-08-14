@@ -16,6 +16,9 @@
  *
  *   double-double Python library by Juraj Sukop:
  *   https://github.com/sukop/doubledouble/tree/master
+ *
+ *   Fork of QD (2.3.17) by scibuilder:
+ *   https://github.com/scibuilder/QD
  */
 
 #pragma once
@@ -113,7 +116,7 @@ public:
     static const Double<T> egamma_v;
     static const Double<T> phi_v;
 
-    static const Double<T> nan;
+    // static const Double<T> nan;
 
 
     //
@@ -143,8 +146,6 @@ public:
         Double<T> l;
         Double<T> r = modf(&l);
 
-        // std::cout << "left: " << l << " right: " << r << std::endl;
-
         for (int i = 0; i < 100; i++) {
 
             Double<T> ii;
@@ -160,7 +161,6 @@ public:
             Double<T> ii;
             r *= 10;
             r = r.modf(&ii);
-            // std::cout << "ii = " << ii << std::endl;
             result = result + std::to_string(int((double)ii));
         }
 
@@ -420,11 +420,11 @@ public:
 
     Double<T> modf(Double<T> *iptr) const
     {
-        int save_round = std::fegetround();
-        std::fesetround(FE_TOWARDZERO);
-        *iptr = nearbyint();
-        std::fesetround(save_round);
-        return std::copysign(isinf() ? 0.0 : (*this) - (*iptr), (*this));
+        auto nearby = nearbyint(FE_TOWARDZERO);
+        auto result = (isinf() ? Double<T>(0.0) : *this - nearby).copysign(*this);
+
+        *iptr = nearby;
+        return result;
     }
 
     Double<T> exp2() const
@@ -461,19 +461,23 @@ public:
         return exp(log() * rhs);
     }
 
+    Double<T> sqr() const
+    {
+        return (*this) * (*this);
+    }
+
     Double<T> sqrt() const
     {
         if (is_zero()) return 0.0;
         if (is_negative()) return nan;
 
-        auto r = Double<T>(1.0) / std::sqrt(x);
-        auto h = mul_pwr2((*this), 0.5);
+        auto r = Double<T>(1.0) / Double<T>(std::sqrt(x));
+        auto h = *this * Double<T>(0.5);
 
-        r += ((0.5 - h * sqr(r)) * r);
-        r += ((0.5 - h * sqr(r)) * r);
-        r += ((0.5 - h * sqr(r)) * r);
-
-        // TODO
+        r += ((0.5 - h * r.sqr()) * r);
+        r += ((0.5 - h * r.sqr()) * r);
+        r += ((0.5 - h * r.sqr()) * r);
+        return r;
     }
 
 
@@ -518,13 +522,98 @@ public:
         }
     }
 
+    Double<T> fmod(Double<T> denom) const
+    {
+        Double<T> tquot = (*this / denom).trunc();
+        return (*this) - tquot * denom;
+    }
+
+    Double<T> trunc() const
+    {
+        return is_negative() ? ceil() : floor();
+    }
+
+    Double<T> round() const
+    {
+        return (*this + Double<T>(0.5)).floor();
+    }
+
+    long lround() const
+    {
+        return (long)round();
+    }
+
+    long long llround() const
+    {
+        return (long long)round();
+    }
+
+    Double<T> rint() const
+    {
+        switch (fegetround()) {
+
+            case FE_DOWNWARD:   return floor();
+            case FE_TONEAREST:  return round();
+            case FE_TOWARDZERO: return trunc();
+            case FE_UPWARD:     return ceil();
+
+            default:
+                assert(false);
+                return 0;
+        }
+    }
+
+    long lrint() const
+    {
+        return (long)rint();
+    }
+
+    long long llrint() const
+    {
+        return (long long)rint();
+    }
+
+    Double<T> nearbyint() const
+    {
+        T hi = std::nearbyint(x);
+
+        if (hi == x) {
+
+            // Upper part is an integer
+            T lo = std::nearbyint(y);
+            return quickTwoSum(hi, lo);
+
+        } else {
+
+            // Upper part is not an integer
+            if (std::abs(hi - x) == 0.5 && y < 0.0) hi -= 1.0;
+            return Double<T>(hi);
+        }
+    }
+
+    Double<T> nearbyint(int mode) const
+    {
+        int save_round = std::fegetround();
+        std::fesetround(mode);
+        auto result = nearbyint();
+        std::fesetround(save_round);
+
+        return result;
+    }
+
+
     //
     // Floating-point manipulation functions
     //
 
-    Double<T> copySign(const Double<T> y) const
+    Double<T> copysign(const Double<T> y) const
     {
         return (y.signbit()) ? -(*this) : (*this);
+    }
+
+    Double<T> nan() const
+    {
+        return std::numeric_limits<double>::quiet_NaN();
     }
 
 
@@ -541,7 +630,7 @@ public:
     {
         if (isnan()) return y;
         if (y.isnan()) return *this;
-        return *this > y : *this : y;
+        return *this > y ? *this : y;
     }
 
     Double<T> fmin(const Double<T> y) const
@@ -567,24 +656,6 @@ public:
     Double<T> fma(const Double<T> &y, const Double<T> &z) const
     {
         return (*this) * y + z;
-    }
-
-    Double<T> nearbyint() const
-    {
-        T hi = std::nearbyint(x);
-
-        if (hi == x) {
-
-            // Upper part is an integer
-            T lo = std::nearbyint(y);
-            return quickTwoSum(hi, lo);
-
-        } else {
-
-            // Upper part is not an integer
-            if (std::abs(hi - x) == 0.5 && y < 0.0) hi -= 1.0;
-            return Double<T>(hi);
-        }
     }
 
 
@@ -629,6 +700,3 @@ Double<T>::pi  ("3.14159265 35897932 38462643 38327950 28841971 69399375 1058209
 
 template <class T> inline const Double<T>
 Double<T>::ln10_v  ("2.3025 85092994 04568401 79914546 84364207 60110148 86287729 76033328");
-
-template <class T> inline const Double<T>
-Double<T>::nan = Double<T>(std::numeric_limits<double>::quiet_NaN());

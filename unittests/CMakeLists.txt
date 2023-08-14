@@ -7,8 +7,9 @@ enable_testing()
 add_executable(unittester
 
     main.cpp
-    arithmetic.cpp
-    comparison.cpp
+    smoke_test.cpp
+    arithmetic_tests.cpp
+    comparison_tests.cpp
     parsing.cpp
     trigonometric.cpp
 )

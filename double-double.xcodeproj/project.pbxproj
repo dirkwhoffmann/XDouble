@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		503867542A8A1CEB0018498B /* trigonometric.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503867532A8A1CEB0018498B /* trigonometric.cpp */; };
+		503867562A8A42790018498B /* conversion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503867552A8A42790018498B /* conversion.cpp */; };
 		5051DEE82A876C4800EED9D7 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5051DEE72A876C4800EED9D7 /* main.cpp */; };
 		5051DEF02A876D1D00EED9D7 /* double-double.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5051DEEE2A876D1D00EED9D7 /* double-double.cpp */; };
 		5051DEF62A8785D800EED9D7 /* comparison.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5051DEF52A8785D800EED9D7 /* comparison.cpp */; };
@@ -27,6 +29,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		503867532A8A1CEB0018498B /* trigonometric.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = trigonometric.cpp; sourceTree = "<group>"; };
+		503867552A8A42790018498B /* conversion.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = conversion.cpp; sourceTree = "<group>"; };
 		5051DEE42A876C4800EED9D7 /* double-double */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "double-double"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5051DEE72A876C4800EED9D7 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		5051DEEE2A876D1D00EED9D7 /* double-double.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "double-double.cpp"; sourceTree = "<group>"; };
@@ -76,8 +80,10 @@
 				5051DEF42A877BD400EED9D7 /* doctest.h */,
 				5051DEE72A876C4800EED9D7 /* main.cpp */,
 				5051DEF22A876E8300EED9D7 /* arithmetic.cpp */,
+				503867552A8A42790018498B /* conversion.cpp */,
 				5051DEF52A8785D800EED9D7 /* comparison.cpp */,
 				5051DEF82A8901E700EED9D7 /* parsing.cpp */,
+				503867532A8A1CEB0018498B /* trigonometric.cpp */,
 			);
 			path = unittests;
 			sourceTree = "<group>";
@@ -139,7 +145,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				503867542A8A1CEB0018498B /* trigonometric.cpp in Sources */,
 				5051DEE82A876C4800EED9D7 /* main.cpp in Sources */,
+				503867562A8A42790018498B /* conversion.cpp in Sources */,
 				5051DEF92A8901E700EED9D7 /* parsing.cpp in Sources */,
 				5051DEF72A87864000EED9D7 /* arithmetic.cpp in Sources */,
 				5051DEF62A8785D800EED9D7 /* comparison.cpp in Sources */,

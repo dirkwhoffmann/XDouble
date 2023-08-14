@@ -10,6 +10,7 @@ add_executable(unittester
     arithmetic.cpp
     comparison.cpp
     parsing.cpp
+    trigonometric.cpp
 )
 target_include_directories(unittester PRIVATE ${CMAKE_SOURCE_DIR})
 target_link_libraries(unittester PRIVATE doubledouble)

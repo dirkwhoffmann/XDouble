@@ -12,7 +12,7 @@ TEST_CASE("Comparison") {
             
             for (int i = 0; i < 100; i++, x += .1, y -= .1) {
                 
-                CHECK((x < y) == (x.asDouble() < y.asDouble()));
+                CHECK((x < y) == ((double)x < (double)y));
             }
         }
         SUBCASE("long double") {
@@ -22,7 +22,7 @@ TEST_CASE("Comparison") {
 
             for (int i = 0; i < 100; i++, x += .1, y -= .1) {
 
-                CHECK((x < y) == (x.asLongDouble() < y.asLongDouble()));
+                CHECK((x < y) == ((long double)x < (long double)y));
             }
         }
     }
@@ -36,7 +36,7 @@ TEST_CASE("Comparison") {
 
             for (int i = 0; i < 100; i++, x += .1, y -= .1) {
 
-                CHECK((x <= y) == (x.asDouble() <= y.asDouble()));
+                CHECK((x <= y) == ((double)x <= (double)y));
             }
         }
         SUBCASE("long double") {
@@ -46,7 +46,7 @@ TEST_CASE("Comparison") {
 
             for (int i = 0; i < 100; i++, x += .1, y -= .1) {
 
-                CHECK((x <= y) == (x.asLongDouble() <= y.asLongDouble()));
+                CHECK((x <= y) == ((long double)x <= (long double)y));
             }
         }
     }

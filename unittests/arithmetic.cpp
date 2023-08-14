@@ -12,7 +12,7 @@ TEST_CASE("Basic arithmetic") {
 
             for (int i = 0; i < 100; i++, x += 1.0, y -= 0.1) {
 
-                CHECK((x + y).asDouble() == x.asDouble() + y.asDouble());
+                CHECK((double)(x + y) == (double)x + (double)y);
             }
         }
         SUBCASE("long double") {
@@ -22,7 +22,7 @@ TEST_CASE("Basic arithmetic") {
 
             for (int i = 0; i < 100; i++, x += 1.0, y -= 0.1) {
 
-                CHECK((x + y).asLongDouble() == x.asLongDouble() + y.asLongDouble());
+                CHECK((long double)(x + y) == (long double)x + (long double)y);
             }
         }
     }
@@ -35,7 +35,7 @@ TEST_CASE("Basic arithmetic") {
 
             for (int i = 0; i < 100; i++, x += 1.0, y -= 0.1) {
 
-                CHECK((x - y).asDouble() == x.asDouble() - y.asDouble());
+                CHECK((double)(x - y) == double(x) - double(y));
             }
         }
         SUBCASE("long double") {
@@ -45,7 +45,7 @@ TEST_CASE("Basic arithmetic") {
 
             for (int i = 0; i < 100; i++, x += 1.0, y -= 0.1) {
 
-                CHECK((x - y).asLongDouble() == x.asLongDouble() - y.asLongDouble());
+                CHECK((long double)(x - y) == (long double)x - (long double)y);
             }
         }
     }
@@ -58,7 +58,7 @@ TEST_CASE("Basic arithmetic") {
 
             for (int i = 0; i < 100; i++, x += 1.0, y -= 0.1) {
 
-                CHECK((x * y).asDouble() == x.asDouble() * y.asDouble());
+                CHECK((double)(x * y) == (double)x * (double)y);
             }
         }
         SUBCASE("long double") {
@@ -68,7 +68,7 @@ TEST_CASE("Basic arithmetic") {
 
             for (int i = 0; i < 100; i++, x += 1.0, y -= 0.1) {
 
-                CHECK((x * y).asLongDouble() == x.asLongDouble() * y.asLongDouble());
+                CHECK((long double)(x * y) == (long double)x * (long double)y);
             }
         }
     }
@@ -81,8 +81,8 @@ TEST_CASE("Basic arithmetic") {
 
             for (int i = 0; i < 100; i++, x += 1.0, y -= 0.1) {
 
-                if (y == 0) continue;
-                CHECK((x / y).asDouble() == x.asDouble() / y.asDouble());
+                if (y == (doubledouble)0) continue;
+                CHECK((double)(x / y) == (double)x / (double)y);
             }
         }
         SUBCASE("long double") {
@@ -92,8 +92,8 @@ TEST_CASE("Basic arithmetic") {
 
             for (int i = 0; i < 100; i++, x += 1.0, y -= 0.1) {
 
-                if (y == 0) continue;
-                CHECK((x / y).asLongDouble() == x.asLongDouble() / y.asLongDouble());
+                if (y == (longdoubledouble)0) continue;
+                CHECK((long double)(x / y) == (long double)x / (long double)y);
             }
         }
     }

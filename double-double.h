@@ -57,7 +57,7 @@ public:
 
             if (ch == '-') neg = !neg;
             if (ch == '.') break;
-            if (ch >= '0' && ch <= '9') l = l * 10 + (ch - '0');
+            if (ch >= '0' && ch <= '9') l = l * Double<T>(10) + Double<T>(ch - '0');
         }
 
         if (auto pos = copy.find("."); pos != std::string::npos) {
@@ -65,7 +65,7 @@ public:
             std::reverse(copy.begin() + pos + 1, copy.end());
             for (auto &ch : copy) {
 
-                if (ch >= '0' && ch <= '9') r = (r + (ch - '0')) / 10;
+                if (ch >= '0' && ch <= '9') r = (r + Double<T>(ch - '0')) / Double<T>(10);
             }
         }
         *this = neg ? -(l + r) : (l + r);
@@ -90,11 +90,12 @@ public:
 
     static const Double<T> e;
     static const Double<T> ln2;
+    static const Double<T> ln10;
     static const Double<T> pi;
 
 
     //
-    // Accessing
+    // Accessors
     //
 
     T getX() const { return x; }
@@ -102,26 +103,31 @@ public:
 
 
     //
-    // Converting
+    // Analyzers
     //
 
-    float asFloat() const
-    {
-        return (float)asLongDouble();
-    }
+    bool signbit() const { return x < 0.0; }
 
-    double asDouble() const
-    {
-        return (double)asLongDouble();
-    }
+    bool is_zero() const { return (x == 0.0); }
+    bool is_one() const { return x == 1.0 && y == 0.0; }
+    bool is_positive() const {  return x > 0.0; }
+    bool is_negative() const {  return x < 0.0; }
 
-    long double asLongDouble() const
-    {
-        return (long double)x + (long double)y;
-    }
-    std::string asString(int digits) const
+
+    //
+    // Cast operators and conversion functions
+    //
+
+    operator int() const { return static_cast<int>(static_cast<long double>(*this)); }
+    operator long() const { return static_cast<long>(static_cast<long double>(*this)); }
+    operator float() const { return static_cast<float>(static_cast<long double>(*this)); }
+    operator double() const { return static_cast<double>(static_cast<long double>(*this)); }
+    operator long double() const { return static_cast<long double>(x) + static_cast<long double>(y); }
+
+    std::string to_string(int digits) const
     {
         std::string result;
+
 
         // Split number l.r into pre-decimal and fractional part
         Double<T> l;
@@ -132,10 +138,10 @@ public:
         for (int i = 0; i < 100; i++) {
 
             Double<T> ii;
-            if (l.abs() < 1) break;
+            if (l.abs() < Double<T>(1)) break;
             l /= 10;
             ii = l.modf(&l);
-            result = std::to_string(int(std::round(ii.asDouble() * 10))) + result;
+            result = std::to_string(int(std::round((double)ii * 10))) + result;
         }
 
         result += '.';
@@ -145,7 +151,7 @@ public:
             r *= 10;
             r = r.modf(&ii);
             // std::cout << "ii = " << ii << std::endl;
-            result = result + std::to_string(int(ii.asDouble()));
+            result = result + std::to_string(int((double)ii));
         }
 
         return result;
@@ -153,7 +159,7 @@ public:
 
 
     //
-    // Comparing
+    // Comparison functions
     //
 
     bool operator==(const Double<T>& rhs) const
@@ -188,7 +194,7 @@ public:
 
 
     //
-    // Calculating
+    // Basic arithmetic functions
     //
 
     static Double<T> quickTwoSum(T a, T b) {
@@ -312,29 +318,17 @@ public:
         return result;
     }
 
-    Double<T> abs() const
-    {
-        return *this < 0 ? -*this : *this;
-    }
 
-    Double<T> pow(const Double<T> &rhs) const
-    {
-        return exp(log() * rhs);
-    }
+    //
+    // Trigonometric functions
+    //
 
-    Double<T> power(int n) const
-    {
-        Double<T> result = 1;
-        auto b = *this;
+    // Not implemented, yet
 
-        for (int i = std::abs(n); i; i >>= 1) {
 
-            if (i & 1) result *= b;
-            b *= b;
-        }
-
-        return n < 0 ? 1.0 / result : result;
-    }
+    //
+    // Exponential and logarithmic functions
+    //
 
     Double<T> exp() const
     {
@@ -361,6 +355,11 @@ public:
         return e().power(n) * (u / v);
     }
 
+    Double<T> ldexp(int exp) const
+    {
+        return Double<T>(std::ldexp(x, exp), std::ldexp(y, exp));
+    }
+
     Double<T> log() const
     {
         auto r = Double<T>(std::log(x));
@@ -380,6 +379,103 @@ public:
         *iptr = Double<T>(ix, iy);
         return Double<T>(fx, fy);
     }
+
+
+    //
+    // Power functions
+    //
+
+    Double<T> pow(const Double<T> &rhs) const
+    {
+        return exp(log() * rhs);
+    }
+
+    Double<T> power(int n) const
+    {
+        Double<T> result = 1;
+        auto b = *this;
+
+        for (int i = std::abs(n); i; i >>= 1) {
+
+            if (i & 1) result *= b;
+            b *= b;
+        }
+
+        return n < 0 ? 1.0 / result : result;
+    }
+
+
+    //
+    // Rounding and remainder functions
+    //
+
+    Double<T> ceil() const
+    {
+        T hi = std::ceil(x);
+
+        if (hi == x) {
+
+            T lo = std::ceil(y);
+            return quickTwoSum(hi, lo);
+
+        } else {
+
+            return Double<T>(hi);
+        }
+    }
+
+    Double<T> floor() const
+    {
+        T hi = std::floor(x);
+
+        if (hi == x) {
+
+            T lo = std::floor(y);
+            return quickTwoSum(hi, lo);
+
+        } else {
+
+            return Double<T>(hi);
+        }
+    }
+
+
+    //
+    // Other functions
+    //
+
+    Double<T> abs() const
+    {
+        return is_negative() ? -(*this) : (*this);
+    }
+
+    Double<T> fabs() const
+    {
+        return abs();
+    }
+
+    Double<T> fma(const Double<T> &y, const Double<T> &z) const
+    {
+        return (*this) * y + z;
+    }
+
+    Double<T> nearbyInt() const
+    {
+        T hi = std::nearbyint(x);
+
+        if (hi == x) {
+
+            // Upper part is an integer
+            T lo = std::nearbyint(y);
+            return quickTwoSum(hi, lo);
+
+        } else {
+
+            // Upper part is not an integer
+            if (std::abs(hi - x) == 0.5 && y < 0.0) hi -= 1.0;
+            return Double<T>(hi);
+        }
+    }
 };
 
 template <class T>
@@ -392,27 +488,15 @@ std::ostream& operator<<(std::ostream& os, const Double<T>& obj)
     return os;
 }
 
-template <class T>
-std::istream& operator>>(std::istream& is, Double<T>& obj)
-{
-    char c;
-    while(is >> c) {
-
-        printf("c = %c\n", c); 
-    }
-
-    // read obj from stream
-
-    return is;
-}
-
 typedef Double<float> doublefloat;
 typedef Double<double> doubledouble;
 typedef Double<long double> longdoubledouble;
 
 template <class T> inline const Double<T>
-Double<T>::e  ("2.71828182 84590452 35360287 47135266 24977572 47093699 95957496 69676277");
+Double<T>::e   ("2.71828182 84590452 35360287 47135266 24977572 47093699 95957496 69676277");
 template <class T> inline const Double<T>
-Double<T>::ln2("0.69314718 05599453 09417232 12145817 65680755 00134360 25525412 06800195");
+Double<T>::ln2 ("0.69314718 05599453 09417232 12145817 65680755 00134360 25525412 06800195");
 template <class T> inline const Double<T>
-Double<T>::pi ("3.14159265 35897932 38462643 38327950 28841971 69399375 10582097 49445923");
+Double<T>::ln10("2.30258509 29940456 84017991 45468436 42076011 01488628 77297603 33279010");
+template <class T> inline const Double<T>
+Double<T>::pi  ("3.14159265 35897932 38462643 38327950 28841971 69399375 10582097 49445923");

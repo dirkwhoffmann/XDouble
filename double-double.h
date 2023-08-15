@@ -542,9 +542,10 @@ public:
 
         if (hi == x) {
 
+            // Upper part is an integer
             T lo = std::ceil(y);
             return quickTwoSum(hi, lo);
-
+            
         } else {
 
             return Double<T>(hi);
@@ -557,6 +558,7 @@ public:
 
         if (hi == x) {
 
+            // Upper part is an integer
             T lo = std::floor(y);
             return quickTwoSum(hi, lo);
 
@@ -586,6 +588,26 @@ public:
         }
     }
 
+    Double<T> roundEven() const
+    {
+        if (is_negative()) {
+
+            auto v1 = *this - Double<T>(0.5);
+            auto v2 = v1.ceil();
+
+            if (v1 != v2) return v2;
+            return fmod(2.0) < -1 ? v2 : v2 + 1;
+
+        } else {
+
+            auto v1 = *this + Double<T>(0.5);
+            auto v2 = v1.floor();
+
+            if (v1 != v2) return v2;
+            return fmod(2.0) < 1 ? v2 - 1 : v2;
+        }
+    }
+
     long lround() const
     {
         return round().to_long();
@@ -598,40 +620,15 @@ public:
 
     Double<T> rint() const
     {
-        T hi = std::rint(x);
+        auto result = nearbyint();
 
-        if (hi == x) {
+        // TODO:
+        // The rint() functions do the same [as nearbyint], but will raise the
+        // inexact exception (FE_INEXACT, checkable via fetestexcept(3)) when
+        // the result differs in value from the argument.
 
-            // Upper part is an integer
-            T lo = std::rint(y);
-            return quickTwoSum(hi, lo);
-
-        } else {
-
-            // Upper part is not an integer
-            if (std::abs(hi - x) == 0.5 && y < 0.0) {
-                hi -= 1.0;
-            }
-            return Double<T>(hi);
-        }
+        return result;
     }
-
-    /*
-    Double<T> rint() const
-    {
-        switch (fegetround()) {
-
-            case FE_DOWNWARD:   return floor();
-            case FE_TONEAREST:  return round();
-            case FE_TOWARDZERO: return trunc();
-            case FE_UPWARD:     return ceil();
-
-            default:
-                assert(false);
-                return 0;
-        }
-    }
-    */
 
     long lrint() const
     {
@@ -645,6 +642,15 @@ public:
 
     Double<T> nearbyint() const
     {
+        switch (fegetround()) {
+
+            case FE_DOWNWARD:   return floor();
+            case FE_TONEAREST:  return roundEven();
+            case FE_TOWARDZERO: return trunc();
+            default:            return ceil();
+        }
+
+        /*
         T hi = std::nearbyint(x);
 
         if (hi == x) {
@@ -659,6 +665,7 @@ public:
             if (std::abs(hi - x) == 0.5 && y < 0.0) hi -= 1.0;
             return Double<T>(hi);
         }
+        */
     }
 
     Double<T> nearbyint(int mode) const

@@ -32,6 +32,7 @@
 		503867572A8AB0CA0018498B /* smoke_tests.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = smoke_tests.cpp; sourceTree = "<group>"; };
 		503867592A8B75B40018498B /* explog_tests.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = explog_tests.cpp; sourceTree = "<group>"; };
 		5038675B2A8BB7950018498B /* power_tests.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = power_tests.cpp; sourceTree = "<group>"; };
+		5038675D2A8BCF390018498B /* main.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = main.h; sourceTree = "<group>"; };
 		5051DEE42A876C4800EED9D7 /* double-double */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "double-double"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5051DEE72A876C4800EED9D7 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		5051DEEE2A876D1D00EED9D7 /* double-double.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "double-double.cpp"; sourceTree = "<group>"; };
@@ -78,6 +79,7 @@
 			children = (
 				5051DEF32A87738C00EED9D7 /* CMakeLists.txt */,
 				5051DEF42A877BD400EED9D7 /* doctest.h */,
+				5038675D2A8BCF390018498B /* main.h */,
 				5051DEE72A876C4800EED9D7 /* main.cpp */,
 				503867572A8AB0CA0018498B /* smoke_tests.cpp */,
 				5051DEF22A876E8300EED9D7 /* arithmetic_tests.cpp */,

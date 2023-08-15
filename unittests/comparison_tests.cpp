@@ -1,5 +1,4 @@
-#include "doctest.h"
-#include "double-double.h"
+#include "main.h"
 
 TEST_CASE("Comparison") {
 

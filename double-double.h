@@ -24,11 +24,12 @@
 #pragma once
 
 #include <cstdio>
-#include <limits>
+#include <cassert>
 #include <cmath>
 #include <cfenv>
-#include <iostream>
+#include <limits>
 #include <algorithm>
+#include <iostream>
 #include <iomanip>
 
 template <class T>
@@ -422,15 +423,16 @@ public:
     Double<T> frexp(int *exp) const
     {
         auto r = std::frexp(x, exp);
-        auto e = y.ldexp(-(*exp));
+        auto e = std::ldexp(y, -(*exp));
 
         return Double<T>(r, e);
     }
 
     Double<T> frexp10(int *exp) const
     {
-        *exp = is_zero() ? 0 : 1 + int(fabs().log10().floor());
-        return pow(static_cast<Double<T>>(10.0), -(*exp));
+        *exp = is_zero() ? 0 : 1 + (fabs().log10().floor().to_int());
+        std::cout << "frexp10 " << *this << " exp = " << *exp << " result = " << *this * Double<T>(10).pow(-(*exp)) << std::endl;
+        return *this * Double<T>(10).pow(-(*exp));
     }
 
     Double<T> ldexp(int exp) const

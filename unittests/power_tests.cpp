@@ -1,5 +1,4 @@
-#include "doctest.h"
-#include "double-double.h"
+#include "main.h"
 
 TEST_CASE("Power functions") {
 
@@ -9,9 +8,9 @@ TEST_CASE("Power functions") {
 
         SUBCASE("integer exponent") {
 
-            for (int i = 0; i < 100; i++) {
+            for (int i = 0; i < NUM_TESTS; i++) {
 
-                double b = (rand() % 128) - 64.0 + 1.0 / rand();
+                double b = rand_double();
                 int e = (rand() % 5) - 2;
 
                 CHECK(doubledouble(b).pow(e).to_float() == (float)std::pow(b,e));
@@ -19,10 +18,10 @@ TEST_CASE("Power functions") {
         }
         SUBCASE("fractional exponent") {
 
-            for (int i = 0; i < 100; i++) {
+            for (int i = 0; i < NUM_TESTS; i++) {
 
-                double b = (rand() % 128) + 1.0 / rand();
-                double e = (rand() % 5) - 2 + 1.0 / rand();
+                double b = rand_double_pos();
+                double e = rand_double();
 
                 CHECK(doubledouble(b).pow(doubledouble(e)).to_float() == (float)std::pow(b,e));
             }
@@ -33,9 +32,9 @@ TEST_CASE("Power functions") {
 
     SUBCASE("sqrt") {
 
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < NUM_TESTS; i++) {
 
-            double x = (rand() % 128) + 1.0 / rand();
+            double x = rand_double_pos();
             CHECK(doubledouble(x).sqrt().to_float() == (float)std::sqrt(x));
         }
 

@@ -1,41 +1,43 @@
-#include "doctest.h"
-#include "double-double.h"
+#include "main.h"
 
 TEST_CASE("Basic arithmetic") {
 
-    SUBCASE("Addition") {
+    srand(0);
 
-        for (double x = -50.0, y = 5.0; x <= 100.0; x += 1.0, y -= 0.1) {
+    SUBCASE("Plus") {
 
-            doubledouble dx(x), dy(y);
-            CHECK((dx + dy).to_float() == float(x + y));
+        for (int i = 0; i < NUM_TESTS; i++) {
+
+            auto x = rand_double(), y = rand_double();
+            CHECK((doubledouble(x) + doubledouble(y)).to_float() == float(x + y));
         }
     }
 
-    SUBCASE("Subtraction") {
+    SUBCASE("Minus") {
 
-        for (double x = -50.0, y = 5.0; x <= 100.0; x += 1.0, y -= 0.1) {
+        for (int i = 0; i < NUM_TESTS; i++) {
 
-            doubledouble dx(x), dy(y);
-            CHECK((dx - dy).to_float() == float(x - y));
+            auto x = rand_double(), y = rand_double();
+            CHECK((doubledouble(x) - doubledouble(y)).to_float() == float(x - y));
         }
     }
 
-    SUBCASE("Multiplication") {
+    SUBCASE("Mult") {
 
-        for (double x = -50.0, y = 5.0; x <= 100.0; x += 1.0, y -= 0.1) {
+        for (int i = 0; i < NUM_TESTS; i++) {
 
-            doubledouble dx(x), dy(y);
-            CHECK((dx * dy).to_float() == float(x * y));
+            auto x = rand_double(), y = rand_double();
+            CHECK((doubledouble(x) * doubledouble(y)).to_float() == float(x * y));
         }
     }
 
     SUBCASE("Division") {
 
-        for (double x = -50.0, y = 5.0; x <= 100.0; x += 1.0, y -= 0.1) {
+        for (int i = 0; i < NUM_TESTS; i++) {
 
-            doubledouble dx(x), dy(y);
-            CHECK((dx / dy).to_float() == float(x / y));
+            auto x = rand_double(), y = rand_double();
+            if (y == 0.0) continue;
+            CHECK((doubledouble(x) / doubledouble(y)).to_float() == float(x / y));
         }
     }
 

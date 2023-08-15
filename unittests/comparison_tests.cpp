@@ -22,35 +22,53 @@ TEST_CASE("Comparison") {
         for (int i = 0; p[i].x[0]; i++) {
             CHECK ((doubledouble(p[i].x) == doubledouble(p[i].y)) == p[i].eq);
         }
+        CHECK (!(doubledouble::nan() == doubledouble(0)));
+        CHECK (!(doubledouble(0)     == doubledouble::nan()));
+        CHECK (!(doubledouble::nan() == doubledouble::nan()));
     }
     SUBCASE("Unequal") {
 
         for (int i = 0; p[i].x[0]; i++) {
-            CHECK ((doubledouble(p[i].x) == doubledouble(p[i].y)) != p[i].neq);
+            CHECK ((doubledouble(p[i].x) != doubledouble(p[i].y)) == p[i].neq);
         }
+        CHECK (doubledouble::nan() != doubledouble(0));
+        CHECK (doubledouble(0)     != doubledouble::nan());
+        CHECK (doubledouble::nan() != doubledouble::nan());
     }
     SUBCASE("Less") {
 
         for (int i = 0; p[i].x[0]; i++) {
             CHECK ((doubledouble(p[i].x) < doubledouble(p[i].y)) == p[i].l);
         }
+        CHECK (!(doubledouble::nan() < doubledouble(0)));
+        CHECK (!(doubledouble(0)     < doubledouble::nan()));
+        CHECK (!(doubledouble::nan() < doubledouble::nan()));
     }
     SUBCASE("Greater") {
 
         for (int i = 0; p[i].x[0]; i++) {
             CHECK ((doubledouble(p[i].x) > doubledouble(p[i].y)) == p[i].g);
         }
+        CHECK (!(doubledouble::nan() > doubledouble(0)));
+        CHECK (!(doubledouble(0)     > doubledouble::nan()));
+        CHECK (!(doubledouble::nan() > doubledouble::nan()));
     }
     SUBCASE("Less or equal") {
 
         for (int i = 0; p[i].x[0]; i++) {
             CHECK ((doubledouble(p[i].x) <= doubledouble(p[i].y)) == p[i].le);
         }
+        CHECK (!(doubledouble::nan() <= doubledouble(0)));
+        CHECK (!(doubledouble(0)     <= doubledouble::nan()));
+        CHECK (!(doubledouble::nan() <= doubledouble::nan()));
     }
     SUBCASE("Greater or equal") {
 
         for (int i = 0; p[i].x[0]; i++) {
             CHECK ((doubledouble(p[i].x) >= doubledouble(p[i].y)) == p[i].ge);
         }
+        CHECK (!(doubledouble::nan() >= doubledouble(0)));
+        CHECK (!(doubledouble(0)     >= doubledouble::nan()));
+        CHECK (!(doubledouble::nan() >= doubledouble::nan()));
     }
 }

@@ -191,6 +191,7 @@ public:
 
     bool operator==(const Double<T>& rhs) const
     {
+        if (isnan() || rhs.isnan()) return false;
         return x == rhs.x && y == rhs.y;
     }
 
@@ -201,21 +202,25 @@ public:
 
     bool operator<(const Double<T>& rhs) const
     {
+        if (isnan() || rhs.isnan()) return false;
         return x < rhs.x || (x == rhs.x && y < rhs.y);
     }
 
     bool operator>(const Double<T>& rhs) const
     {
+        if (isnan() || rhs.isnan()) return false;
         return rhs < *this;
     }
 
     bool operator<=(const Double<T>& rhs) const
     {
+        if (isnan() || rhs.isnan()) return false;
         return !(*this > rhs);
     }
 
     bool operator>=(const Double<T>& rhs) const
     {
+        if (isnan() || rhs.isnan()) return false;
         return !(*this < rhs);
     }
 
@@ -296,6 +301,9 @@ public:
         return result;
     }
 
+    friend Double<T> operator+(double lhs, Double<T> rhs) { return Double<T>(lhs) + rhs; }
+    friend Double<T> operator+(Double<T> lhs, double rhs) { return lhs + Double<T>(rhs); }
+
     Double<T> &operator-=(const Double<T> &rhs)
     {
         *this += -rhs;
@@ -309,6 +317,9 @@ public:
 
         return result;
     }
+
+    friend Double<T> operator-(double lhs, Double<T> rhs) { return Double<T>(lhs) - rhs; }
+    friend Double<T> operator-(Double<T> lhs, double rhs) { return lhs - Double<T>(rhs); }
 
     Double<T> &operator*=(const Double<T> &rhs)
     {
@@ -327,6 +338,9 @@ public:
         return result;
     }
 
+    friend Double<T> operator*(double lhs, Double<T> rhs) { return Double<T>(lhs) * rhs; }
+    friend Double<T> operator*(Double<T> lhs, double rhs) { return lhs * Double<T>(rhs); }
+
     Double<T> &operator/=(const Double<T> &rhs)
     {
         auto r = x / rhs.x;
@@ -344,6 +358,9 @@ public:
 
         return result;
     }
+
+    friend Double<T> operator/(double lhs, Double<T> rhs) { return Double<T>(lhs) / rhs; }
+    friend Double<T> operator/(Double<T> lhs, double rhs) { return lhs / Double<T>(rhs); }
 
     void operator++()
     {
@@ -399,7 +416,7 @@ public:
                     23465490048000) * w + 154872234316800) * w -
                   647647525324800) * w + 1295295050649600;
 
-        return e.power(n) * (u / v);
+        return e.pow(n) * (u / v);
     }
 
     Double<T> frexp(int *exp) const
@@ -423,6 +440,9 @@ public:
 
     Double<T> log() const
     {
+        if (is_negative()) return nan();
+        if (is_zero()) return -inf();
+
         auto r = Double<T>(std::log(x));
         auto u = r.exp();
         r -= 2.0 * (u - *this) / (u + *this);
@@ -470,12 +490,12 @@ public:
             b *= b;
         }
 
-        return n < 0 ? 1.0 / result : result;
+        return n < 0 ? (1.0 / result) : result;
     }
 
     Double<T> pow(const Double<T> &rhs) const
     {
-        return exp(log() * rhs);
+        return (log() * rhs).exp();
     }
 
     Double<T> sqr() const
@@ -486,15 +506,16 @@ public:
     Double<T> sqrt() const
     {
         if (is_zero()) return 0.0;
-        if (is_negative()) return nan;
+        if (is_negative()) return nan();
 
-        auto r = Double<T>(1.0) / Double<T>(std::sqrt(x));
-        auto h = *this * Double<T>(0.5);
+        auto r = Double<T>(1.0 / std::sqrt(x));
+        auto h = *this * 0.5;
 
-        r += ((0.5 - h * r.sqr()) * r);
-        r += ((0.5 - h * r.sqr()) * r);
-        r += ((0.5 - h * r.sqr()) * r);
-        return r;
+        r += (0.5 - h * r.sqr()) * r;
+        r += (0.5 - h * r.sqr()) * r;
+        r += (0.5 - h * r.sqr()) * r;
+
+        return r * (*this);
     }
 
 
@@ -628,9 +649,14 @@ public:
         return (y.signbit()) ? -(*this) : (*this);
     }
 
-    Double<T> nan() const
+    static Double<T> nan()
     {
         return std::numeric_limits<double>::quiet_NaN();
+    }
+    
+    static Double<T> inf()
+    {
+        return std::numeric_limits<double>::infinity();
     }
 
 

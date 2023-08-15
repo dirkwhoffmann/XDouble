@@ -7,10 +7,11 @@ enable_testing()
 add_executable(unittester
 
     main.cpp
-    smoke_test.cpp
+    smoke_tests.cpp
     arithmetic_tests.cpp
     comparison_tests.cpp
     explog_tests.cpp
+    power_tests.cpp
 )
 target_include_directories(unittester PRIVATE ${CMAKE_SOURCE_DIR})
 target_link_libraries(unittester PRIVATE doubledouble)

@@ -1,18 +1,15 @@
-include "doctest.h"
+#include "doctest.h"
 #include "double-double.h"
 
-TEST_CASE("Basic smoke tests") {
+TEST_CASE("Exponential and logarithmic functions") {
 
-    SUBCASE("Exponential function") {
+    SUBCASE("exp") {
 
-        doubledouble x = 2.25;
-
-        CHECK(doubledouble().to_double() == 0.0);
-        CHECK(doubledouble(0.5).to_double() == 0.5);
-        CHECK(doubledouble(0.5,0.125).to_double() == 0.625);
-        CHECK(doubledouble(x).to_double() == 2.25);
-        CHECK(doubledouble("3.5").to_double() == 3.5);
-        CHECK(doubledouble("-3.5").to_double() == -3.5);
+        CHECK(doubledouble("0"   ).exp().to_string(30) == "1.000000000000000000000000000000");
+        CHECK(doubledouble("0.1" ).exp().to_string(30) == "1.105170918075647624811707826490");
+        CHECK(doubledouble("0.5" ).exp().to_string(30) == "1.648721270700128146848650787814");
+        CHECK(doubledouble("-0.1").exp().to_string(30) ==  ".904837418035959573164249059446");
+        CHECK(doubledouble("-0.5").exp().to_string(30) ==  ".606530659712633423603799534991");
     }
 
     SUBCASE("Converting to different types") {

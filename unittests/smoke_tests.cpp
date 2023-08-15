@@ -61,7 +61,6 @@ TEST_CASE("Basic smoke tests") {
         CHECK(me.to_string(4) == "-2.7182");
         CHECK(me.to_string(5) == "-2.71828");
 
-        
         doubledouble pi2("3.14159265358979323846264338327950");
         CHECK(pi2.to_string(32) == "3.14159265358979323846264338327950");
 

@@ -29,6 +29,7 @@
 #include <cfenv>
 #include <limits>
 #include <algorithm>
+#include <utility>
 #include <iostream>
 #include <iomanip>
 
@@ -137,9 +138,14 @@ public:
         return static_cast<int>(to_long_double());
     }
 
-    long int to_long() const
+    long to_long() const
     {
         return static_cast<long>(to_long_double());
+    }
+
+    long long to_long_long() const
+    {
+        return static_cast<long long>(to_long_double());
     }
 
     float to_float() const
@@ -397,7 +403,6 @@ public:
 
     Double<T> exp() const
     {
-        auto result = *this;
         auto n = std::round(x);
         auto w = *this - n;
 
@@ -593,6 +598,27 @@ public:
 
     Double<T> rint() const
     {
+        T hi = std::rint(x);
+
+        if (hi == x) {
+
+            // Upper part is an integer
+            T lo = std::rint(y);
+            return quickTwoSum(hi, lo);
+
+        } else {
+
+            // Upper part is not an integer
+            if (std::abs(hi - x) == 0.5 && y < 0.0) {
+                hi -= 1.0;
+            }
+            return Double<T>(hi);
+        }
+    }
+
+    /*
+    Double<T> rint() const
+    {
         switch (fegetround()) {
 
             case FE_DOWNWARD:   return floor();
@@ -605,15 +631,16 @@ public:
                 return 0;
         }
     }
+    */
 
     long lrint() const
     {
-        return (long)rint();
+        return rint().to_long();
     }
 
     long long llrint() const
     {
-        return (long long)rint();
+        return rint().to_long_long();
     }
 
     Double<T> nearbyint() const

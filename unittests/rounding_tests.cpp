@@ -2,6 +2,8 @@
 
 TEST_CASE("Rounding and remainder functions") {
 
+#pragma STDC FENV_ACCESS ON
+
     srand(0);
 
     SUBCASE("ceil") {
@@ -102,6 +104,143 @@ TEST_CASE("Rounding and remainder functions") {
 
             double x = rand_double();
             CHECK(doubledouble(x).nearbyint().to_float() == (float)std::nearbyint(x));
+        }
+    }
+
+    SUBCASE("rint") {
+
+        auto mode = fegetround();
+
+        SUBCASE("FE_DOWNWARD") {
+
+            fesetround(FE_DOWNWARD);
+
+            CHECK(doubledouble(3).rint().to_float() == 3);
+            CHECK(doubledouble(3.25).rint().to_float() == 3);
+            CHECK(doubledouble(3.5).rint().to_float() == 3);
+            CHECK(doubledouble(3.75).rint().to_float() == 3);
+            CHECK(doubledouble(4).rint().to_float() == 4);
+            CHECK(doubledouble(4.25).rint().to_float() == 4);
+            CHECK(doubledouble(4.5).rint().to_float() == 4);
+            CHECK(doubledouble(4.75).rint().to_float() == 4);
+
+            CHECK(doubledouble(-3).rint().to_float() == -3);
+            CHECK(doubledouble(-3.25).rint().to_float() == -4);
+            CHECK(doubledouble(-3.5).rint().to_float() == -4);
+            CHECK(doubledouble(-3.75).rint().to_float() == -4);
+            CHECK(doubledouble(-4).rint().to_float() == -4);
+            CHECK(doubledouble(-4.25).rint().to_float() == -5);
+            CHECK(doubledouble(-4.5).rint().to_float() == -5);
+            CHECK(doubledouble(-4.75).rint().to_float() == -5);
+
+            for (int i = 0; i < NUM_TESTS; i++) {
+                double x = rand_double();
+                CHECK(doubledouble(x).rint().to_float() == (float)std::rint(x));
+            }
+        }
+
+        SUBCASE("FE_TONEAREST") {
+
+            fesetround(FE_TONEAREST);
+
+            CHECK(doubledouble(3).rint().to_float() == 3);
+            CHECK(doubledouble(3.25).rint().to_float() == 3);
+            CHECK(doubledouble(3.5).rint().to_float() == 4);
+            CHECK(doubledouble(3.75).rint().to_float() == 4);
+            CHECK(doubledouble(4).rint().to_float() == 4);
+            CHECK(doubledouble(4.25).rint().to_float() == 4);
+            CHECK(doubledouble(4.5).rint().to_float() == 4);
+            CHECK(doubledouble(4.75).rint().to_float() == 5);
+
+            CHECK(doubledouble(-3).rint().to_float() == -3);
+            CHECK(doubledouble(-3.25).rint().to_float() == -3);
+            CHECK(doubledouble(-3.5).rint().to_float() == -4);
+            CHECK(doubledouble(-3.75).rint().to_float() == -4);
+            CHECK(doubledouble(-4).rint().to_float() == -4);
+            CHECK(doubledouble(-4.25).rint().to_float() == -4);
+            CHECK(doubledouble(-4.5).rint().to_float() == -4);
+            CHECK(doubledouble(-4.75).rint().to_float() == -5);
+
+            for (int i = 0; i < NUM_TESTS; i++) {
+                double x = rand_double();
+                CHECK(doubledouble(x).rint().to_float() == (float)std::rint(x));
+            }
+        }
+
+        SUBCASE("FE_TOWARDZERO") {
+
+            fesetround(FE_TOWARDZERO);
+
+            CHECK(doubledouble(3).rint().to_float() == 3);
+            CHECK(doubledouble(3.25).rint().to_float() == 3);
+            CHECK(doubledouble(3.5).rint().to_float() == 3);
+            CHECK(doubledouble(3.75).rint().to_float() == 3);
+            CHECK(doubledouble(4).rint().to_float() == 4);
+            CHECK(doubledouble(4.25).rint().to_float() == 4);
+            CHECK(doubledouble(4.5).rint().to_float() == 4);
+            CHECK(doubledouble(4.75).rint().to_float() == 4);
+
+            CHECK(doubledouble(-3).rint().to_float() == -3);
+            CHECK(doubledouble(-3.25).rint().to_float() == -3);
+            CHECK(doubledouble(-3.5).rint().to_float() == -3);
+            CHECK(doubledouble(-3.75).rint().to_float() == -3);
+            CHECK(doubledouble(-4).rint().to_float() == -4);
+            CHECK(doubledouble(-4.25).rint().to_float() == -4);
+            CHECK(doubledouble(-4.5).rint().to_float() == -4);
+            CHECK(doubledouble(-4.75).rint().to_float() == -4);
+
+            for (int i = 0; i < NUM_TESTS; i++) {
+                double x = rand_double();
+                CHECK(doubledouble(x).rint().to_float() == (float)std::rint(x));
+            }
+        }
+
+        SUBCASE("FE_UPWARD") {
+
+            fesetround(FE_UPWARD);
+
+            CHECK(doubledouble(3).rint().to_float() == 3);
+            CHECK(doubledouble(3.25).rint().to_float() == 4);
+            CHECK(doubledouble(3.5).rint().to_float() == 4);
+            CHECK(doubledouble(3.75).rint().to_float() == 4);
+            CHECK(doubledouble(4).rint().to_float() == 4);
+            CHECK(doubledouble(4.25).rint().to_float() == 5);
+            CHECK(doubledouble(4.5).rint().to_float() == 5);
+            CHECK(doubledouble(4.75).rint().to_float() == 5);
+
+            CHECK(doubledouble(-3).rint().to_float() == -3);
+            CHECK(doubledouble(-3.25).rint().to_float() == -3);
+            CHECK(doubledouble(-3.5).rint().to_float() == -3);
+            CHECK(doubledouble(-3.75).rint().to_float() == -3);
+            CHECK(doubledouble(-4).rint().to_float() == -4);
+            CHECK(doubledouble(-4.25).rint().to_float() == -4);
+            CHECK(doubledouble(-4.5).rint().to_float() == -4);
+            CHECK(doubledouble(-4.75).rint().to_float() == -4);
+
+            for (int i = 0; i < NUM_TESTS; i++) {
+                double x = rand_double();
+                CHECK(doubledouble(x).rint().to_float() == (float)std::rint(x));
+            }
+        }
+
+        fesetround(mode);
+    }
+
+    SUBCASE("lrint") {
+
+        for (int i = 0; i < NUM_TESTS; i++) {
+
+            double x = rand_double();
+            CHECK(doubledouble(x).lrint() == std::lrint(x));
+        }
+    }
+
+    SUBCASE("llrint") {
+
+        for (int i = 0; i < NUM_TESTS; i++) {
+
+            double x = rand_double();
+            CHECK(doubledouble(x).llrint() == std::llrint(x));
         }
     }
 }

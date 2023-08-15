@@ -40,5 +40,4 @@ TEST_CASE("Power functions") {
 
         CHECK(doubledouble(-2).sqrt().isnan());
     }
-
 }

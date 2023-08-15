@@ -67,6 +67,5 @@ TEST_CASE("Basic smoke tests") {
 
         doubledouble me2("-2.71828182845904523536028747135266");
         CHECK(me2.to_string(32) == "-2.71828182845904523536028747135266");
-
     }
 }

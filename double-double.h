@@ -45,13 +45,13 @@ public:
     // Constructors
     //
 
-    Double<T>() noexcept : x(0), y(0) { }
-    Double<T>(T x) noexcept : x(x), y(0) { }
-    Double<T>(T x, T y) noexcept : x(x), y(y) { }
-    Double<T>(const Double<T>& other) noexcept : Double<T>() { x = other.x; y = other.y; }
-    Double<T>(Double<T>&& other) noexcept : Double<T>() { swap(*this, other); }
+    Double() noexcept : x(0), y(0) { }
+    Double(T x) noexcept : x(x), y(0) { }
+    Double(T x, T y) noexcept : x(x), y(y) { }
+    Double(const Double<T>& other) noexcept : Double() { x = other.x; y = other.y; }
+    Double(Double<T>&& other) noexcept : Double() { swap(*this, other); }
 
-    Double<T>(const std::string &s) noexcept : Double<T>()
+    Double(const std::string &s) noexcept : Double()
     {
         Double<T> l, r;
         std::string left(s), right;
@@ -431,7 +431,6 @@ public:
     Double<T> frexp10(int *exp) const
     {
         *exp = is_zero() ? 0 : 1 + (fabs().log10().floor().to_int());
-        std::cout << "frexp10 " << *this << " exp = " << *exp << " result = " << *this * Double<T>(10).pow(-(*exp)) << std::endl;
         return *this * Double<T>(10).pow(-(*exp));
     }
 
@@ -575,17 +574,21 @@ public:
 
     Double<T> round() const
     {
-        return (*this + Double<T>(0.5)).floor();
+        if (is_negative()) {
+            return (*this - Double<T>(0.5)).ceil();
+        } else {
+            return (*this + Double<T>(0.5)).floor();
+        }
     }
 
     long lround() const
     {
-        return (long)round();
+        return round().to_long();
     }
 
     long long llround() const
     {
-        return (long long)round();
+        return round().to_long_double();
     }
 
     Double<T> rint() const

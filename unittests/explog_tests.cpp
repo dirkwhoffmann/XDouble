@@ -111,5 +111,4 @@ TEST_CASE("Exponential and logarithmic functions") {
             CHECK(i1 == i2);
         }
     }
-
 }

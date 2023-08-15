@@ -712,12 +712,16 @@ public:
     {
         if (isnan()) return y;
         if (y.isnan()) return *this;
+
         return *this > y ? *this : y;
     }
 
     Double<T> fmin(const Double<T> y) const
     {
-        return y.fmax(*this);
+        if (isnan()) return y;
+        if (y.isnan()) return *this;
+
+        return *this < y ? *this : y;
     }
 
 

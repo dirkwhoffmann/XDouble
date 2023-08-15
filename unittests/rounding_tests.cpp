@@ -193,15 +193,6 @@ TEST_CASE("Rounding and remainder functions") {
         }
     }
 
-    SUBCASE("nearbyint") {
-
-        for (int i = 0; i < NUM_TESTS; i++) {
-
-            double x = rand_double();
-            CHECK(doubledouble(x).nearbyint().to_float() == (float)std::nearbyint(x));
-        }
-    }
-
     SUBCASE("rint") {
 
         auto mode = fegetround();
@@ -316,7 +307,7 @@ TEST_CASE("Rounding and remainder functions") {
             CHECK(doubledouble(-4.75).rint().to_float() == -4);
 
             for (int i = 0; i < NUM_TESTS; i++) {
-                
+
                 double x = rand_double();
                 CHECK(doubledouble(x).rint().to_float() == (float)std::rint(x));
             }
@@ -340,6 +331,15 @@ TEST_CASE("Rounding and remainder functions") {
 
             double x = rand_double();
             CHECK(doubledouble(x).llrint() == std::llrint(x));
+        }
+    }
+
+    SUBCASE("nearbyint") {
+
+        for (int i = 0; i < NUM_TESTS; i++) {
+
+            double x = rand_double();
+            CHECK(doubledouble(x).nearbyint().to_float() == (float)std::nearbyint(x));
         }
     }
 }

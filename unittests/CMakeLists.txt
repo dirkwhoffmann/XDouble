@@ -10,8 +10,7 @@ add_executable(unittester
     smoke_test.cpp
     arithmetic_tests.cpp
     comparison_tests.cpp
-    parsing.cpp
-    trigonometric.cpp
+    explog_tests.cpp
 )
 target_include_directories(unittester PRIVATE ${CMAKE_SOURCE_DIR})
 target_link_libraries(unittester PRIVATE doubledouble)

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		503867582A8AB0CA0018498B /* smoke_tests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503867572A8AB0CA0018498B /* smoke_tests.cpp */; };
+		5038675A2A8B75B40018498B /* explog_tests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503867592A8B75B40018498B /* explog_tests.cpp */; };
 		5051DEE82A876C4800EED9D7 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5051DEE72A876C4800EED9D7 /* main.cpp */; };
 		5051DEF02A876D1D00EED9D7 /* double-double.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5051DEEE2A876D1D00EED9D7 /* double-double.cpp */; };
 		5051DEF62A8785D800EED9D7 /* comparison_tests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5051DEF52A8785D800EED9D7 /* comparison_tests.cpp */; };
@@ -28,6 +29,7 @@
 
 /* Begin PBXFileReference section */
 		503867572A8AB0CA0018498B /* smoke_tests.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = smoke_tests.cpp; sourceTree = "<group>"; };
+		503867592A8B75B40018498B /* explog_tests.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = explog_tests.cpp; sourceTree = "<group>"; };
 		5051DEE42A876C4800EED9D7 /* double-double */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "double-double"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5051DEE72A876C4800EED9D7 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		5051DEEE2A876D1D00EED9D7 /* double-double.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "double-double.cpp"; sourceTree = "<group>"; };
@@ -78,6 +80,7 @@
 				503867572A8AB0CA0018498B /* smoke_tests.cpp */,
 				5051DEF22A876E8300EED9D7 /* arithmetic_tests.cpp */,
 				5051DEF52A8785D800EED9D7 /* comparison_tests.cpp */,
+				503867592A8B75B40018498B /* explog_tests.cpp */,
 			);
 			path = unittests;
 			sourceTree = "<group>";
@@ -141,6 +144,7 @@
 			files = (
 				503867582A8AB0CA0018498B /* smoke_tests.cpp in Sources */,
 				5051DEE82A876C4800EED9D7 /* main.cpp in Sources */,
+				5038675A2A8B75B40018498B /* explog_tests.cpp in Sources */,
 				5051DEF72A87864000EED9D7 /* arithmetic_tests.cpp in Sources */,
 				5051DEF62A8785D800EED9D7 /* comparison_tests.cpp in Sources */,
 				5051DEF02A876D1D00EED9D7 /* double-double.cpp in Sources */,

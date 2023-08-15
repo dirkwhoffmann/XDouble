@@ -53,25 +53,25 @@ public:
     Double<T>(const std::string &s) noexcept : Double<T>()
     {
         Double<T> l, r;
-        bool neg = false;
+        std::string left(s), right;
 
-        std::string copy(s);
+        bool neg = s.empty() ? false : s[0] == '-';
 
-        for (auto &ch : copy) {
+        if (auto pos = s.find("."); pos != std::string::npos) {
 
-            if (ch == '-') neg = !neg;
-            if (ch == '.') break;
+            left = s.substr(0, pos);
+            right = s.substr(pos + 1, std::string::npos);
+            std::reverse(right.begin(), right.end());
+        }
+
+        for (auto &ch : left) {
             if (ch >= '0' && ch <= '9') l = l * Double<T>(10) + Double<T>(ch - '0');
         }
 
-        if (auto pos = copy.find("."); pos != std::string::npos) {
-
-            std::reverse(copy.begin() + pos + 1, copy.end());
-            for (auto &ch : copy) {
-
-                if (ch >= '0' && ch <= '9') r = (r + Double<T>(ch - '0')) / Double<T>(10);
-            }
+        for (auto &ch : right) {
+            if (ch >= '0' && ch <= '9') r = (r + Double<T>(ch - '0')) / Double<T>(10);
         }
+
         *this = neg ? -(l + r) : (l + r);
     }
 
@@ -128,43 +128,60 @@ public:
 
 
     //
-    // Cast operators and conversion functions
+    // Conversion functions
     //
 
-    operator int() const { return static_cast<int>(static_cast<long double>(*this)); }
-    operator long() const { return static_cast<long>(static_cast<long double>(*this)); }
-    operator float() const { return static_cast<float>(static_cast<long double>(*this)); }
-    operator double() const { return static_cast<double>(static_cast<long double>(*this)); }
-    operator long double() const { return static_cast<long double>(x) + static_cast<long double>(y); }
+    int to_int() const
+    {
+        return static_cast<int>(to_long_double());
+    }
+
+    long int to_long() const
+    {
+        return static_cast<long>(to_long_double());
+    }
+
+    float to_float() const
+    {
+        return static_cast<float>(to_long_double());
+    }
+
+    double to_double() const
+    {
+        return static_cast<double>(to_long_double());
+    }
+
+    long double to_long_double() const
+    {
+        return static_cast<long double>(x) + static_cast<long double>(y);
+    }
 
     std::string to_string(int digits) const
     {
         std::string result;
 
-
         // Split number l.r into pre-decimal and fractional part
-        Double<T> l;
-        Double<T> r = modf(&l);
+        Double<T> l; Double<T> r = modf(&l);
 
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 100 && l.abs() >= 1; i++) {
 
-            Double<T> ii;
-            if (l.abs() < Double<T>(1)) break;
+            Double<T> digit;
             l /= 10;
-            ii = l.modf(&l);
-            result = std::to_string(int(std::round((double)ii * 10))) + result;
+            digit = l.modf(&l) * 10;
+            result = std::to_string(digit.nearbyint().to_int()) + result;
         }
 
-        result += '.';
+        if (digits) result += '.';
+
         for (int i = 0; i < digits; i++) {
 
-            Double<T> ii;
+            Double<T> digit;
             r *= 10;
-            r = r.modf(&ii);
-            result = result + std::to_string(int((double)ii));
+            r = r.modf(&digit);
+            result = result + std::to_string(digit.nearbyint().to_int());
         }
 
-        return result;
+        return (is_negative() ? "-" : "") + result;
     }
 
 

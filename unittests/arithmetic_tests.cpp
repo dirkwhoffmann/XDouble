@@ -1,102 +1,54 @@
 #include "doctest.h"
 #include "double-double.h"
 
-/*
 TEST_CASE("Basic arithmetic") {
 
     SUBCASE("Addition") {
 
-        SUBCASE("double") {
+        for (double x = -50.0, y = 5.0; x <= 100.0; x += 1.0, y -= 0.1) {
 
-            doubledouble x = -50.0;
-            doubledouble y = 5.0;
-
-            for (int i = 0; i < 100; i++, x += 1.0, y -= 0.1) {
-
-                CHECK((double)(x + y) == (double)x + (double)y);
-            }
-        }
-        SUBCASE("long double") {
-
-            longdoubledouble x = -50.0;
-            longdoubledouble y = 5.0;
-
-            for (int i = 0; i < 100; i++, x += 1.0, y -= 0.1) {
-
-                CHECK((long double)(x + y) == (long double)x + (long double)y);
-            }
+            doubledouble dx(x), dy(y);
+            CHECK((dx + dy).to_float() == float(x + y));
         }
     }
+
     SUBCASE("Subtraction") {
 
-        SUBCASE("double") {
+        for (double x = -50.0, y = 5.0; x <= 100.0; x += 1.0, y -= 0.1) {
 
-            doubledouble x = -50.0;
-            doubledouble y = 5.0;
-
-            for (int i = 0; i < 100; i++, x += 1.0, y -= 0.1) {
-
-                CHECK((double)(x - y) == double(x) - double(y));
-            }
-        }
-        SUBCASE("long double") {
-
-            longdoubledouble x = -50.0;
-            longdoubledouble y = 5.0;
-
-            for (int i = 0; i < 100; i++, x += 1.0, y -= 0.1) {
-
-                CHECK((long double)(x - y) == (long double)x - (long double)y);
-            }
+            doubledouble dx(x), dy(y);
+            CHECK((dx - dy).to_float() == float(x - y));
         }
     }
+
     SUBCASE("Multiplication") {
 
-        SUBCASE("double") {
+        for (double x = -50.0, y = 5.0; x <= 100.0; x += 1.0, y -= 0.1) {
 
-            doubledouble x = -50.0;
-            doubledouble y = 5.0;
-
-            for (int i = 0; i < 100; i++, x += 1.0, y -= 0.1) {
-
-                CHECK((double)(x * y) == (double)x * (double)y);
-            }
-        }
-        SUBCASE("long double") {
-
-            longdoubledouble x = -50.0;
-            longdoubledouble y = 5.0;
-
-            for (int i = 0; i < 100; i++, x += 1.0, y -= 0.1) {
-
-                CHECK((long double)(x * y) == (long double)x * (long double)y);
-            }
+            doubledouble dx(x), dy(y);
+            CHECK((dx * dy).to_float() == float(x * y));
         }
     }
+
     SUBCASE("Division") {
 
-        SUBCASE("double") {
+        for (double x = -50.0, y = 5.0; x <= 100.0; x += 1.0, y -= 0.1) {
 
-            doubledouble x = -50.0;
-            doubledouble y = 5.0;
-
-            for (int i = 0; i < 100; i++, x += 1.0, y -= 0.1) {
-
-                if (y == (doubledouble)0) continue;
-                CHECK((double)(x / y) == (double)x / (double)y);
-            }
+            doubledouble dx(x), dy(y);
+            CHECK((dx / dy).to_float() == float(x / y));
         }
-        SUBCASE("long double") {
+    }
 
-            longdoubledouble x = -50.0;
-            longdoubledouble y = 5.0;
+    SUBCASE("Increment and decrement operators") {
 
-            for (int i = 0; i < 100; i++, x += 1.0, y -= 0.1) {
+        for (double x = -5.0; x <= 10.0; x += 0.1) {
 
-                if (y == (longdoubledouble)0) continue;
-                CHECK((long double)(x / y) == (long double)x / (long double)y);
-            }
+            doubledouble dx(x);
+
+            dx++; CHECK(std::abs(dx.to_double() - (x + 1.0)) < 1e-10);
+            ++dx; CHECK(std::abs(dx.to_double() - (x + 2.0)) < 1e-10);
+            dx--; CHECK(std::abs(dx.to_double() - (x + 1.0)) < 1e-10);
+            --dx; CHECK(std::abs(dx.to_double() - (x + 0.0)) < 1e-10);
         }
     }
 }
-*/

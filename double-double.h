@@ -191,7 +191,7 @@ public:
 
         }
 
-        return (is_negative() ? "-" : "") + result;
+        return (isnegative() ? "-" : "") + result;
     }
 
 
@@ -380,9 +380,9 @@ public:
 
     Double<T> &operator/=(const Double<T> &rhs)
     {
-        if (rhs.is_zero()) {
+        if (rhs.iszero()) {
 
-            *this = is_zero() ? nan() : signbit() ? -inf() : inf();
+            *this = (iszero() || isnan()) ? nan() : signbit() ? -inf() : inf();
             return *this;
         }
         if (isnan() || rhs.isnan()) {
@@ -491,7 +491,7 @@ public:
 
     Double<T> frexp10(int *exp) const
     {
-        *exp = is_zero() ? 0 : 1 + (fabs().log10().floor().to_int());
+        *exp = iszero() ? 0 : 1 + (fabs().log10().floor().to_int());
         return *this * Double<T>(10).pow(-(*exp));
     }
 
@@ -507,8 +507,8 @@ public:
 
     Double<T> log() const
     {
-        if (is_negative()) return nan();
-        if (is_zero()) return -inf();
+        if (isnegative()) return nan();
+        if (iszero()) return -inf();
 
         auto r = Double<T>(std::log(x));
         auto u = r.exp();
@@ -572,8 +572,8 @@ public:
 
     Double<T> sqrt() const
     {
-        if (is_zero()) return 0.0;
-        if (is_negative()) return nan();
+        if (iszero()) return 0.0;
+        if (isnegative()) return nan();
 
         auto r = Double<T>(1.0 / std::sqrt(x));
         auto h = *this * 0.5;
@@ -641,13 +641,16 @@ public:
 
     Double<T> fmod(Double<T> denom) const
     {
+        if (denom.iszero()) return Double<T>::nan();
+        if (isfinite() && denom.isinf()) return *this;
+
         Double<T> tquot = (*this / denom).trunc();
         return (*this) - tquot * denom;
     }
 
     Double<T> trunc() const
     {
-        return is_negative() ? ceil() : floor();
+        return isnegative() ? ceil() : floor();
     }
 
     Double<T> trunc(int fracdigits) const
@@ -657,7 +660,7 @@ public:
 
     Double<T> round() const
     {
-        if (is_negative()) {
+        if (isnegative()) {
             return (*this - Double<T>(0.5)).ceil();
         } else {
             return (*this + Double<T>(0.5)).floor();
@@ -671,7 +674,7 @@ public:
 
     Double<T> roundEven() const
     {
-        if (is_negative()) {
+        if (isnegative()) {
 
             auto v1 = *this - Double<T>(0.5);
             auto v2 = v1.ceil();
@@ -813,7 +816,7 @@ public:
 
     Double<T> fabs() const
     {
-        return is_negative() ? -(*this) : (*this);
+        return isnegative() ? -(*this) : (*this);
     }
 
     Double<T> abs() const
@@ -837,10 +840,10 @@ public:
     bool isnormal() const { return std::isnormal(x); }
     bool signbit() const { return x != 0 || y == 0 ? std::signbit(x) : std::signbit(y); }
 
-    bool is_zero() const { return x == 0.0; }
-    bool is_one() const { return x == 1.0 && y == 0.0; }
-    bool is_positive() const {  return x > 0.0; }
-    bool is_negative() const {  return x < 0.0; }
+    bool iszero() const { return x == 0.0; }
+    bool isone() const { return x == 1.0 && y == 0.0; }
+    bool ispositive() const {  return x > 0.0; }
+    bool isnegative() const {  return x < 0.0; }
 };
 
 template <class T>

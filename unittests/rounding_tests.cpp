@@ -125,17 +125,38 @@ TEST_CASE("Rounding and remainder functions") {
 
     SUBCASE("fmod") {
 
-        for (int i = 0; i < NUM_TESTS; i++) {
+        SUBCASE("Standard cases") {
 
-            double x = rand_double();
-            double denom = rand_double();
-            auto result = doubledouble(x).fmod(denom);
+            for (int i = 0; i < NUM_TESTS; i++) {
 
-            if (result.isnan()) {
-                CHECK(std::isnan(std::fmod(x, denom)));
-            } else {
-                CHECK(result.to_float() == (float)std::fmod(x, denom));
+                double x = rand_double();
+                double denom = rand_double();
+                auto result = doubledouble(x).fmod(denom);
+
+                if (result.isnan()) {
+                    CHECK(std::isnan(std::fmod(x, denom)));
+                } else {
+                    CHECK(result.to_float() == (float)std::fmod(x, denom));
+                }
             }
+        }
+
+        SUBCASE("Special cases") {
+
+            CHECK(doubledouble(2.0).fmod(0.0).isnan());
+            CHECK(doubledouble::nan().fmod(0.0).isnan());
+            CHECK(doubledouble::inf().fmod(0.0).isnan());
+
+            CHECK(doubledouble(2.0).fmod(doubledouble::nan()).isnan());
+            CHECK(doubledouble::nan().fmod(2.0).isnan());
+            CHECK(doubledouble::nan().fmod(doubledouble::nan()).isnan());
+            CHECK(doubledouble::nan().fmod(doubledouble::inf()).isnan());
+            CHECK(doubledouble::inf().fmod(doubledouble::nan()).isnan());
+
+            CHECK(doubledouble(2.0).fmod(doubledouble::inf()) == doubledouble(2.0));
+            CHECK(doubledouble(4.1).fmod(doubledouble::inf()) == doubledouble(4.1));
+            CHECK(doubledouble::inf().fmod(2.0).isnan());
+            CHECK(doubledouble::inf().fmod(doubledouble::inf()).isnan());
         }
     }
 

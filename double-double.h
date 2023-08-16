@@ -175,7 +175,8 @@ public:
             Double<T> digit;
             l /= 10;
             digit = l.modf(&l) * 10;
-            result = std::to_string(digit.round().to_int()) + result;
+            // result = std::to_string(digit.round().to_int()) + result;
+            result = char(digit.round().to_int() + '0') + result;
         }
 
         if (digits) result += '.';
@@ -185,7 +186,9 @@ public:
             Double<T> digit;
             r *= 10;
             r = r.modf(&digit);
-            result = result + std::to_string(digit.round().to_int());
+            // result = result + std::to_string(digit.round().to_int());
+            result = result + char(digit.round().to_int() + '0');
+
         }
 
         return (is_negative() ? "-" : "") + result;
@@ -353,15 +356,34 @@ public:
         if (rhs.is_zero()) {
 
             *this = is_zero() ? nan() : signbit() ? -inf() : inf();
-
-        } else {
-
-            auto r = x / rhs.x;
-            auto val = twoProd(r, rhs.x);
-            auto e = (x - val.x - val.y + y - r * rhs.y) / rhs.x;
-
-            *this = quickTwoSum(r, e);
+            return *this;
         }
+        if (isnan() || rhs.isnan()) {
+
+            *this = nan();
+            return *this;
+        }
+        if (isinf() && rhs.isinf()) {
+
+            *this = nan();
+            return *this;
+        }
+        if (isinf()) {
+
+            *this = signbit() ^ rhs.signbit() ? -inf() : inf();
+            return *this;
+        }
+        if (rhs.isinf()) {
+
+            *this = signbit() ^ rhs.signbit() ? -0.0 : 0.0;
+            return *this;
+        }
+
+        auto r = x / rhs.x;
+        auto val = twoProd(r, rhs.x);
+        auto e = (x - val.x - val.y + y - r * rhs.y) / rhs.x;
+
+        *this = quickTwoSum(r, e);
         return *this;
     }
 

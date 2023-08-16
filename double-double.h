@@ -175,7 +175,7 @@ public:
             Double<T> digit;
             l /= 10;
             digit = l.modf(&l) * 10;
-            result = std::to_string(digit.nearbyint().to_int()) + result;
+            result = std::to_string(digit.round().to_int()) + result;
         }
 
         if (digits) result += '.';
@@ -185,7 +185,7 @@ public:
             Double<T> digit;
             r *= 10;
             r = r.modf(&digit);
-            result = result + std::to_string(digit.nearbyint().to_int());
+            result = result + std::to_string(digit.round().to_int());
         }
 
         return (is_negative() ? "-" : "") + result;
@@ -444,6 +444,11 @@ public:
         return Double<T>(std::ldexp(x, exp), std::ldexp(y, exp));
     }
 
+    Double<T> ldexp10(int exp) const
+    {
+        return *this * Double<T>(10).pow(exp);
+    }
+
     Double<T> log() const
     {
         if (is_negative()) return nan();
@@ -552,6 +557,12 @@ public:
         }
     }
 
+    Double<T> ceil(int fracdigits) const
+    {
+        int e; auto m = frexp10(&e);
+        return m.ceil().ldexp10(e);
+    }
+
     Double<T> floor() const
     {
         T hi = std::floor(x);
@@ -566,6 +577,12 @@ public:
 
             return Double<T>(hi);
         }
+    }
+
+    Double<T> floor(int fracdigits) const
+    {
+        int e; auto m = frexp10(&e);
+        return m.floor().ldexp10(e);
     }
 
     Double<T> fmod(Double<T> denom) const

@@ -5,70 +5,93 @@ TEST_CASE("Rounding and remainder functions") {
 #pragma STDC FENV_ACCESS ON
 
     srand(0);
+    auto mode = fegetround();
 
     SUBCASE("ceil") {
 
-        CHECK(doubledouble(2.75).ceil().to_float() == 3);
-        CHECK(doubledouble(2.5).ceil().to_float() == 3);
-        CHECK(doubledouble(2.25).ceil().to_float() == 3);
-        CHECK(doubledouble(2.0).ceil().to_float() == 2);
-        CHECK(doubledouble(1.75).ceil().to_float() == 2);
-        CHECK(doubledouble(1.5).ceil().to_float() == 2);
-        CHECK(doubledouble(1.25).ceil().to_float() == 2);
-        CHECK(doubledouble(1.0).ceil().to_float() == 1);
-        CHECK(doubledouble(0.75).ceil().to_float() == 1);
-        CHECK(doubledouble(0.5).ceil().to_float() == 1);
-        CHECK(doubledouble(0.25).ceil().to_float() == 1);
-        CHECK(doubledouble(0).ceil().to_float() == 0);
-        CHECK(doubledouble(-0.25).ceil().to_float() == 0);
-        CHECK(doubledouble(-0.5).ceil().to_float() == 0);
-        CHECK(doubledouble(-0.75).ceil().to_float() == 0);
-        CHECK(doubledouble(-1.0).ceil().to_float() == -1);
-        CHECK(doubledouble(-1.25).ceil().to_float() == -1);
-        CHECK(doubledouble(-1.5).ceil().to_float() == -1);
-        CHECK(doubledouble(-1.75).ceil().to_float() == -1);
-        CHECK(doubledouble(-2).ceil().to_float() == -2);
-        CHECK(doubledouble(-2.25).ceil().to_float() == -2);
-        CHECK(doubledouble(-2.5).ceil().to_float() == -2);
-        CHECK(doubledouble(-2.75).ceil().to_float() == -2);
+        struct { double v; float down; float round; float zero; float up; } p[] = {
 
-        for (int i = 0; i < NUM_TESTS; i++) {
+            { 2.75,     3,      3,      3,      3 },
+            { 2.5,      3,      3,      3,      3 },
+            { 2.25,     3,      3,      3,      3 },
+            { 2.0,      2,      2,      2,      2 },
+            { 1.75,     2,      2,      2,      2 },
+            { 1.5,      2,      2,      2,      2 },
+            { 1.25,     2,      2,      2,      2 },
+            { 1.0,      1,      1,      1,      1 },
+            { 0.75,     1,      1,      1,      1 },
+            { 0.5,      1,      1,      1,      1 },
+            { 0.25,     1,      1,      1,      1 },
+            { 0,        0,      0,      0,      0 },
+            { -0.25,    0,      0,      0,      0 },
+            { -0.5,     0,      0,      0,      0 },
+            { -0.75,    0,      0,      0,      0 },
+            { -1.0,    -1,     -1,     -1,     -1 },
+            { -1.25,   -1,     -1,     -1,     -1 },
+            { -1.5,    -1,     -1,     -1,     -1 },
+            { -1.75,   -1,     -1,     -1,     -1 },
+            { -2,      -2,     -2,     -2,     -2 },
+            { -2.25,   -2,     -2,     -2,     -2 },
+            { -2.5,    -2,     -2,     -2,     -2 },
+            { -2.75,   -2,     -2,     -2,     -2 },
 
-            double x = rand_double();
-            CHECK(doubledouble(x).ceil().to_float() == (float)std::ceil(x));
+            { 999,      0,      0,      0,      0 }
+        };
+
+        for (int i = 0; p[i].v != 999; i++) {
+
+            fesetround(FE_DOWNWARD);
+            CHECK(doubledouble(p[i].v).ceil() == p[i].down);
+            fesetround(FE_TONEAREST);
+            CHECK(doubledouble(p[i].v).ceil() == p[i].round);
+            fesetround(FE_TOWARDZERO);
+            CHECK(doubledouble(p[i].v).ceil() == p[i].zero);
+            fesetround(FE_UPWARD);
+            CHECK(doubledouble(p[i].v).ceil() == p[i].up);
         }
     }
 
     SUBCASE("floor") {
 
-        CHECK(doubledouble(2.75).floor().to_float() == 2);
-        CHECK(doubledouble(2.5).floor().to_float() == 2);
-        CHECK(doubledouble(2.25).floor().to_float() == 2);
-        CHECK(doubledouble(2.0).floor().to_float() == 2);
-        CHECK(doubledouble(1.75).floor().to_float() == 1);
-        CHECK(doubledouble(1.5).floor().to_float() == 1);
-        CHECK(doubledouble(1.25).floor().to_float() == 1);
-        CHECK(doubledouble(1.0).floor().to_float() == 1);
-        CHECK(doubledouble(0.75).floor().to_float() == 0);
-        CHECK(doubledouble(0.5).floor().to_float() == 0);
-        CHECK(doubledouble(0.25).floor().to_float() == 0);
-        CHECK(doubledouble(0).floor().to_float() == 0);
-        CHECK(doubledouble(-0.25).floor().to_float() == -1);
-        CHECK(doubledouble(-0.5).floor().to_float() == -1);
-        CHECK(doubledouble(-0.75).floor().to_float() == -1);
-        CHECK(doubledouble(-1.0).floor().to_float() == -1);
-        CHECK(doubledouble(-1.25).floor().to_float() == -2);
-        CHECK(doubledouble(-1.5).floor().to_float() == -2);
-        CHECK(doubledouble(-1.75).floor().to_float() == -2);
-        CHECK(doubledouble(-2).floor().to_float() == -2);
-        CHECK(doubledouble(-2.25).floor().to_float() == -3);
-        CHECK(doubledouble(-2.5).floor().to_float() == -3);
-        CHECK(doubledouble(-2.75).floor().to_float() == -3);
+        struct { double v; float down; float round; float zero; float up; } p[] = {
 
-        for (int i = 0; i < NUM_TESTS; i++) {
+            { 2.75,     2,      2,      2,      2 },
+            { 2.5,      2,      2,      2,      2 },
+            { 2.25,     2,      2,      2,      2 },
+            { 2.0,      2,      2,      2,      2 },
+            { 1.75,     1,      1,      1,      1 },
+            { 1.5,      1,      1,      1,      1 },
+            { 1.25,     1,      1,      1,      1 },
+            { 1.0,      1,      1,      1,      1 },
+            { 0.75,     0,      0,      0,      0 },
+            { 0.5,      0,      0,      0,      0 },
+            { 0.25,     0,      0,      0,      0 },
+            { 0,        0,      0,      0,      0 },
+            { -0.25,   -1,     -1,     -1,     -1 },
+            { -0.5,    -1,     -1,     -1,     -1 },
+            { -0.75,   -1,     -1,     -1,     -1 },
+            { -1.0,    -1,     -1,     -1,     -1 },
+            { -1.25,   -2,     -2,     -2,     -2 },
+            { -1.5,    -2,     -2,     -2,     -2 },
+            { -1.75,   -2,     -2,     -2,     -2 },
+            { -2,      -2,     -2,     -2,     -2 },
+            { -2.25,   -3,     -3,     -3,     -3 },
+            { -2.5,    -3,     -3,     -3,     -3 },
+            { -2.75,   -3,     -3,     -3,     -3 },
 
-            double x = rand_double();
-            CHECK(doubledouble(x).floor().to_float() == (float)std::floor(x));
+            { 999,      0,      0,      0,      0 }
+        };
+
+        for (int i = 0; p[i].v != 999; i++) {
+
+            fesetround(FE_DOWNWARD);
+            CHECK(doubledouble(p[i].v).floor() == p[i].down);
+            fesetround(FE_TONEAREST);
+            CHECK(doubledouble(p[i].v).floor() == p[i].round);
+            fesetround(FE_TOWARDZERO);
+            CHECK(doubledouble(p[i].v).floor() == p[i].zero);
+            fesetround(FE_UPWARD);
+            CHECK(doubledouble(p[i].v).floor() == p[i].up);
         }
     }
 
@@ -84,95 +107,134 @@ TEST_CASE("Rounding and remainder functions") {
 
     SUBCASE("trunc") {
 
-        CHECK(doubledouble(2.75).trunc().to_float() == 2);
-        CHECK(doubledouble(2.5).trunc().to_float() == 2);
-        CHECK(doubledouble(2.25).trunc().to_float() == 2);
-        CHECK(doubledouble(2.0).trunc().to_float() == 2);
-        CHECK(doubledouble(1.75).trunc().to_float() == 1);
-        CHECK(doubledouble(1.5).trunc().to_float() == 1);
-        CHECK(doubledouble(1.25).trunc().to_float() == 1);
-        CHECK(doubledouble(1.0).trunc().to_float() == 1);
-        CHECK(doubledouble(0.75).trunc().to_float() == 0);
-        CHECK(doubledouble(0.5).trunc().to_float() == 0);
-        CHECK(doubledouble(0.25).trunc().to_float() == 0);
-        CHECK(doubledouble(0).trunc().to_float() == 0);
-        CHECK(doubledouble(-0.25).trunc().to_float() == 0);
-        CHECK(doubledouble(-0.5).trunc().to_float() == 0);
-        CHECK(doubledouble(-0.75).trunc().to_float() == 0);
-        CHECK(doubledouble(-1.0).trunc().to_float() == -1);
-        CHECK(doubledouble(-1.25).trunc().to_float() == -1);
-        CHECK(doubledouble(-1.5).trunc().to_float() == -1);
-        CHECK(doubledouble(-1.75).trunc().to_float() == -1);
-        CHECK(doubledouble(-2).trunc().to_float() == -2);
-        CHECK(doubledouble(-2.25).trunc().to_float() == -2);
-        CHECK(doubledouble(-2.5).trunc().to_float() == -2);
-        CHECK(doubledouble(-2.75).trunc().to_float() == -2);
+        struct { double v; float down; float round; float zero; float up; } p[] = {
 
-        for (int i = 0; i < NUM_TESTS; i++) {
+            { 2.75,     2,      2,      2,      2 },
+            { 2.5,      2,      2,      2,      2 },
+            { 2.25,     2,      2,      2,      2 },
+            { 2.0,      2,      2,      2,      2 },
+            { 1.75,     1,      1,      1,      1 },
+            { 1.5,      1,      1,      1,      1 },
+            { 1.25,     1,      1,      1,      1 },
+            { 1.0,      1,      1,      1,      1 },
+            { 0.75,     0,      0,      0,      0 },
+            { 0.5,      0,      0,      0,      0 },
+            { 0.25,     0,      0,      0,      0 },
+            { 0,        0,      0,      0,      0 },
+            { -0.25,    0,      0,      0,      0 },
+            { -0.5,     0,      0,      0,      0 },
+            { -0.75,    0,      0,      0,      0 },
+            { -1.0,    -1,     -1,     -1,     -1 },
+            { -1.25,   -1,     -1,     -1,     -1 },
+            { -1.5,    -1,     -1,     -1,     -1 },
+            { -1.75,   -1,     -1,     -1,     -1 },
+            { -2,      -2,     -2,     -2,     -2 },
+            { -2.25,   -2,     -2,     -2,     -2 },
+            { -2.5,    -2,     -2,     -2,     -2 },
+            { -2.75,   -2,     -2,     -2,     -2 },
 
-            double x = rand_double();
-            CHECK(doubledouble(x).trunc().to_float() == (float)std::trunc(x));
+            { 999,      0,      0,      0,      0 }
+        };
+
+        for (int i = 0; p[i].v != 999; i++) {
+
+            fesetround(FE_DOWNWARD);
+            CHECK(doubledouble(p[i].v).trunc() == p[i].down);
+            fesetround(FE_TONEAREST);
+            CHECK(doubledouble(p[i].v).trunc() == p[i].round);
+            fesetround(FE_TOWARDZERO);
+            CHECK(doubledouble(p[i].v).trunc() == p[i].zero);
+            fesetround(FE_UPWARD);
+            CHECK(doubledouble(p[i].v).trunc() == p[i].up);
         }
     }
 
     SUBCASE("round") {
 
-        CHECK(doubledouble(2.75).round().to_float() == 3);
-        CHECK(doubledouble(2.5).round().to_float() == 3);
-        CHECK(doubledouble(2.25).round().to_float() == 2);
-        CHECK(doubledouble(2.0).round().to_float() == 2);
-        CHECK(doubledouble(1.75).round().to_float() == 2);
-        CHECK(doubledouble(1.5).round().to_float() == 2);
-        CHECK(doubledouble(1.25).round().to_float() == 1);
-        CHECK(doubledouble(1.0).round().to_float() == 1);
-        CHECK(doubledouble(0.75).round().to_float() == 1);
-        CHECK(doubledouble(0.5).round().to_float() == 1);
-        CHECK(doubledouble(0.25).round().to_float() == 0);
-        CHECK(doubledouble(0).round().to_float() == 0);
-        CHECK(doubledouble(-0.25).round().to_float() == 0);
-        CHECK(doubledouble(-0.5).round().to_float() == -1);
-        CHECK(doubledouble(-0.75).round().to_float() == -1);
-        CHECK(doubledouble(-1.0).round().to_float() == -1);
-        CHECK(doubledouble(-1.25).round().to_float() == -1);
-        CHECK(doubledouble(-1.5).round().to_float() == -2);
-        CHECK(doubledouble(-1.75).round().to_float() == -2);
-        CHECK(doubledouble(-2).round().to_float() == -2);
-        CHECK(doubledouble(-2.25).round().to_float() == -2);
-        CHECK(doubledouble(-2.5).round().to_float() == -3);
-        CHECK(doubledouble(-2.75).round().to_float() == -3);
+        struct { double v; float down; float round; float zero; float up; } p[] = {
 
-        for (int i = 0; i < NUM_TESTS; i++) {
+            { 2.75,     3,      3,      3,      3 },
+            { 2.5,      3,      3,      3,      3 },
+            { 2.25,     2,      2,      2,      2 },
+            { 2.0,      2,      2,      2,      2 },
+            { 1.75,     2,      2,      2,      2 },
+            { 1.5,      2,      2,      2,      2 },
+            { 1.25,     1,      1,      1,      1 },
+            { 1.0,      1,      1,      1,      1 },
+            { 0.75,     1,      1,      1,      1 },
+            { 0.5,      1,      1,      1,      1 },
+            { 0.25,     0,      0,      0,      0 },
+            { 0,        0,      0,      0,      0 },
+            { -0.25,    0,      0,      0,      0 },
+            { -0.5,    -1,     -1,     -1,     -1 },
+            { -0.75,   -1,     -1,     -1,     -1 },
+            { -1.0,    -1,     -1,     -1,     -1 },
+            { -1.25,   -1,     -1,     -1,     -1 },
+            { -1.5,    -2,     -2,     -2,     -2 },
+            { -1.75,   -2,     -2,     -2,     -2 },
+            { -2,      -2,     -2,     -2,     -2 },
+            { -2.25,   -2,     -2,     -2,     -2 },
+            { -2.5,    -3,     -3,     -3,     -3 },
+            { -2.75,   -3,     -3,     -3,     -3 },
 
-            double x = rand_double();
-            CHECK(doubledouble(x).round().to_float() == (float)std::round(x));
+            { 999,      0,      0,      0,      0 }
+        };
+
+        for (int i = 0; p[i].v != 999; i++) {
+
+            fesetround(FE_DOWNWARD);
+            CHECK(doubledouble(p[i].v).round() == p[i].down);
+            fesetround(FE_TONEAREST);
+            CHECK(doubledouble(p[i].v).round() == p[i].round);
+            fesetround(FE_TOWARDZERO);
+            CHECK(doubledouble(p[i].v).round() == p[i].zero);
+            fesetround(FE_UPWARD);
+            CHECK(doubledouble(p[i].v).round() == p[i].up);
         }
     }
 
     SUBCASE("roundEven") {
 
-        CHECK(doubledouble(2.75).roundEven().to_float() == 3);
-        CHECK(doubledouble(2.5).roundEven().to_float() == 2);
-        CHECK(doubledouble(2.25).roundEven().to_float() == 2);
-        CHECK(doubledouble(2.0).roundEven().to_float() == 2);
-        CHECK(doubledouble(1.75).roundEven().to_float() == 2);
-        CHECK(doubledouble(1.5).roundEven().to_float() == 2);
-        CHECK(doubledouble(1.25).roundEven().to_float() == 1);
-        CHECK(doubledouble(1.0).roundEven().to_float() == 1);
-        CHECK(doubledouble(0.75).roundEven().to_float() == 1);
-        CHECK(doubledouble(0.5).roundEven().to_float() == 0);
-        CHECK(doubledouble(0.25).roundEven().to_float() == 0);
-        CHECK(doubledouble(0).roundEven().to_float() == 0);
-        CHECK(doubledouble(-0.25).roundEven().to_float() == 0);
-        CHECK(doubledouble(-0.5).roundEven().to_float() == 0);
-        CHECK(doubledouble(-0.75).roundEven().to_float() == -1);
-        CHECK(doubledouble(-1.0).roundEven().to_float() == -1);
-        CHECK(doubledouble(-1.25).roundEven().to_float() == -1);
-        CHECK(doubledouble(-1.5).roundEven().to_float() == -2);
-        CHECK(doubledouble(-1.75).roundEven().to_float() == -2);
-        CHECK(doubledouble(-2).roundEven().to_float() == -2);
-        CHECK(doubledouble(-2.25).roundEven().to_float() == -2);
-        CHECK(doubledouble(-2.5).roundEven().to_float() == -2);
-        CHECK(doubledouble(-2.75).roundEven().to_float() == -3);
+        struct { double v; float down; float round; float zero; float up; } p[] = {
+
+            { 2.75,     3,      3,      3,      3 },
+            { 2.5,      2,      2,      2,      2 },
+            { 2.25,     2,      2,      2,      2 },
+            { 2.0,      2,      2,      2,      2 },
+            { 1.75,     2,      2,      2,      2 },
+            { 1.5,      2,      2,      2,      2 },
+            { 1.25,     1,      1,      1,      1 },
+            { 1.0,      1,      1,      1,      1 },
+            { 0.75,     1,      1,      1,      1 },
+            { 0.5,      0,      0,      0,      0 },
+            { 0.25,     0,      0,      0,      0 },
+            { 0,        0,      0,      0,      0 },
+            { -0.25,    0,      0,      0,      0 },
+            { -0.5,     0,      0,      0,      0 },
+            { -0.75,   -1,     -1,     -1,     -1 },
+            { -1.0,    -1,     -1,     -1,     -1 },
+            { -1.25,   -1,     -1,     -1,     -1 },
+            { -1.5,    -2,     -2,     -2,     -2 },
+            { -1.75,   -2,     -2,     -2,     -2 },
+            { -2,      -2,     -2,     -2,     -2 },
+            { -2.25,   -2,     -2,     -2,     -2 },
+            { -2.5,    -2,     -2,     -2,     -2 },
+            { -2.75,   -3,     -3,     -3,     -3 },
+
+            { 999,      0,      0,      0,      0 }
+        };
+
+        for (int i = 0; p[i].v != 999; i++) {
+
+            fesetround(FE_DOWNWARD);
+            CHECK(doubledouble(p[i].v).roundEven() == p[i].down);
+            fesetround(FE_TONEAREST);
+            CHECK(doubledouble(p[i].v).roundEven() == p[i].round);
+            fesetround(FE_TOWARDZERO);
+            CHECK(doubledouble(p[i].v).roundEven() == p[i].zero);
+            fesetround(FE_UPWARD);
+            CHECK(doubledouble(p[i].v).roundEven() == p[i].up);
+        }
     }
 
     SUBCASE("lround") {
@@ -195,125 +257,46 @@ TEST_CASE("Rounding and remainder functions") {
 
     SUBCASE("rint") {
 
-        auto mode = fegetround();
+        struct { double v; float down; float round; float zero; float up; } p[] = {
 
-        SUBCASE("FE_DOWNWARD") {
+            { 2.75,     2,      3,      2,      3 },
+            { 2.5,      2,      2,      2,      3 },
+            { 2.25,     2,      2,      2,      3 },
+            { 2.0,      2,      2,      2,      2 },
+            { 1.75,     1,      2,      1,      2 },
+            { 1.5,      1,      2,      1,      2 },
+            { 1.25,     1,      1,      1,      2 },
+            { 1.0,      1,      1,      1,      1 },
+            { 0.75,     0,      1,      0,      1 },
+            { 0.5,      0,      0,      0,      1 },
+            { 0.25,     0,      0,      0,      1 },
+            { 0,        0,      0,      0,      0 },
+            { -0.25,   -1,      0,      0,      0 },
+            { -0.5,    -1,      0,      0,      0 },
+            { -0.75,   -1,     -1,      0,      0 },
+            { -1.0,    -1,     -1,     -1,     -1 },
+            { -1.25,   -2,     -1,     -1,     -1 },
+            { -1.5,    -2,     -2,     -1,     -1 },
+            { -1.75,   -2,     -2,     -1,     -1 },
+            { -2,      -2,     -2,     -2,     -2 },
+            { -2.25,   -3,     -2,     -2,     -2 },
+            { -2.5,    -3,     -2,     -2,     -2 },
+            { -2.75,   -3,     -3,     -2,     -2 },
+
+            { 999,      0,      0,      0,      0 }
+        };
+
+        for (int i = 0; p[i].v != 999; i++) {
 
             fesetround(FE_DOWNWARD);
-
-            CHECK(doubledouble(3).rint().to_float() == 3);
-            CHECK(doubledouble(3.25).rint().to_float() == 3);
-            CHECK(doubledouble(3.5).rint().to_float() == 3);
-            CHECK(doubledouble(3.75).rint().to_float() == 3);
-            CHECK(doubledouble(4).rint().to_float() == 4);
-            CHECK(doubledouble(4.25).rint().to_float() == 4);
-            CHECK(doubledouble(4.5).rint().to_float() == 4);
-            CHECK(doubledouble(4.75).rint().to_float() == 4);
-
-            CHECK(doubledouble(-3).rint().to_float() == -3);
-            CHECK(doubledouble(-3.25).rint().to_float() == -4);
-            CHECK(doubledouble(-3.5).rint().to_float() == -4);
-            CHECK(doubledouble(-3.75).rint().to_float() == -4);
-            CHECK(doubledouble(-4).rint().to_float() == -4);
-            CHECK(doubledouble(-4.25).rint().to_float() == -5);
-            CHECK(doubledouble(-4.5).rint().to_float() == -5);
-            CHECK(doubledouble(-4.75).rint().to_float() == -5);
-
-            for (int i = 0; i < NUM_TESTS; i++) {
-
-                double x = rand_double();
-                CHECK(doubledouble(x).rint().to_float() == (float)std::rint(x));
-            }
-        }
-
-        SUBCASE("FE_TONEAREST") {
-
+            CHECK(doubledouble(p[i].v).rint() == p[i].down);
             fesetround(FE_TONEAREST);
-
-            CHECK(doubledouble(3).rint().to_float() == 3);
-            CHECK(doubledouble(3.25).rint().to_float() == 3);
-            CHECK(doubledouble(3.5).rint().to_float() == 4);
-            CHECK(doubledouble(3.75).rint().to_float() == 4);
-            CHECK(doubledouble(4).rint().to_float() == 4);
-            CHECK(doubledouble(4.25).rint().to_float() == 4);
-            CHECK(doubledouble(4.5).rint().to_float() == 4);
-            CHECK(doubledouble(4.75).rint().to_float() == 5);
-
-            CHECK(doubledouble(-3).rint().to_float() == -3);
-            CHECK(doubledouble(-3.25).rint().to_float() == -3);
-            CHECK(doubledouble(-3.5).rint().to_float() == -4);
-            CHECK(doubledouble(-3.75).rint().to_float() == -4);
-            CHECK(doubledouble(-4).rint().to_float() == -4);
-            CHECK(doubledouble(-4.25).rint().to_float() == -4);
-            CHECK(doubledouble(-4.5).rint().to_float() == -4);
-            CHECK(doubledouble(-4.75).rint().to_float() == -5);
-
-            for (int i = 0; i < NUM_TESTS; i++) {
-
-                double x = rand_double();
-                CHECK(doubledouble(x).rint().to_float() == (float)std::rint(x));
-            }
-        }
-
-        SUBCASE("FE_TOWARDZERO") {
-
+            CHECK(doubledouble(p[i].v).rint() == p[i].round);
             fesetround(FE_TOWARDZERO);
-
-            CHECK(doubledouble(3).rint().to_float() == 3);
-            CHECK(doubledouble(3.25).rint().to_float() == 3);
-            CHECK(doubledouble(3.5).rint().to_float() == 3);
-            CHECK(doubledouble(3.75).rint().to_float() == 3);
-            CHECK(doubledouble(4).rint().to_float() == 4);
-            CHECK(doubledouble(4.25).rint().to_float() == 4);
-            CHECK(doubledouble(4.5).rint().to_float() == 4);
-            CHECK(doubledouble(4.75).rint().to_float() == 4);
-
-            CHECK(doubledouble(-3).rint().to_float() == -3);
-            CHECK(doubledouble(-3.25).rint().to_float() == -3);
-            CHECK(doubledouble(-3.5).rint().to_float() == -3);
-            CHECK(doubledouble(-3.75).rint().to_float() == -3);
-            CHECK(doubledouble(-4).rint().to_float() == -4);
-            CHECK(doubledouble(-4.25).rint().to_float() == -4);
-            CHECK(doubledouble(-4.5).rint().to_float() == -4);
-            CHECK(doubledouble(-4.75).rint().to_float() == -4);
-
-            for (int i = 0; i < NUM_TESTS; i++) {
-
-                double x = rand_double();
-                CHECK(doubledouble(x).rint().to_float() == (float)std::rint(x));
-            }
-        }
-
-        SUBCASE("FE_UPWARD") {
-
+            CHECK(doubledouble(p[i].v).rint() == p[i].zero);
             fesetround(FE_UPWARD);
-
-            CHECK(doubledouble(3).rint().to_float() == 3);
-            CHECK(doubledouble(3.25).rint().to_float() == 4);
-            CHECK(doubledouble(3.5).rint().to_float() == 4);
-            CHECK(doubledouble(3.75).rint().to_float() == 4);
-            CHECK(doubledouble(4).rint().to_float() == 4);
-            CHECK(doubledouble(4.25).rint().to_float() == 5);
-            CHECK(doubledouble(4.5).rint().to_float() == 5);
-            CHECK(doubledouble(4.75).rint().to_float() == 5);
-
-            CHECK(doubledouble(-3).rint().to_float() == -3);
-            CHECK(doubledouble(-3.25).rint().to_float() == -3);
-            CHECK(doubledouble(-3.5).rint().to_float() == -3);
-            CHECK(doubledouble(-3.75).rint().to_float() == -3);
-            CHECK(doubledouble(-4).rint().to_float() == -4);
-            CHECK(doubledouble(-4.25).rint().to_float() == -4);
-            CHECK(doubledouble(-4.5).rint().to_float() == -4);
-            CHECK(doubledouble(-4.75).rint().to_float() == -4);
-
-            for (int i = 0; i < NUM_TESTS; i++) {
-
-                double x = rand_double();
-                CHECK(doubledouble(x).rint().to_float() == (float)std::rint(x));
-            }
+            CHECK(doubledouble(p[i].v).rint() == p[i].up);
         }
-
-        fesetround(mode);
     }
 
     SUBCASE("lrint") {
@@ -336,10 +319,53 @@ TEST_CASE("Rounding and remainder functions") {
 
     SUBCASE("nearbyint") {
 
+        struct { double v; float down; float round; float zero; float up; } p[] = {
+
+            { 2.75,     2,      3,      2,      3 },
+            { 2.5,      2,      2,      2,      3 },
+            { 2.25,     2,      2,      2,      3 },
+            { 2.0,      2,      2,      2,      2 },
+            { 1.75,     1,      2,      1,      2 },
+            { 1.5,      1,      2,      1,      2 },
+            { 1.25,     1,      1,      1,      2 },
+            { 1.0,      1,      1,      1,      1 },
+            { 0.75,     0,      1,      0,      1 },
+            { 0.5,      0,      0,      0,      1 },
+            { 0.25,     0,      0,      0,      1 },
+            { 0,        0,      0,      0,      0 },
+            { -0.25,   -1,      0,      0,      0 },
+            { -0.5,    -1,      0,      0,      0 },
+            { -0.75,   -1,     -1,      0,      0 },
+            { -1.0,    -1,     -1,     -1,     -1 },
+            { -1.25,   -2,     -1,     -1,     -1 },
+            { -1.5,    -2,     -2,     -1,     -1 },
+            { -1.75,   -2,     -2,     -1,     -1 },
+            { -2,      -2,     -2,     -2,     -2 },
+            { -2.25,   -3,     -2,     -2,     -2 },
+            { -2.5,    -3,     -2,     -2,     -2 },
+            { -2.75,   -3,     -3,     -2,     -2 },
+
+            { 999,      0,      0,      0,      0 }
+        };
+
+        for (int i = 0; p[i].v != 999; i++) {
+
+            fesetround(FE_DOWNWARD);
+            CHECK(doubledouble(p[i].v).nearbyint() == p[i].down);
+            fesetround(FE_TONEAREST);
+            CHECK(doubledouble(p[i].v).nearbyint() == p[i].round);
+            fesetround(FE_TOWARDZERO);
+            CHECK(doubledouble(p[i].v).nearbyint() == p[i].zero);
+            fesetround(FE_UPWARD);
+            CHECK(doubledouble(p[i].v).nearbyint() == p[i].up);
+        }
+
         for (int i = 0; i < NUM_TESTS; i++) {
 
             double x = rand_double();
             CHECK(doubledouble(x).nearbyint().to_float() == (float)std::nearbyint(x));
         }
     }
+
+    fesetround(mode);
 }

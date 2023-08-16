@@ -468,7 +468,7 @@ public:
 
     Double<T> modf(Double<T> *iptr) const
     {
-        auto nearby = nearbyint(FE_TOWARDZERO);
+        auto nearby = trunc();
         auto result = (isinf() ? Double<T>(0.0) : *this - nearby).copysign(*this);
 
         *iptr = nearby;
@@ -559,8 +559,7 @@ public:
 
     Double<T> ceil(int fracdigits) const
     {
-        int e; auto m = frexp10(&e);
-        return m.ceil().ldexp10(e);
+        return ldexp10(fracdigits).ceil().ldexp10(-fracdigits);
     }
 
     Double<T> floor() const
@@ -580,9 +579,8 @@ public:
     }
 
     Double<T> floor(int fracdigits) const
-    {
-        int e; auto m = frexp10(&e);
-        return m.floor().ldexp10(e);
+    {        
+        return ldexp10(fracdigits).floor().ldexp10(-fracdigits);
     }
 
     Double<T> fmod(Double<T> denom) const
@@ -596,6 +594,11 @@ public:
         return is_negative() ? ceil() : floor();
     }
 
+    Double<T> trunc(int fracdigits) const
+    {
+        return ldexp10(fracdigits).trunc().ldexp10(-fracdigits);
+    }
+
     Double<T> round() const
     {
         if (is_negative()) {
@@ -603,6 +606,11 @@ public:
         } else {
             return (*this + Double<T>(0.5)).floor();
         }
+    }
+
+    Double<T> round(int fracdigits) const
+    {
+        return ldexp10(fracdigits).round().ldexp10(-fracdigits);
     }
 
     Double<T> roundEven() const
@@ -625,6 +633,11 @@ public:
         }
     }
 
+    Double<T> roundEven(int fracdigits) const
+    {
+        return ldexp10(fracdigits).roundEven().ldexp10(-fracdigits);
+    }
+
     long lround() const
     {
         return round().to_long();
@@ -638,6 +651,18 @@ public:
     Double<T> rint() const
     {
         auto result = nearbyint();
+
+        // TODO:
+        // The rint() functions do the same [as nearbyint], but will raise the
+        // inexact exception (FE_INEXACT, checkable via fetestexcept(3)) when
+        // the result differs in value from the argument.
+
+        return result;
+    }
+
+    Double<T> rint(int fracdigits) const
+    {
+        auto result = nearbyint(fracdigits);
 
         // TODO:
         // The rint() functions do the same [as nearbyint], but will raise the
@@ -666,33 +691,17 @@ public:
             case FE_TOWARDZERO: return trunc();
             default:            return ceil();
         }
-
-        /*
-        T hi = std::nearbyint(x);
-
-        if (hi == x) {
-
-            // Upper part is an integer
-            T lo = std::nearbyint(y);
-            return quickTwoSum(hi, lo);
-
-        } else {
-
-            // Upper part is not an integer
-            if (std::abs(hi - x) == 0.5 && y < 0.0) hi -= 1.0;
-            return Double<T>(hi);
-        }
-        */
     }
 
-    Double<T> nearbyint(int mode) const
+    Double<T> nearbyint(int fracdigits) const
     {
-        int save_round = std::fegetround();
-        std::fesetround(mode);
-        auto result = nearbyint();
-        std::fesetround(save_round);
+        switch (fegetround()) {
 
-        return result;
+            case FE_DOWNWARD:   return floor(fracdigits);
+            case FE_TONEAREST:  return roundEven(fracdigits);
+            case FE_TOWARDZERO: return trunc(fracdigits);
+            default:            return ceil(fracdigits);
+        }
     }
 
 

@@ -83,6 +83,18 @@ TEST_CASE("Exponential and logarithmic functions") {
         }
     }
 
+    SUBCASE("ldexp10") {
+
+        doubledouble pi(3.1415);
+
+        CHECK(pi.ldexp10(0).to_float() == (float)3.1415);
+        CHECK(pi.ldexp10(1).to_float() == (float)31.415);
+        CHECK(pi.ldexp10(2).to_float() == (float)314.15);
+        CHECK(pi.ldexp10(3).to_float() == (float)3141.5);
+        CHECK(pi.ldexp10(4).to_float() == (float)31415);
+        CHECK(pi.ldexp10(5).to_float() == (float)314150);
+    }
+
     SUBCASE("log") {
 
         for (int i = 0; i < NUM_TESTS; i++) {

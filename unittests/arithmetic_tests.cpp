@@ -41,6 +41,16 @@ TEST_CASE("Basic arithmetic") {
         }
     }
 
+    SUBCASE("Division by zero") {
+
+        CHECK((doubledouble(42.0) / 0.0).isinf());
+        CHECK((doubledouble(-42.0) / 0.0).isinf());
+        CHECK(doubledouble(42.0) / 0.0 == doubledouble::inf());
+        CHECK(doubledouble(-42.0) / 0.0 != doubledouble::inf());
+        CHECK(doubledouble(-42.0) / 0.0 == -doubledouble::inf());
+        CHECK((doubledouble(0.0) / 0.0).isnan());
+    }
+
     SUBCASE("Increment and decrement operators") {
 
         for (double x = -5.0; x <= 10.0; x += 0.1) {

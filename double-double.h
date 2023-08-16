@@ -350,11 +350,18 @@ public:
 
     Double<T> &operator/=(const Double<T> &rhs)
     {
-        auto r = x / rhs.x;
-        auto val = twoProd(r, rhs.x);
-        auto e = (x - val.x - val.y + y - r * rhs.y) / rhs.x;
+        if (rhs.is_zero()) {
 
-        *this = quickTwoSum(r, e);
+            *this = is_zero() ? nan() : signbit() ? -inf() : inf();
+
+        } else {
+
+            auto r = x / rhs.x;
+            auto val = twoProd(r, rhs.x);
+            auto e = (x - val.x - val.y + y - r * rhs.y) / rhs.x;
+
+            *this = quickTwoSum(r, e);
+        }
         return *this;
     }
 
@@ -779,9 +786,9 @@ public:
     bool isinf() const { return std::isinf(x); }
     bool isnan() const { return std::isnan(x); }
     bool isnormal() const { return std::isnormal(x); }
-    bool signbit() const { return x < 0.0; }
+    bool signbit() const { return x != 0 || y == 0 ? std::signbit(x) : std::signbit(y); }
 
-    bool is_zero() const { return (x == 0.0); }
+    bool is_zero() const { return x == 0.0; }
     bool is_one() const { return x == 1.0 && y == 0.0; }
     bool is_positive() const {  return x > 0.0; }
     bool is_negative() const {  return x < 0.0; }

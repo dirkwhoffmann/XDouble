@@ -129,7 +129,13 @@ TEST_CASE("Rounding and remainder functions") {
 
             double x = rand_double();
             double denom = rand_double();
-            CHECK(doubledouble(x).fmod(denom).to_float() == (float)std::fmod(x, denom));
+            auto result = doubledouble(x).fmod(denom);
+
+            if (result.isnan()) {
+                CHECK(std::isnan(std::fmod(x, denom)));
+            } else {
+                CHECK(result.to_float() == (float)std::fmod(x, denom));
+            }
         }
     }
 

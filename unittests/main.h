@@ -3,7 +3,7 @@
 #include "doctest.h"
 #include "double-double.h"
 
-#define NUM_TESTS 1000
+#define NUM_TESTS 10000
 
 static inline double rand_int()
 {

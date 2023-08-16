@@ -46,7 +46,7 @@ TEST_CASE("Power functions") {
         CHECK(sqrt2.to_string(30) == "1.414213562373095048801688724209");
 
         // 1.6487212707001281468486507878141635716537761007101480115750793116
-        doubledouble sqrte = doubledouble::e.sqrt();
+        doubledouble sqrte = doubledouble::e_v.sqrt();
         CHECK(sqrte.to_string(30) == "1.648721270700128146848650787814");
 
     }

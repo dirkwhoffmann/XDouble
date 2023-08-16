@@ -36,7 +36,7 @@
 template <class T>
 class Double {
 
-    constexpr static bool useFma = false;
+    constexpr static bool useFma = true;
 
     T x, y;
 
@@ -98,12 +98,6 @@ private:
 
 public:
 
-    // DEPRECATED
-    static const Double<T> e;
-    static const Double<T> ln2;
-    static const Double<T> ln10;
-    static const Double<T> pi;
-
     static const Double<T> e_v;
     static const Double<T> log2e_v;
     static const Double<T> log10e_v;
@@ -117,8 +111,6 @@ public:
     static const Double<T> inv_sqrt3_v;
     static const Double<T> egamma_v;
     static const Double<T> phi_v;
-
-    // static const Double<T> nan;
 
 
     //
@@ -166,6 +158,10 @@ public:
     std::string to_string(int digits) const
     {
         std::string result;
+
+        // Catch special cases
+        if (isnan()) return "nan";
+        if (isinf()) return signbit() ? "-inf" : "inf";
 
         // Split number l.r into pre-decimal and fractional part
         Double<T> l; Double<T> r = modf(&l);
@@ -478,7 +474,7 @@ public:
                     23465490048000) * w + 154872234316800) * w -
                   647647525324800) * w + 1295295050649600;
 
-        return e.pow(n) * (u / v);
+        return e_v.pow(n) * (u / v);
     }
 
     Double<T> frexp(int *exp) const
@@ -824,11 +820,6 @@ public:
         return fabs();
     }
 
-    Double<T> fma(const Double<T> &y, const Double<T> &z) const
-    {
-        return (*this) * y + z;
-    }
-
 
     //
     // Classification functions
@@ -840,7 +831,7 @@ public:
     bool isnormal() const { return std::isnormal(x); }
     bool signbit() const { return x != 0 || y == 0 ? std::signbit(x) : std::signbit(y); }
 
-    bool iszero() const { return x == 0.0; }
+    bool iszero() const { return x == 0.0 && y == 0.0; }
     bool isone() const { return x == 1.0 && y == 0.0; }
     bool ispositive() const {  return x > 0.0; }
     bool isnegative() const {  return x < 0.0; }
@@ -861,13 +852,28 @@ typedef Double<double> doubledouble;
 typedef Double<long double> longdoubledouble;
 
 template <class T> inline const Double<T>
-Double<T>::e   ("2.71828182 84590452 35360287 47135266 24977572 47093699 95957496 69676277");
+Double<T>::e_v          ("2.71828182 84590452 35360287 47135266 24977572 47093699 95957496 69676277");
 template <class T> inline const Double<T>
-Double<T>::ln2 ("0.69314718 05599453 09417232 12145817 65680755 00134360 25525412 06800195");
+Double<T>::log2e_v      ("1.44269504 08889634 07359924 68100189 21374266 45954152 98593413 54494069");
 template <class T> inline const Double<T>
-Double<T>::ln10("2.30258509 29940456 84017991 45468436 42076011 01488628 77297603 33279010");
+Double<T>::log10e_v     ("0.434294 48190325 18276511 28918916 60508229 43970058 03666566 1144537831");
 template <class T> inline const Double<T>
-Double<T>::pi  ("3.14159265 35897932 38462643 38327950 28841971 69399375 10582097 49445923");
-
+Double<T>::pi_v         ("3.14159265 35897932 38462643 38327950 28841971 69399375 10582097 49445923");
 template <class T> inline const Double<T>
-Double<T>::ln10_v  ("2.3025 85092994 04568401 79914546 84364207 60110148 86287729 76033328");
+Double<T>::inv_pi_v     ("0.31830988 61837906 71537767 52674502 87240689 19291480 91289749 53346881");
+template <class T> inline const Double<T>
+Double<T>::inv_sqrtpi_v ("0.56418958 35477562 86948079 45156077 25858440 50629328 99885684 4085a722");
+template <class T> inline const Double<T>
+Double<T>::ln2_v        ("0.69314718 05599453 09417232 12145817 65680755 00134360 25525412 06800195");
+template <class T> inline const Double<T>
+Double<T>::ln10_v       ("2.30258509 29940456 84017991 45468436 42076011 01488628 77297603 33279009");
+template <class T> inline const Double<T>
+Double<T>::sqrt2_v      ("1.41421356 23730950 48801688 72420969 80785696 71875376 94807317 66797379");
+template <class T> inline const Double<T>
+Double<T>::sqrt3_v      ("1.73205080 75688772 93527446 34150587 23669428 05253810 38062805 58069794");
+template <class T> inline const Double<T>
+Double<T>::inv_sqrt3_v  ("0.57735026 91896257 64509148 78050195 74556476 01751270 12687601 86023264");
+template <class T> inline const Double<T>
+Double<T>::egamma_v     ("0.57721566 49015328 60606512 09008240 24310421 59335939 92359880 57672349");
+template <class T> inline const Double<T>
+Double<T>::phi_v        ("1.61803398 87498948 48204586 83436563 81177203 09179805 76286213 54486227");

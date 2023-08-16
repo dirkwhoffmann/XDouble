@@ -4,7 +4,7 @@ TEST_CASE("Floating-point manipulation functions") {
 
     SUBCASE("copysign") {
 
-        doubledouble pi = doubledouble::pi;
+        doubledouble pi = doubledouble::pi_v;
 
         doubledouble x = 1.0;
         doubledouble y = -1.0;

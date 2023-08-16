@@ -1,4 +1,5 @@
 #include "main.h"
+#include <numbers>
 
 TEST_CASE("Basic smoke tests") {
 
@@ -97,5 +98,22 @@ TEST_CASE("Basic smoke tests") {
         CHECK(doubledouble::nan().to_string(0) == "nan");
         CHECK(doubledouble::inf().to_string(0) == "inf");
         CHECK((-doubledouble::inf()).to_string(0) == "-inf");
+    }
+
+    SUBCASE("Constants") {
+
+        CHECK(doubledouble::e.to_float() == (float)std::numbers::e);
+        CHECK(doubledouble::log2e.to_float() == (float)std::numbers::log2e);
+        CHECK(doubledouble::log10e.to_float() == (float)std::numbers::log10e);
+        CHECK(doubledouble::pi.to_float() == (float)std::numbers::pi);
+        CHECK(doubledouble::inv_pi.to_float() == (float)std::numbers::inv_pi);
+        CHECK(doubledouble::inv_sqrtpi.to_float() == (float)std::numbers::inv_sqrtpi);
+        CHECK(doubledouble::ln2.to_float() == (float)std::numbers::ln2);
+        CHECK(doubledouble::ln10.to_float() == (float)std::numbers::ln10);
+        CHECK(doubledouble::sqrt2.to_float() == (float)std::numbers::sqrt2);
+        CHECK(doubledouble::sqrt3.to_float() == (float)std::numbers::sqrt3);
+        CHECK(doubledouble::inv_sqrt3.to_float() == (float)std::numbers::inv_sqrt3);
+        CHECK(doubledouble::egamma.to_float() == (float)std::numbers::egamma);
+        CHECK(doubledouble::phi.to_float() == (float)std::numbers::phi);
     }
 }

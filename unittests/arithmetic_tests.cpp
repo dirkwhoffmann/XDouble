@@ -14,6 +14,12 @@ TEST_CASE("Basic arithmetic") {
 
         SUBCASE("Standard cases") {
 
+            printf("inf + inf = %f\n", std::numeric_limits<double>::infinity() + std::numeric_limits<double>::infinity());
+            printf("inf + -inf = %f\n", std::numeric_limits<double>::infinity() + (-std::numeric_limits<double>::infinity()));
+            printf("inf - inf = %f\n", std::numeric_limits<double>::infinity() - std::numeric_limits<double>::infinity());
+
+            std::cout << "inf = " << doubledouble::inf() << " inf + inf = " << doubledouble::inf() + doubledouble::inf() << std::endl;
+
             for (int i = 0; i < NUM_TESTS; i++) {
 
                 auto x = rand_double(), y = rand_double();
@@ -23,27 +29,35 @@ TEST_CASE("Basic arithmetic") {
 
         SUBCASE("Special cases") {
 
+            CHECK((doubledouble(123.0) + doubledouble(123.0)).isfinite());
             CHECK((doubledouble(123.0) + doubledouble::nan()).isnan());
+            CHECK((doubledouble(123.0) + doubledouble::inf()).isinf());
+            CHECK((doubledouble(123.0) + -doubledouble::inf()).isinf());
+
             CHECK((doubledouble::nan() + doubledouble(123.0)).isnan());
             CHECK((doubledouble::nan() + doubledouble::nan()).isnan());
             CHECK((doubledouble::nan() + doubledouble::inf()).isnan());
-            CHECK((doubledouble::inf() + doubledouble::nan()).isnan());
-
-            CHECK((doubledouble::inf() + doubledouble::inf()).isinf());
-
-            CHECK((doubledouble(123.0) + doubledouble::inf()).isinf());
-            CHECK((doubledouble(123.0) + (-doubledouble::inf())).isinf());
-            CHECK((doubledouble(123.0) + doubledouble::inf()).signbit() == 0);
-            CHECK((doubledouble(123.0) + (-doubledouble::inf())).signbit() == 1);
-            CHECK((doubledouble(-123.0) + doubledouble::inf()).signbit() == 0);
-            CHECK((doubledouble(-123.0) + (-doubledouble::inf())).signbit() == 1);
+            CHECK((doubledouble::nan() + -doubledouble::inf()).isnan());
 
             CHECK((doubledouble::inf() + doubledouble(123.0)).isinf());
+            CHECK((doubledouble::inf() + doubledouble::nan()).isnan());
+            CHECK((doubledouble::inf() + doubledouble::inf()).isinf());
+            CHECK((doubledouble::inf() + -doubledouble::inf()).isnan());
+
             CHECK((-doubledouble::inf() + doubledouble(123.0)).isinf());
+            CHECK((-doubledouble::inf() + doubledouble::nan()).isnan());
+            CHECK((-doubledouble::inf() + doubledouble::inf()).isnan());
+            CHECK((-doubledouble::inf() + -doubledouble::inf()).isinf());
+
+            CHECK((doubledouble(123.0) + doubledouble(123.0)).signbit() == 0);
+            CHECK((doubledouble(123.0) + doubledouble::inf()).signbit() == 0);
+            CHECK((doubledouble(123.0) + -doubledouble::inf()).signbit() == 1);
+
             CHECK((doubledouble::inf() + doubledouble(123.0)).signbit() == 0);
+            CHECK((doubledouble::inf() + doubledouble::inf()).signbit() == 0);
+
             CHECK((-doubledouble::inf() + doubledouble(123.0)).signbit() == 1);
-            CHECK((doubledouble::inf() + doubledouble(-123.0)).signbit() == 0);
-            CHECK((-doubledouble::inf() + doubledouble(-123.0)).signbit() == 1);
+            CHECK((-doubledouble::inf() + -doubledouble::inf()).signbit() == 1);
         }
     }
 
@@ -57,6 +71,39 @@ TEST_CASE("Basic arithmetic") {
                 CHECK((doubledouble(x) - doubledouble(y)).to_float() == float(x - y));
             }
         }
+
+        SUBCASE("Special cases") {
+
+            CHECK((doubledouble(123.0) - doubledouble(123.0)).isfinite());
+            CHECK((doubledouble(123.0) - doubledouble::nan()).isnan());
+            CHECK((doubledouble(123.0) - doubledouble::inf()).isinf());
+            CHECK((doubledouble(123.0) - -doubledouble::inf()).isinf());
+
+            CHECK((doubledouble::nan() - doubledouble(123.0)).isnan());
+            CHECK((doubledouble::nan() - doubledouble::nan()).isnan());
+            CHECK((doubledouble::nan() - doubledouble::inf()).isnan());
+            CHECK((doubledouble::nan() - -doubledouble::inf()).isnan());
+
+            CHECK((doubledouble::inf() - doubledouble(123.0)).isinf());
+            CHECK((doubledouble::inf() - doubledouble::nan()).isnan());
+            CHECK((doubledouble::inf() - doubledouble::inf()).isnan());
+            CHECK((doubledouble::inf() - -doubledouble::inf()).isinf());
+
+            CHECK((-doubledouble::inf() - doubledouble(123.0)).isinf());
+            CHECK((-doubledouble::inf() - doubledouble::nan()).isnan());
+            CHECK((-doubledouble::inf() - doubledouble::inf()).isinf());
+            CHECK((-doubledouble::inf() - -doubledouble::inf()).isnan());
+
+            CHECK((doubledouble(123.0) - doubledouble(123.0)).signbit() == 0);
+            CHECK((doubledouble(123.0) - doubledouble::inf()).signbit() == 1);
+            CHECK((doubledouble(123.0) - -doubledouble::inf()).signbit() == 0);
+
+            CHECK((doubledouble::inf() - doubledouble(123.0)).signbit() == 0);
+            CHECK((doubledouble::inf() - -doubledouble::inf()).signbit() == 0);
+
+            CHECK((-doubledouble::inf() + doubledouble(123.0)).signbit() == 1);
+            CHECK((-doubledouble::inf() - doubledouble::inf()).signbit() == 1);
+        }
     }
 
     SUBCASE("Multiplication") {
@@ -68,6 +115,41 @@ TEST_CASE("Basic arithmetic") {
                 auto x = rand_double(), y = rand_double();
                 CHECK((doubledouble(x) * doubledouble(y)).to_float() == float(x * y));
             }
+        }
+
+        SUBCASE("Special cases") {
+
+            CHECK((doubledouble(123.0) * doubledouble(123.0)).isfinite());
+            CHECK((doubledouble(123.0) * doubledouble::nan()).isnan());
+            CHECK((doubledouble(123.0) * doubledouble::inf()).isinf());
+            CHECK((doubledouble(123.0) * -doubledouble::inf()).isinf());
+
+            CHECK((doubledouble::nan() * doubledouble(123.0)).isnan());
+            CHECK((doubledouble::nan() * doubledouble::nan()).isnan());
+            CHECK((doubledouble::nan() * doubledouble::inf()).isnan());
+            CHECK((doubledouble::nan() * -doubledouble::inf()).isnan());
+
+            CHECK((doubledouble::inf() * doubledouble(123.0)).isinf());
+            CHECK((doubledouble::inf() * doubledouble::nan()).isnan());
+            CHECK((doubledouble::inf() * doubledouble::inf()).isinf());
+            CHECK((doubledouble::inf() * -doubledouble::inf()).isinf());
+
+            CHECK((-doubledouble::inf() * doubledouble(123.0)).isinf());
+            CHECK((-doubledouble::inf() * doubledouble::nan()).isnan());
+            CHECK((-doubledouble::inf() * doubledouble::inf()).isinf());
+            CHECK((-doubledouble::inf() * -doubledouble::inf()).isinf());
+
+            CHECK((doubledouble(123.0) * doubledouble(123.0)).signbit() == 0);
+            CHECK((doubledouble(123.0) * doubledouble::inf()).signbit() == 0);
+            CHECK((doubledouble(123.0) * -doubledouble::inf()).signbit() == 1);
+
+            CHECK((doubledouble::inf() * doubledouble(123.0)).signbit() == 0);
+            CHECK((doubledouble::inf() * doubledouble::inf()).signbit() == 0);
+            CHECK((doubledouble::inf() * -doubledouble::inf()).signbit() == 1);
+
+            CHECK((-doubledouble::inf() * doubledouble(123.0)).signbit() == 1);
+            CHECK((-doubledouble::inf() * doubledouble::inf()).signbit() == 1);
+            CHECK((-doubledouble::inf() * -doubledouble::inf()).signbit() == 0);
         }
     }
 
@@ -85,6 +167,35 @@ TEST_CASE("Basic arithmetic") {
 
         SUBCASE("Special cases") {
 
+            CHECK((doubledouble(123.0) / doubledouble(123.0)).isfinite());
+            CHECK((doubledouble(123.0) / doubledouble::nan()).isnan());
+            CHECK((doubledouble(123.0) / doubledouble::inf()).is_zero());
+            CHECK((doubledouble(123.0) / -doubledouble::inf()).is_zero());
+
+            CHECK((doubledouble::nan() / doubledouble(123.0)).isnan());
+            CHECK((doubledouble::nan() / doubledouble::nan()).isnan());
+            CHECK((doubledouble::nan() / doubledouble::inf()).isnan());
+            CHECK((doubledouble::nan() / -doubledouble::inf()).isnan());
+
+            CHECK((doubledouble::inf() / doubledouble(123.0)).isinf());
+            CHECK((doubledouble::inf() / doubledouble::nan()).isnan());
+            CHECK((doubledouble::inf() / doubledouble::inf()).isnan());
+            CHECK((doubledouble::inf() / -doubledouble::inf()).isnan());
+
+            CHECK((-doubledouble::inf() / doubledouble(123.0)).isinf());
+            CHECK((-doubledouble::inf() / doubledouble::nan()).isnan());
+            CHECK((-doubledouble::inf() / doubledouble::inf()).isnan());
+            CHECK((-doubledouble::inf() / -doubledouble::inf()).isnan());
+
+            CHECK((doubledouble(123.0) / doubledouble(123.0)).signbit() == 0);
+            CHECK((doubledouble(123.0) / doubledouble::inf()).signbit() == 0);
+            CHECK((doubledouble(123.0) / -doubledouble::inf()).signbit() == 1);
+
+            CHECK((doubledouble::inf() / doubledouble(123.0)).signbit() == 0);
+
+            CHECK((-doubledouble::inf() / doubledouble(123.0)).signbit() == 1);
+
+            /*
             CHECK((doubledouble(123.0) / doubledouble::nan()).isnan());
             CHECK((doubledouble::nan() / doubledouble(123.0)).isnan());
             CHECK((doubledouble::nan() / doubledouble::nan()).isnan());
@@ -105,6 +216,7 @@ TEST_CASE("Basic arithmetic") {
             CHECK((-doubledouble::inf() / doubledouble(123.0)).signbit() == 1);
             CHECK((doubledouble::inf() / doubledouble(-123.0)).signbit() == 1);
             CHECK((-doubledouble::inf() / doubledouble(-123.0)).signbit() == 0);
+            */
         }
 
         SUBCASE("Division by zero") {

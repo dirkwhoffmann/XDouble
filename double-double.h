@@ -296,9 +296,25 @@ public:
 
     Double<T> &operator+=(const Double<T> &rhs)
     {
-        auto sum = twoSum(x, rhs.x);
-        sum.y += y + rhs.y;
-        *this = quickTwoSum(sum.x, sum.y);
+        if (isfinite() && rhs.isfinite()) {
+
+            auto sum = twoSum(x, rhs.x);
+            sum.y += y + rhs.y;
+            *this = quickTwoSum(sum.x, sum.y);
+
+        } else if (isnan() || rhs.isnan()) {
+
+            *this = nan();
+
+        } else if (isinf() && rhs.isinf()) {
+
+            if (signbit() ^ rhs.signbit()) *this = nan();
+
+        } else if (rhs.isinf()) {
+
+            *this = rhs;
+        }
+
         return *this;
     }
 
@@ -333,10 +349,21 @@ public:
 
     Double<T> &operator*=(const Double<T> &rhs)
     {
-        auto val = twoProd(x, rhs.x);
-        val.y += x * rhs.y + y * rhs.x;
+        if (isfinite() && rhs.isfinite()) {
 
-        *this = quickTwoSum(val.x, val.y);
+            auto val = twoProd(x, rhs.x);
+            val.y += x * rhs.y + y * rhs.x;
+            *this = quickTwoSum(val.x, val.y);
+
+        } else if (isnan() || rhs.isnan()) {
+
+            *this = nan();
+
+        } else {
+
+            *this = (signbit() ^ rhs.signbit()) ? -inf() : inf();
+        }
+
         return *this;
     }
 

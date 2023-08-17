@@ -636,99 +636,18 @@ public:
     Double<T> trunc(int fracdigits) const { return dbl::trunc(*this, fracdigits); }
     Double<T> round() const { return dbl::round(*this); }
     Double<T> round(int fracdigits) const { return dbl::round(*this, fracdigits); }
+    Double<T> roundEven() const { return dbl::roundEven(*this); }
+    Double<T> roundEven(int fracdigits) const  { return dbl::roundEven(*this, fracdigits); }
+    long lround() const { return dbl::lround(*this); }
+    long long llround() const { return dbl::llround(*this); }
+    Double<T> rint() const { return dbl::rint(*this); }
+    Double<T> rint(int fracdigits) const { return dbl::rint(*this, fracdigits); }
+    long lrint() const { return dbl::lrint(*this); }
+    long long llrint() const { return dbl::llrint(*this); }
+    Double<T> nearbyint() const { return dbl::nearbyint(*this); }
+    Double<T> nearbyint(int fracdigits) const { return dbl::nearbyint(*this, fracdigits); }
 
-    Double<T> roundEven() const
-    {
-        if (isnegative()) {
-
-            auto v1 = *this - Double<T>(0.5);
-            auto v2 = v1.ceil();
-
-            if (v1 != v2) return v2;
-            return fmod(2.0) < -1 ? v2 : v2 + 1;
-
-        } else {
-
-            auto v1 = *this + Double<T>(0.5);
-            auto v2 = v1.floor();
-
-            if (v1 != v2) return v2;
-            return fmod(2.0) < 1 ? v2 - 1 : v2;
-        }
-    }
-
-    Double<T> roundEven(int fracdigits) const
-    {
-        return ldexp10(fracdigits).roundEven().ldexp10(-fracdigits);
-    }
-
-    long lround() const
-    {
-        return round().to_long();
-    }
-
-    long long llround() const
-    {
-        return round().to_long_double();
-    }
-
-    Double<T> rint() const
-    {
-        auto result = nearbyint();
-
-        // TODO:
-        // The rint() functions do the same [as nearbyint], but will raise the
-        // inexact exception (FE_INEXACT, checkable via fetestexcept(3)) when
-        // the result differs in value from the argument.
-
-        return result;
-    }
-
-    Double<T> rint(int fracdigits) const
-    {
-        auto result = nearbyint(fracdigits);
-
-        // TODO:
-        // The rint() functions do the same [as nearbyint], but will raise the
-        // inexact exception (FE_INEXACT, checkable via fetestexcept(3)) when
-        // the result differs in value from the argument.
-
-        return result;
-    }
-
-    long lrint() const
-    {
-        return rint().to_long();
-    }
-
-    long long llrint() const
-    {
-        return rint().to_long_long();
-    }
-
-    Double<T> nearbyint() const
-    {
-        switch (fegetround()) {
-
-            case FE_DOWNWARD:   return floor();
-            case FE_TONEAREST:  return roundEven();
-            case FE_TOWARDZERO: return trunc();
-            default:            return ceil();
-        }
-    }
-
-    Double<T> nearbyint(int fracdigits) const
-    {
-        switch (fegetround()) {
-
-            case FE_DOWNWARD:   return floor(fracdigits);
-            case FE_TONEAREST:  return roundEven(fracdigits);
-            case FE_TOWARDZERO: return trunc(fracdigits);
-            default:            return ceil(fracdigits);
-        }
-    }
-
-
+    
     //
     // Floating-point manipulation functions
     //
@@ -1079,19 +998,19 @@ roundEven(const Double<T> &x, int fracdigits)
 template <class T> inline long
 lround(const Double<T> &x)
 {
-    return round(x.to_long());
+    return round(x).to_long();
 }
 
 template <class T> inline long long
 llround(const Double<T> &x)
 {
-    return round(x.to_long_double());
+    return round(x).to_long_double();
 }
 
 template <class T> inline Double<T>
 rint(const Double<T> &x)
 {
-    auto result = x.nearbyint();
+    auto result = dbl::nearbyint(x);
 
     // TODO:
     // The rint() functions do the same [as nearbyint], but will raise the
@@ -1104,7 +1023,7 @@ rint(const Double<T> &x)
 template <class T> inline Double<T>
 rint(const Double<T> &x, int fracdigits)
 {
-    auto result = x.nearbyint(fracdigits);
+    auto result = dbl::nearbyint(x, fracdigits);
 
     // TODO:
     // The rint() functions do the same [as nearbyint], but will raise the

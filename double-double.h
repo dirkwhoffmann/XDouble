@@ -63,6 +63,9 @@ using std::modf;
 using std::exp2;
 using std::log2;
 
+using std::pow;
+using std::sqrt;
+
 using std::ceil;
 using std::floor;
 using std::fmod;
@@ -101,11 +104,16 @@ template <class T> Double<T> modf(const Double<T> &op, Double<T> *iptr);
 template <class T> Double<T> exp2(const Double<T> &op);
 template <class T> Double<T> log2(const Double<T> &op);
 
+template <class T> Double<T> pow(const Double<T> &base, int exponent);
+template <class T> Double<T> pow(const Double<T> &base, const Double<T> &exponent);
+template <class T> Double<T> sqr(const Double<T> &x);
+template <class T> Double<T> sqrt(const Double<T> &x);
+
 template <class T> Double<T> ceil(const Double<T> &x);
 template <class T> Double<T> ceil(const Double<T> &x, int fracdigits);
 template <class T> Double<T> floor(const Double<T> &x);
 template <class T> Double<T> floor(const Double<T> &x, int fracdigits);
-template <class T> Double<T> fmod(const Double<T> &numer, Double<T> &denom);
+template <class T> Double<T> fmod(const Double<T> &numer, const Double<T> &denom);
 template <class T> Double<T> trunc(const Double<T> &x);
 template <class T> Double<T> trunc(const Double<T> &x, int fracdigits);
 template <class T> Double<T> round(const Double<T> &x);
@@ -602,44 +610,10 @@ public:
     // Power functions
     //
 
-    Double<T> pow(int n) const
-    {
-        Double<T> result = 1;
-        auto b = *this;
-
-        for (int i = std::abs(n); i; i >>= 1) {
-
-            if (i & 1) result *= b;
-            b *= b;
-        }
-
-        return n < 0 ? (1.0 / result) : result;
-    }
-
-    Double<T> pow(const Double<T> &rhs) const
-    {
-        return (log() * rhs).exp();
-    }
-
-    Double<T> sqr() const
-    {
-        return (*this) * (*this);
-    }
-
-    Double<T> sqrt() const
-    {
-        if (iszero()) return 0.0;
-        if (isnegative()) return nan();
-
-        auto r = Double<T>(1.0 / std::sqrt(x));
-        auto h = *this * 0.5;
-
-        r += (0.5 - h * r.sqr()) * r;
-        r += (0.5 - h * r.sqr()) * r;
-        r += (0.5 - h * r.sqr()) * r;
-
-        return r * (*this);
-    }
+    Double<T> pow(int exponent) const { return dbl::pow(*this, exponent); }
+    Double<T> pow(const Double<T> &exponent) const { return dbl::pow(*this, exponent); }
+    Double<T> sqr() const { return dbl::sqr(*this); }
+    Double<T> sqrt() const { return dbl::sqrt(*this); }
 
 
     //
@@ -653,80 +627,15 @@ public:
     // Rounding and remainder functions
     //
 
-    Double<T> ceil() const
-    {
-        T hi = dbl::ceil(x);
-
-        if (hi == x) {
-
-            // Upper part is an integer
-            T lo = dbl::ceil(y);
-            return quickTwoSum(hi, lo);
-            
-        } else {
-
-            return Double<T>(hi);
-        }
-    }
-
-    Double<T> ceil(int fracdigits) const
-    {
-        return ldexp10(fracdigits).ceil().ldexp10(-fracdigits);
-    }
-
-    Double<T> floor() const
-    {
-        T hi = dbl::floor(x);
-
-        if (hi == x) {
-
-            // Upper part is an integer
-            T lo = std::floor(y);
-            return quickTwoSum(hi, lo);
-
-        } else {
-
-            return Double<T>(hi);
-        }
-    }
-
-    Double<T> floor(int fracdigits) const
-    {
-        return ldexp10(fracdigits).floor().ldexp10(-fracdigits);
-    }
-
-    Double<T> fmod(Double<T> denom) const
-    {
-        if (denom.iszero()) return Double<T>::nan();
-        if (isfinite() && denom.isinf()) return *this;
-
-        Double<T> tquot = (*this / denom).trunc();
-        return (*this) - tquot * denom;
-    }
-
-    Double<T> trunc() const
-    {
-        return isnegative() ? ceil() : floor();
-    }
-
-    Double<T> trunc(int fracdigits) const
-    {
-        return ldexp10(fracdigits).trunc().ldexp10(-fracdigits);
-    }
-
-    Double<T> round() const
-    {
-        if (isnegative()) {
-            return (*this - Double<T>(0.5)).ceil();
-        } else {
-            return (*this + Double<T>(0.5)).floor();
-        }
-    }
-
-    Double<T> round(int fracdigits) const
-    {
-        return ldexp10(fracdigits).round().ldexp10(-fracdigits);
-    }
+    Double<T> ceil() const { return dbl::ceil(*this); }
+    Double<T> ceil(int fracdigits) const { return dbl::ceil(*this, fracdigits); }
+    Double<T> floor() const { return dbl::floor(*this); }
+    Double<T> floor(int fracdigits) const { return dbl::floor(*this, fracdigits); }
+    Double<T> fmod(Double<T> denom) const { return dbl::fmod(*this, denom); }
+    Double<T> trunc() const { return dbl::trunc(*this); }
+    Double<T> trunc(int fracdigits) const { return dbl::trunc(*this, fracdigits); }
+    Double<T> round() const { return dbl::round(*this); }
+    Double<T> round(int fracdigits) const { return dbl::round(*this, fracdigits); }
 
     Double<T> roundEven() const
     {
@@ -1032,7 +941,7 @@ sqrt(const Double<T> &x)
     if (x.iszero()) return 0.0;
     if (x.isnegative()) return Double<T>::nan();
 
-    auto r = Double<T>(1.0 / std::sqrt(x));
+    auto r = Double<T>(1.0 / dbl::sqrt(x.x));
     auto h = x * 0.5;
 
     r += (0.5 - h * r.sqr()) * r;
@@ -1057,25 +966,49 @@ sqrt(const Double<T> &x)
 template <class T> inline Double<T>
 ceil(const Double<T> &x)
 {
-    return x.ceil();
+    T hi = dbl::ceil(x.x);
+
+    if (hi == x.x) {
+
+        // Upper part is an integer
+        T lo = dbl::ceil(x.y);
+        return Double<T>::quickTwoSum(hi, lo);
+
+    } else {
+
+        return Double<T>(hi);
+    }
 }
 
 template <class T> inline Double<T>
 ceil(const Double<T> &x, int fracdigits)
 {
-    return x.ceil(fracdigits);
+    return x.ldexp10(fracdigits).ceil().ldexp10(-fracdigits);
+    // return x.ceil(fracdigits);
 }
 
 template <class T> inline Double<T>
 floor(const Double<T> &x)
 {
-    return x.floor();
+    T hi = dbl::floor(x.x);
+
+    if (hi == x.x) {
+
+        // Upper part is an integer
+        T lo = std::floor(x.y);
+        return Double<T>::quickTwoSum(hi, lo);
+
+    } else {
+
+        return Double<T>(hi);
+    }
 }
 
 template <class T> inline Double<T>
 floor(const Double<T> &x, int fracdigits)
 {
-    return x.floor(fracdigits);
+    return x.ldexp10(fracdigits).floor().ldexp10(-fracdigits);
+    // return x.floor(fracdigits);
 }
 
 template <class T> inline Double<T>

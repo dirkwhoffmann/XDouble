@@ -53,9 +53,44 @@
 
 namespace dbl {
 
+template <class T> class Double;
+
+template <class T> Double<T> exp(const Double<T> &op);
+template <class T> Double<T> frexp(const Double<T> &op, int *exp);
+template <class T> Double<T> frexp10(const Double<T> &op, int *exp);
+template <class T> Double<T> ldexp(const Double<T> &op, int exp);
+template <class T> Double<T> ldexp10(const Double<T> &op, int exp);
+template <class T> Double<T> log(const Double<T> &op);
+template <class T> Double<T> log10(const Double<T> &op);
+template <class T> Double<T> modf(const Double<T> &op, Double<T> *iptr);
+template <class T> Double<T> exp2(const Double<T> &op);
+template <class T> Double<T> log2(const Double<T> &op);
+
+template <class T> Double<T> ceil(const Double<T> &x);
+template <class T> Double<T> ceil(const Double<T> &x, int fracdigits);
+template <class T> Double<T> floor(const Double<T> &x);
+template <class T> Double<T> floor(const Double<T> &x, int fracdigits);
+template <class T> Double<T> fmod(const Double<T> &numer, Double<T> denom);
+template <class T> Double<T> trunc(const Double<T> &x);
+template <class T> Double<T> trunc(const Double<T> &x, int fracdigits);
+template <class T> Double<T> round(const Double<T> &x);
+template <class T> Double<T> round(const Double<T> &x, int fracdigits);
+template <class T> Double<T> roundEven(const Double<T> &x);
+template <class T> Double<T> roundEven(const Double<T> &x, int fracdigits);
+template <class T> long lround(const Double<T> &x);
+template <class T> long long llround(const Double<T> &x);
+template <class T> Double<T> rint(const Double<T> &x);
+template <class T> Double<T> rint(const Double<T> &x, int fracdigits);
+template <class T> long lrint(const Double<T> &x);
+template <class T> long long llrint(const Double<T> &x);
+template <class T> Double<T> nearbyint(const Double<T> &x);
+template <class T> Double<T> nearbyint(const Double<T> &x, int fracdigits);
+
 template <class T> class Double {
 
     constexpr static bool useFma = true;
+
+public:
 
     T x, y;
 
@@ -498,6 +533,8 @@ public:
 
     Double<T> exp() const
     {
+        return dbl::exp(*this);
+        /*
         auto n = std::round(x);
         auto w = *this - n;
 
@@ -518,6 +555,7 @@ public:
                   647647525324800) * w + 1295295050649600;
 
         return e.pow(n) * (u / v);
+        */
     }
 
     Double<T> frexp(int *exp) const
@@ -879,6 +917,132 @@ public:
     bool ispositive() const {  return x > 0.0; }
     bool isnegative() const {  return x < 0.0; }
 };
+
+//
+// Exponential and logarithmic functions
+//
+
+template <class T> inline Double<T>
+exp(const Double<T> &op)
+{
+    auto n = std::round(op.x);
+    auto w = op - n;
+
+    auto u = (((((((((((w +
+                        156) * w + 12012) * w +
+                      600600) * w + 21621600) * w +
+                    588107520) * w + 12350257920) * w +
+                  201132771840) * w + 2514159648000) * w +
+                23465490048000) * w + 154872234316800) * w +
+              647647525324800) * w + 1295295050649600;
+
+    auto v = (((((((((((w -
+                        156) * w + 12012) * w -
+                      600600) * w + 21621600) * w -
+                    588107520) * w + 12350257920) * w -
+                  201132771840) * w + 2514159648000) * w -
+                23465490048000) * w + 154872234316800) * w -
+              647647525324800) * w + 1295295050649600;
+
+    return Double<T>::e.pow(n) * (u / v);
+}
+
+template <class T> inline Double<T>
+frexp(const Double<T> &op, int *exp)
+{
+    auto r = std::frexp(op.x, exp);
+    auto e = std::ldexp(op.y, -(*exp));
+
+    return Double<T>(r, e);
+}
+
+template <class T> inline Double<T>
+frexp10(const Double<T> &op, int *exp)
+{
+    *exp = op.iszero() ? 0 : 1 + (op.fabs().log10().floor().to_int());
+    return op * Double<T>(10).pow(-(*exp));
+}
+
+template <class T> inline Double<T>
+ldexp(const Double<T> &op, int exp)
+{
+    return Double<T>(std::ldexp(op.x, exp), std::ldexp(op.y, exp));
+}
+
+template <class T> inline Double<T>
+ldexp10(const Double<T> &op, int exp)
+{
+    return op * Double<T>(10).pow(exp);
+}
+
+template <class T> inline Double<T>
+log(const Double<T> &op)
+{
+    if (op.isnegative()) return Double<T>::nan();
+    if (op.iszero()) return -Double<T>::inf();
+
+    auto r = Double<T>(std::log(op.x));
+    auto u = r.exp();
+    r -= 2.0 * (u - op) / (u + op);
+
+    return r;
+}
+
+template <class T> inline Double<T>
+log10(const Double<T> &op)
+{
+    return op.log() / Double<T>::ln10;
+}
+
+template <class T> inline Double<T>
+modf(const Double<T> &op, Double<T> *iptr)
+{
+    auto nearby = op.trunc();
+    auto result = (op.isinf() ? Double<T>(0.0) : op - nearby).copysign(op);
+
+    *iptr = nearby;
+    return result;
+}
+
+template <class T> inline Double<T>
+exp2(const Double<T> &op)
+{
+    return (op * Double<T>::ln2).exp();
+}
+
+template <class T> inline Double<T>
+log2(const Double<T> &op)
+{
+    return op.log() * Double<T>::log2e;
+}
+
+template <class T> inline Double<T>
+ceil(const Double<T> &x)
+{
+    return x.ceil();
+}
+
+template <class T> inline Double<T>
+ceil(const Double<T> &x, int fracdigits)
+{
+    return x.ceil(fracdigits);
+}
+
+template <class T> inline Double<T>
+floor(const Double<T> &x)
+{
+    return x.floor();
+}
+
+template <class T> inline Double<T>
+floor(const Double<T> &x, int fracdigits)
+{
+    return x.floor(fracdigits);
+}
+
+
+
+
 
 template <class T>
 std::ostream& operator<<(std::ostream& os, const Double<T>& obj)

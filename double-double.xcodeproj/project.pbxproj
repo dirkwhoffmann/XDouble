@@ -15,6 +15,7 @@
 		503867632A8C214A0018498B /* minmax_tests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503867622A8C214A0018498B /* minmax_tests.cpp */; };
 		503867652A8CD2940018498B /* other_tests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503867642A8CD2940018498B /* other_tests.cpp */; };
 		503867672A8CD80F0018498B /* classification_tests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503867662A8CD80F0018498B /* classification_tests.cpp */; };
+		5038676B2A8E33C60018498B /* quaddouble_tests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5038676A2A8E33C60018498B /* quaddouble_tests.cpp */; };
 		5051DEE82A876C4800EED9D7 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5051DEE72A876C4800EED9D7 /* main.cpp */; };
 		5051DEF02A876D1D00EED9D7 /* double-double.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5051DEEE2A876D1D00EED9D7 /* double-double.cpp */; };
 		5051DEF62A8785D800EED9D7 /* comparison_tests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5051DEF52A8785D800EED9D7 /* comparison_tests.cpp */; };
@@ -43,6 +44,7 @@
 		503867622A8C214A0018498B /* minmax_tests.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = minmax_tests.cpp; sourceTree = "<group>"; };
 		503867642A8CD2940018498B /* other_tests.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = other_tests.cpp; sourceTree = "<group>"; };
 		503867662A8CD80F0018498B /* classification_tests.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = classification_tests.cpp; sourceTree = "<group>"; };
+		5038676A2A8E33C60018498B /* quaddouble_tests.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = quaddouble_tests.cpp; sourceTree = "<group>"; };
 		5051DEE42A876C4800EED9D7 /* double-double */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "double-double"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5051DEE72A876C4800EED9D7 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		5051DEEE2A876D1D00EED9D7 /* double-double.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "double-double.cpp"; sourceTree = "<group>"; };
@@ -101,6 +103,7 @@
 				503867622A8C214A0018498B /* minmax_tests.cpp */,
 				503867642A8CD2940018498B /* other_tests.cpp */,
 				503867662A8CD80F0018498B /* classification_tests.cpp */,
+				5038676A2A8E33C60018498B /* quaddouble_tests.cpp */,
 			);
 			path = unittests;
 			sourceTree = "<group>";
@@ -166,6 +169,7 @@
 				503867582A8AB0CA0018498B /* smoke_tests.cpp in Sources */,
 				5051DEE82A876C4800EED9D7 /* main.cpp in Sources */,
 				503867672A8CD80F0018498B /* classification_tests.cpp in Sources */,
+				5038676B2A8E33C60018498B /* quaddouble_tests.cpp in Sources */,
 				5038675A2A8B75B40018498B /* explog_tests.cpp in Sources */,
 				5038675F2A8BE5D40018498B /* rounding_tests.cpp in Sources */,
 				5051DEF72A87864000EED9D7 /* arithmetic_tests.cpp in Sources */,

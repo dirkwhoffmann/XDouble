@@ -21,10 +21,10 @@ endif()
 add_library(doubledouble double-double.cpp)
 
 # Specify compile options
+target_compile_options(doubledouble PUBLIC -Wall -Werror -Wno-unknown-pragmas)
 if(MSVC)
   target_compile_options(doubledouble PUBLIC /W4)
 elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-  target_compile_options(doubledouble PUBLIC -Wall -Werror)
 endif()
 
 # Add the unit tester

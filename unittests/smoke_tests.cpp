@@ -37,8 +37,8 @@ TEST_CASE("Basic smoke tests") {
         CHECK(doubledouble(0.5).to_long_long() == 0);
         CHECK(doubledouble(3.14).to_long_long() == 3);
         CHECK(doubledouble(-3.14).to_long_long() == -3);
-        CHECK(doubledouble::inf().to_long_long() == LONG_LONG_MAX);
-        CHECK((-doubledouble::inf()).to_long_long() == LONG_LONG_MIN);
+        CHECK(doubledouble::inf().to_long_long() == LLONG_MAX);
+        CHECK((-doubledouble::inf()).to_long_long() == LLONG_MIN);
         CHECK(doubledouble::nan().to_long_long() == 0);
 
         CHECK(doubledouble(0).to_float() == 0.0f);

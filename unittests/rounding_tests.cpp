@@ -2,8 +2,6 @@
 
 TEST_CASE("Rounding and remainder functions") {
 
-#pragma STDC FENV_ACCESS ON
-
     srand(0);
     auto mode = fegetround();
 

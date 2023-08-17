@@ -21,10 +21,16 @@ TEST_CASE("Comparison") {
         for (int i = 0; p[i].x[0]; i++) {
             CHECK ((doubledouble(p[i].x) == doubledouble(p[i].y)) == p[i].eq);
         }
+
         CHECK ( (doubledouble(0.0)   == doubledouble(-0.0)));
-        CHECK (!(doubledouble::nan() == doubledouble(0.0)));
+        CHECK ( (doubledouble(-0.0)  == doubledouble(0.0)));
         CHECK (!(doubledouble(0.0)   == doubledouble::nan()));
+        CHECK (!(doubledouble::nan() == doubledouble(0.0)));
         CHECK (!(doubledouble::nan() == doubledouble::nan()));
+        CHECK (!(doubledouble::nan() == doubledouble::inf()));
+        CHECK (!(doubledouble::inf() == doubledouble::nan()));
+        CHECK ( (doubledouble::inf() == doubledouble::inf()));
+        CHECK (!(doubledouble::inf() == -doubledouble::inf()));
     }
 
     SUBCASE("Unequal") {
@@ -32,10 +38,16 @@ TEST_CASE("Comparison") {
         for (int i = 0; p[i].x[0]; i++) {
             CHECK ((doubledouble(p[i].x) != doubledouble(p[i].y)) == p[i].neq);
         }
-        CHECK (!(doubledouble(0)     != doubledouble(-0)));
-        CHECK ( (doubledouble::nan() != doubledouble(0)));
-        CHECK ( (doubledouble(0)     != doubledouble::nan()));
+
+        CHECK (!(doubledouble(0.0)   != doubledouble(-0.0)));
+        CHECK (!(doubledouble(-0.0)  != doubledouble(0.0)));
+        CHECK ( (doubledouble(0.0)   != doubledouble::nan()));
+        CHECK ( (doubledouble::nan() != doubledouble(0.0)));
         CHECK ( (doubledouble::nan() != doubledouble::nan()));
+        CHECK ( (doubledouble::nan() != doubledouble::inf()));
+        CHECK ( (doubledouble::inf() != doubledouble::nan()));
+        CHECK (!(doubledouble::inf() != doubledouble::inf()));
+        CHECK ( (doubledouble::inf() != -doubledouble::inf()));
     }
 
     SUBCASE("Less") {
@@ -43,9 +55,16 @@ TEST_CASE("Comparison") {
         for (int i = 0; p[i].x[0]; i++) {
             CHECK ((doubledouble(p[i].x) < doubledouble(p[i].y)) == p[i].l);
         }
-        CHECK (!(doubledouble::nan() < doubledouble(0)));
-        CHECK (!(doubledouble(0)     < doubledouble::nan()));
+
+        CHECK (!(doubledouble(0.0)   < doubledouble(-0.0)));
+        CHECK (!(doubledouble(-0.0)  < doubledouble(0.0)));
+        CHECK (!(doubledouble(0.0)   < doubledouble::nan()));
+        CHECK (!(doubledouble::nan() < doubledouble(0.0)));
         CHECK (!(doubledouble::nan() < doubledouble::nan()));
+        CHECK (!(doubledouble::nan() < doubledouble::inf()));
+        CHECK (!(doubledouble::inf() < doubledouble::nan()));
+        CHECK (!(doubledouble::inf() < doubledouble::inf()));
+        CHECK (!(doubledouble::inf() < -doubledouble::inf()));
     }
 
     SUBCASE("Greater") {
@@ -53,9 +72,16 @@ TEST_CASE("Comparison") {
         for (int i = 0; p[i].x[0]; i++) {
             CHECK ((doubledouble(p[i].x) > doubledouble(p[i].y)) == p[i].g);
         }
-        CHECK (!(doubledouble::nan() > doubledouble(0)));
-        CHECK (!(doubledouble(0)     > doubledouble::nan()));
+
+        CHECK (!(doubledouble(0.0)   > doubledouble(-0.0)));
+        CHECK (!(doubledouble(-0.0)  > doubledouble(0.0)));
+        CHECK (!(doubledouble(0.0)   > doubledouble::nan()));
+        CHECK (!(doubledouble::nan() > doubledouble(0.0)));
         CHECK (!(doubledouble::nan() > doubledouble::nan()));
+        CHECK (!(doubledouble::nan() > doubledouble::inf()));
+        CHECK (!(doubledouble::inf() > doubledouble::nan()));
+        CHECK (!(doubledouble::inf() > doubledouble::inf()));
+        CHECK ( (doubledouble::inf() > -doubledouble::inf()));
     }
 
     SUBCASE("Less or equal") {
@@ -63,9 +89,16 @@ TEST_CASE("Comparison") {
         for (int i = 0; p[i].x[0]; i++) {
             CHECK ((doubledouble(p[i].x) <= doubledouble(p[i].y)) == p[i].le);
         }
-        CHECK (!(doubledouble::nan() <= doubledouble(0)));
-        CHECK (!(doubledouble(0)     <= doubledouble::nan()));
+
+        CHECK ( (doubledouble(0.0)   <= doubledouble(-0.0)));
+        CHECK ( (doubledouble(-0.0)  <= doubledouble(0.0)));
+        CHECK (!(doubledouble(0.0)   <= doubledouble::nan()));
+        CHECK (!(doubledouble::nan() <= doubledouble(0.0)));
         CHECK (!(doubledouble::nan() <= doubledouble::nan()));
+        CHECK (!(doubledouble::nan() <= doubledouble::inf()));
+        CHECK (!(doubledouble::inf() <= doubledouble::nan()));
+        CHECK ( (doubledouble::inf() <= doubledouble::inf()));
+        CHECK (!(doubledouble::inf() <= -doubledouble::inf()));
     }
 
     SUBCASE("Greater or equal") {
@@ -73,8 +106,15 @@ TEST_CASE("Comparison") {
         for (int i = 0; p[i].x[0]; i++) {
             CHECK ((doubledouble(p[i].x) >= doubledouble(p[i].y)) == p[i].ge);
         }
-        CHECK (!(doubledouble::nan() >= doubledouble(0)));
-        CHECK (!(doubledouble(0)     >= doubledouble::nan()));
+
+        CHECK ( (doubledouble(0.0)   >= doubledouble(-0.0)));
+        CHECK ( (doubledouble(-0.0)  >= doubledouble(0.0)));
+        CHECK (!(doubledouble(0.0)   >= doubledouble::nan()));
+        CHECK (!(doubledouble::nan() >= doubledouble(0.0)));
         CHECK (!(doubledouble::nan() >= doubledouble::nan()));
+        CHECK (!(doubledouble::nan() >= doubledouble::inf()));
+        CHECK (!(doubledouble::inf() >= doubledouble::nan()));
+        CHECK ( (doubledouble::inf() >= doubledouble::inf()));
+        CHECK ( (doubledouble::inf() >= -doubledouble::inf()));
     }
 }

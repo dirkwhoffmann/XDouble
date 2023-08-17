@@ -5,21 +5,39 @@
 // Published under the terms of the MIT License
 // -----------------------------------------------------------------------------
 
-/* Double-double arithmetic increases the accuracy of floating-point operations
- * by representing numbers as an unevaluated sum of two floating-point numbers
- * of lower precision.
- *
- * References:
- *
- *   Hida, Y., Li, X. S., Bailey, D. H. (2000), "Quad-Double Arithmetic:
- *   Algorithms, Implementation, and Application", Technical Report LBNL-46996
- *
- *   double-double Python library by Juraj Sukop:
- *   https://github.com/sukop/doubledouble/tree/master
- *
- *   Fork of QD (2.3.17) by scibuilder:
- *   https://github.com/scibuilder/QD
- */
+// -----------------------------------------------------------------------------
+// DISCLAIMER: THIS IS AN EARLY BETA-VERSION. THE CODE IS NOT PRODUCTION-READY.
+// -----------------------------------------------------------------------------
+
+// -----------------------------------------------------------------------------
+// Double-double arithmetic increases the precision of floating point operations
+// by representing numbers as an unevaluated sum of two floating point numbers
+// with lower precision. This results in a floating point format with almost
+// twice the precision of the base format without sacrificing speed too much.
+//
+// This library is a lightweight implementation of double-double arithetics
+// written in C++20.
+//
+// Highlights:
+//
+//   - Easy to use in your own application (header-only library).
+//
+//   - Interchangable base types due to a template-based design.
+//
+// References:
+//
+//   - Hida, Y., Li, X. S., Bailey, D. H. (2000), "Quad-Double Arithmetic:
+//     Algorithms, Implementation, and Application", Technical Report LBNL-46996
+//
+//   - double-double Python library by Juraj Sukop
+//     https://github.com/sukop/doubledouble/tree/master
+//
+//   - Fork of QD (2.3.17) by scibuilder
+//     https://github.com/scibuilder/QD
+//
+//   - David H. Bailey: High-Precision Software Directory
+//     https://www.davidhbailey.com/dhbsoftware
+// -----------------------------------------------------------------------------
 
 #pragma once
 
@@ -33,8 +51,9 @@
 #include <iostream>
 #include <iomanip>
 
-template <class T>
-class Double {
+namespace dbl {
+
+template <class T> class Double {
 
     constexpr static bool useFma = true;
 
@@ -49,38 +68,42 @@ public:
     Double() noexcept : x(0), y(0) { }
     Double(T x) noexcept : x(x), y(0) { }
     Double(T x, T y) noexcept : x(x), y(y) { }
-    Double(const Double<T>& other) noexcept : Double() { x = other.x; y = other.y; }
+    Double(const Double<T>& other) noexcept : x(other.x), y(other.y) { }
     Double(Double<T>&& other) noexcept : Double() { swap(*this, other); }
 
     Double(const std::string &s) noexcept : Double()
     {
-        Double<T> l, r;
-        std::string left(s), right;
-
-        bool neg = s.empty() ? false : s[0] == '-';
+        std::string left = s;
+        std::string right = "";
 
         if (auto pos = s.find("."); pos != std::string::npos) {
 
             left = s.substr(0, pos);
             right = s.substr(pos + 1, std::string::npos);
-            std::reverse(right.begin(), right.end());
         }
 
-        for (auto &ch : left) {
-            if (ch >= '0' && ch <= '9') l = l * Double<T>(10) + Double<T>(ch - '0');
-        }
-
-        for (auto &ch : right) {
-            if (ch >= '0' && ch <= '9') r = (r + Double<T>(ch - '0')) / Double<T>(10);
-        }
-
-        *this = neg ? -(l + r) : (l + r);
+        *this = Double(left, right);
     }
 
-    Double<T>& operator=(Double<T> rhs)
+    Double(const std::string &left, const std::string &right) noexcept : Double()
     {
-        swap(*this, rhs);
-        return *this;
+        Double<T> l, r;
+
+        // Check if the number is positive or negative
+        bool neg = left.empty() ? false : left[0] == '-';
+
+        // Parse the integral digits
+        for (auto it = left.begin() ; it != left.end(); ++it) {
+            if (*it >= '0' && *it <= '9') l = l * Double<T>(10) + Double<T>(*it - '0');
+        }
+
+        // Parse the fractional digits (in reverse order)
+        for (auto it = right.crbegin() ; it != right.crend(); ++it) {
+            if (*it >= '0' && *it <= '9') r = (r + Double<T>(*it - '0')) / Double<T>(10);
+        }
+
+        // Assemble the result
+        *this = neg ? -(l + r) : (l + r);
     }
 
 private:
@@ -122,6 +145,17 @@ public:
 
 
     //
+    // Basic operators
+    //
+
+    Double<T>& operator=(Double<T> rhs)
+    {
+        swap(*this, rhs);
+        return *this;
+    }
+
+
+    //
     // Conversion functions
     //
 
@@ -155,36 +189,45 @@ public:
         return static_cast<long double>(x) + static_cast<long double>(y);
     }
 
+    char to_character() const
+    {
+        auto digit = round().to_long() + '0';
+        return digit >= '0' && digit <= '9' ? char(digit) : '?';
+    }
+
     std::string to_string(int digits) const
+    {
+        return to_string(128, digits);
+    }
+
+    std::string to_string(int ldigits, int rdigits) const
     {
         std::string result;
 
-        // Catch special cases
+        // Catch NaN and infinity
         if (isnan()) return "nan";
         if (isinf()) return signbit() ? "-inf" : "inf";
 
-        // Split number l.r into pre-decimal and fractional part
+        // Split number into its integral (l) and fractional (r) part
         Double<T> l; Double<T> r = modf(&l);
 
-        for (int i = 0; i < 100 && l.abs() >= 1; i++) {
+        // Compute integral digits
+        for (int i = 0; i < ldigits && l.abs() >= 1; i++) {
 
-            Double<T> digit;
             l /= 10;
-            digit = l.modf(&l) * 10;
-            // result = std::to_string(digit.round().to_int()) + result;
-            result = char(digit.round().to_int() + '0') + result;
+            Double<T> digit = l.modf(&l) * 10;
+            result = digit.to_character() + result;
         }
 
-        if (digits) result += '.';
+        // Create a decimal point of necessary
+        if (rdigits) result += '.';
 
-        for (int i = 0; i < digits; i++) {
+        // Compute fractional digits
+        for (int i = 0; i < rdigits; i++) {
 
-            Double<T> digit;
             r *= 10;
-            r = r.modf(&digit);
-            // result = result + std::to_string(digit.round().to_int());
-            result = result + char(digit.round().to_int() + '0');
-
+            Double<T> digit; r = r.modf(&digit);
+            result = result + digit.to_character();
         }
 
         return (isnegative() ? "-" : "") + result;
@@ -631,7 +674,7 @@ public:
     }
 
     Double<T> floor(int fracdigits) const
-    {        
+    {
         return ldexp10(fracdigits).floor().ldexp10(-fracdigits);
     }
 
@@ -856,7 +899,7 @@ Double<T>::e          ("2.71828182 84590452 35360287 47135266 24977572 47093699 
 template <class T> inline const Double<T>
 Double<T>::log2e      ("1.44269504 08889634 07359924 68100189 21374266 45954152 98593413 54494069");
 template <class T> inline const Double<T>
-Double<T>::log10e     ("0.434294 48190325 18276511 28918916 60508229 43970058 03666566 1144537831");
+Double<T>::log10e     ("0.43429448 19032518 27651128 91891660 50822943 97005803 66656611 44537831");
 template <class T> inline const Double<T>
 Double<T>::pi         ("3.14159265 35897932 38462643 38327950 28841971 69399375 10582097 49445923");
 template <class T> inline const Double<T>
@@ -877,3 +920,5 @@ template <class T> inline const Double<T>
 Double<T>::egamma     ("0.57721566 49015328 60606512 09008240 24310421 59335939 92359880 57672349");
 template <class T> inline const Double<T>
 Double<T>::phi        ("1.61803398 87498948 48204586 83436563 81177203 09179805 76286213 54486227");
+
+}

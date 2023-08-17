@@ -233,6 +233,16 @@ public:
     static const Double<T> egamma;
     static const Double<T> phi;
 
+    static Double<T> nan()
+    {
+        return std::numeric_limits<double>::quiet_NaN();
+    }
+
+    static Double<T> inf()
+    {
+        return std::numeric_limits<double>::infinity();
+    }
+
 
     //
     // Accessors
@@ -647,83 +657,47 @@ public:
     Double<T> nearbyint() const { return dbl::nearbyint(*this); }
     Double<T> nearbyint(int fracdigits) const { return dbl::nearbyint(*this, fracdigits); }
 
-    
+
     //
     // Floating-point manipulation functions
     //
 
-    Double<T> copysign(const Double<T> y) const
-    {
-        return (y.signbit()) ? -(*this) : (*this);
-    }
-
-    static Double<T> nan()
-    {
-        return std::numeric_limits<double>::quiet_NaN();
-    }
-    
-    static Double<T> inf()
-    {
-        return std::numeric_limits<double>::infinity();
-    }
+    Double<T> copysign(const Double<T> &y) const { return dbl::copysign(*this, y); }
 
 
     //
     // Minimum, maximum, difference functions
     //
 
-    Double<T> fdim(const Double<T> y) const
-    {
-        return ((*this) > y) ? (*this) - y : Double<T>();
-    }
-
-    Double<T> fmax(const Double<T> y) const
-    {
-        if (isnan()) return y;
-        if (y.isnan()) return *this;
-
-        return *this > y ? *this : y;
-    }
-
-    Double<T> fmin(const Double<T> y) const
-    {
-        if (isnan()) return y;
-        if (y.isnan()) return *this;
-
-        return *this < y ? *this : y;
-    }
+    Double<T> fdim(const Double<T> &y) const { return dbl::fdim(*this, y); }
+    Double<T> fmax(const Double<T> &y) const { return dbl::fmax(*this, y); }
+    Double<T> fmin(const Double<T> &y) const { return dbl::fmin(*this, y); }
 
 
     //
     // Other functions
     //
 
-    Double<T> fabs() const
-    {
-        return isnegative() ? -(*this) : (*this);
-    }
-
-    Double<T> abs() const
-    {
-        return fabs();
-    }
+    Double<T> fabs() const { return dbl::fabs(*this); }
+    Double<T> abs() const { return dbl::abs(*this); }
 
 
     //
     // Classification functions
     //
 
-    bool isfinite() const { return std::isfinite(x); }
-    bool isinf() const { return std::isinf(x); }
-    bool isnan() const { return std::isnan(x); }
-    bool isnormal() const { return std::isnormal(x); }
-    bool signbit() const { return x != 0 || y == 0 ? std::signbit(x) : std::signbit(y); }
+    bool isfinite() const { return dbl::isfinite(*this); }
+    bool isinf() const { return dbl::isinf(*this); }
+    bool isnan() const { return dbl::isnan(*this); }
+    bool isnormal() const { return dbl::isnormal(*this); }
+    bool signbit() const { return dbl::signbit(*this); }
 
-    bool iszero() const { return x == 0.0 && y == 0.0; }
-    bool isone() const { return x == 1.0 && y == 0.0; }
-    bool ispositive() const {  return x > 0.0; }
-    bool isnegative() const {  return x < 0.0; }
+    bool iszero() const { return dbl::iszero(*this); }
+    bool isone() const { return dbl::isone(*this); }
+    bool ispositive() const { return dbl::ispositive(*this); }
+    bool isnegative() const { return dbl::isnegative(*this); }
 };
+
 
 //
 // Exponential and logarithmic functions

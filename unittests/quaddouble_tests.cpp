@@ -47,20 +47,20 @@ TEST_CASE("Quad-double tests") {
 
         std::cout << "BREAK" << std::endl;
         std::cout << "qd  : " << qd.to_mpf() << std::endl;
-        std::cout << "qdx : " << qd.x.to_mpf() << std::endl;
-        std::cout << "qdy : " << qd.y.to_mpf() << std::endl;
+        std::cout << "qdx : " << qd.h.to_mpf() << std::endl;
+        std::cout << "qdy : " << qd.l.to_mpf() << std::endl;
 
         std::cout << "+= 9:" << std::endl;
 
-        auto x = qd.x;
-        auto y = qd.y;
+        auto x = qd.h;
+        auto y = qd.l;
         auto rhs = quaddouble(9.0);
         std::cout << "rhs : " << rhs << std::endl;
 
-        auto sum = quaddouble::twoSum(x, rhs.x);
-        auto sum2 = quaddouble::twoSum(rhs.x, x);
+        auto sum = quaddouble::twoSum(x, rhs.h);
+        auto sum2 = quaddouble::twoSum(rhs.h, x);
         // auto sum = quaddouble::quickTwoSum(rhs.x, x);
-        std::cout << "qdx : " << qd.x.to_mpf() << std::endl;
+        std::cout << "qdx : " << qd.h.to_mpf() << std::endl;
         std::cout << "sum : " << sum.to_mpf() << std::endl;
         std::cout << "sum2: " << sum2.to_mpf() << std::endl;
         std::cout << std::endl;
@@ -68,7 +68,7 @@ TEST_CASE("Quad-double tests") {
         // twoSum
         std::cout << "sum:" << std::endl;
         auto a1 = x;
-        auto b1 = rhs.x;
+        auto b1 = rhs.h;
         doubledouble s1 = a1 + b1;
         doubledouble v1 = s1 - a1;
         doubledouble e1 = (a1 - (s1 - v1)) + (b1 - v1);
@@ -88,7 +88,7 @@ TEST_CASE("Quad-double tests") {
 
         // twoSum
         std::cout << "sum2:" << std::endl;
-        auto a2 = rhs.x;
+        auto a2 = rhs.h;
         auto b2 = x;
         doubledouble s2 = a2 + b2;
         doubledouble v2 = s2 - a2;

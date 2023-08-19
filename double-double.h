@@ -159,24 +159,20 @@ template <class T> bool isone(const Double<T> &x);
 template <class T> bool ispositive(const Double<T> &x);
 template <class T> bool isnegative(const Double<T> &x);
 
-template <class T> class Double {
+template <class T> struct Double {
 
     constexpr static bool useFma = false;
 
-public:
-
-    T x, y;
-
-public:
+    T h, l;
 
     //
     // Constructors
     //
 
-    Double() noexcept : x(0), y(0) { }
-    Double(T x) noexcept : x(x), y(0) { }
-    Double(T x, T y) noexcept : x(x), y(y) { }
-    Double(const Double<T>& other) noexcept : x(other.x), y(other.y) { }
+    Double() noexcept : h(0), l(0) { }
+    Double(T h) noexcept : h(h), l(0) { }
+    Double(T h, T l) noexcept : h(h), l(l) { }
+    Double(const Double<T>& other) noexcept : h(other.h), l(other.l) { }
     Double(Double<T>&& other) noexcept : Double() { swap(*this, other); }
 
     Double(const std::string &s) noexcept : Double()
@@ -218,8 +214,8 @@ private:
 
     friend void swap(Double<T>& first, Double<T>& second) noexcept
     {
-        std::swap(first.x, second.x);
-        std::swap(first.y, second.y);
+        std::swap(first.h, second.h);
+        std::swap(first.l, second.l);
     }
 
 
@@ -260,8 +256,8 @@ public:
     // Accessors
     //
 
-    T getX() const { return x; }
-    T getY() const { return y; }
+    // T getX() const { return x; }
+    // T getY() const { return y; }
 
 
     //
@@ -318,7 +314,7 @@ public:
     long double to_long_double() const
     {
         // printf("long double to_long_double() const\n");
-        return static_cast<long double>(x) + static_cast<long double>(y);
+        return static_cast<long double>(h) + static_cast<long double>(l);
     }
 
 #ifdef DBL_DEBUG
@@ -329,11 +325,11 @@ public:
         mpf_class result = 0.0;
 
         if constexpr (std::is_same<T, float>::value) {
-            result = mpf_class(x, precision) + mpf_class(y, precision);
+            result = mpf_class(h, precision) + mpf_class(l, precision);
         } else if constexpr (std::is_same<T, double>::value) {
-            result = mpf_class(x, precision) + mpf_class(y, precision);
+            result = mpf_class(h, precision) + mpf_class(l, precision);
         } else {
-            result = x.to_mpf() + y.to_mpf();
+            result = h.to_mpf() + l.to_mpf();
         }
         return result;
     }
@@ -391,7 +387,7 @@ public:
     bool operator==(const Double<T>& rhs) const
     {
         if (isnan() || rhs.isnan()) return false;
-        return x == rhs.x && y == rhs.y;
+        return h == rhs.h && l == rhs.l;
     }
 
     bool operator!=(const Double<T>& rhs) const
@@ -402,7 +398,7 @@ public:
     bool operator<(const Double<T>& rhs) const
     {
         if (isnan() || rhs.isnan()) return false;
-        return x < rhs.x || (x == rhs.x && y < rhs.y);
+        return h < rhs.h || (h == rhs.h && l < rhs.l);
     }
 
     bool operator>(const Double<T>& rhs) const
@@ -504,7 +500,7 @@ public:
             auto p =  a * b;
             auto aa = split(a);
             auto bb = split(b);
-            auto e = ((aa.x * bb.x - p) + aa.x * bb.y + aa.y * bb.x) + aa.y * bb.y;
+            auto e = ((aa.h * bb.h - p) + aa.h * bb.l + aa.l * bb.h) + aa.l * bb.l;
 
             return Double<T>(p,e);
         }
@@ -512,7 +508,7 @@ public:
 
     Double<T> operator-() const
     {
-        return Double<T>(-x, -y);
+        return Double<T>(-h, -l);
     }
 
     Double<T> &operator+=(const Double<T> &rhs)
@@ -520,27 +516,9 @@ public:
         if (isfinite() && rhs.isfinite()) {
 
 
-            auto sum = twoSum(x, rhs.x);
-            sum.y += y + rhs.y;
-            *this = quickTwoSum(sum.x, sum.y);
-            /*
-            T xl = x;
-            T xh = y;
-            T yl = rhs.x;
-            T yh = rhs.y;
-
-            //const [sl,sh] = twoSum(xh,yh);
-            T sh = xh + yh; T _1 = sh - xh; T sl = (xh - (sh - _1)) + (yh - _1);
-            //const [tl,th] = twoSum(xl,yl);
-            T th = xl + yl; T _2 = th - xl; T tl = (xl - (th - _2)) + (yl - _2);
-            T c = sl + th;
-            //const [vl,vh] = fastTwoSum(sh,c)
-            T vh = sh + c; T vl = c - (vh - sh);
-            T w = tl + vl;
-            //const [zl,zh] = fastTwoSum(vh,w)
-            T zh = vh + w; T zl = w - (zh - vh);
-            *this = Double<T>(zh, zl);
-            */
+            auto sum = twoSum(h, rhs.h);
+            sum.l += l + rhs.l;
+            *this = quickTwoSum(sum.h, sum.l);
 
         } else if (isnan() || rhs.isnan()) {
 
@@ -591,9 +569,9 @@ public:
     {
         if (isfinite() && rhs.isfinite()) {
 
-            auto val = twoProd(x, rhs.x);
-            val.y += x * rhs.y + y * rhs.x;
-            *this = quickTwoSum(val.x, val.y);
+            auto val = twoProd(h, rhs.h);
+            val.l += h * rhs.l + l * rhs.h;
+            *this = quickTwoSum(val.h, val.l);
 
         } else if (isnan() || rhs.isnan()) {
 
@@ -657,13 +635,13 @@ public:
         */
 
         Double<T> r = *this;
-        T q1 = r.x / rhs.x;
+        T q1 = r.h / rhs.h;
 
         r -= Double<T>(q1) * rhs;
-        T q2 = r.x / rhs.x;
+        T q2 = r.h / rhs.h;
 
         r -= Double<T>(q2) * rhs;
-        T q3 = r.x / rhs.x;
+        T q3 = r.h / rhs.h;
 
         *this = Double<T>(q1) + Double<T>(q2) + Double<T>(q3);
         return *this;
@@ -815,7 +793,7 @@ public:
 template <class T> inline Double<T>
 exp(const Double<T> &op)
 {
-    auto n = dbl::round(op.x);
+    auto n = dbl::round(op.h);
     auto w = op - Double<T>(n);
 
     auto u = (((((((((((w +
@@ -840,8 +818,8 @@ exp(const Double<T> &op)
 template <class T> inline Double<T>
 frexp(const Double<T> &op, int *exp)
 {
-    auto r = dbl::frexp(op.x, exp);
-    auto e = dbl::ldexp(op.y, -(*exp));
+    auto r = dbl::frexp(op.h, exp);
+    auto e = dbl::ldexp(op.l, -(*exp));
 
     return Double<T>(r, e);
 }
@@ -856,7 +834,7 @@ frexp10(const Double<T> &op, int *exp)
 template <class T> inline Double<T>
 ldexp(const Double<T> &op, int exp)
 {
-    return Double<T>(dbl::ldexp(op.x, exp), dbl::ldexp(op.y, exp));
+    return Double<T>(dbl::ldexp(op.h, exp), dbl::ldexp(op.l, exp));
 }
 
 template <class T> inline Double<T>
@@ -871,7 +849,7 @@ log(const Double<T> &op)
     if (op.isnegative()) return Double<T>::nan();
     if (op.iszero()) return -Double<T>::inf();
 
-    auto r = Double<T>(dbl::log(op.x));
+    auto r = Double<T>(dbl::log(op.h));
     auto u = r.exp();
     r -= 2.0 * (u - op) / (u + op);
 
@@ -943,7 +921,7 @@ sqrt(const Double<T> &x)
     if (x.iszero()) return Double<T>(0.0);
     if (x.isnegative()) return Double<T>::nan();
 
-    auto r = Double<T>(1.0 / dbl::sqrt(x.x));
+    auto r = Double<T>(1.0 / dbl::sqrt(x.h));
     auto h = x * 0.5;
 
     r += (0.5 - h * r.sqr()) * r;
@@ -968,12 +946,12 @@ sqrt(const Double<T> &x)
 template <class T> inline Double<T>
 ceil(const Double<T> &x)
 {
-    T hi = dbl::ceil(x.x);
+    T hi = dbl::ceil(x.h);
 
-    if (hi == x.x) {
+    if (hi == x.h) {
 
         // Upper part is an integer
-        T lo = dbl::ceil(x.y);
+        T lo = dbl::ceil(x.l);
         return Double<T>::quickTwoSum(hi, lo);
 
     } else {
@@ -992,12 +970,12 @@ ceil(const Double<T> &x, int fracdigits)
 template <class T> inline Double<T>
 floor(const Double<T> &x)
 {
-    T hi = dbl::floor(x.x);
+    T hi = dbl::floor(x.h);
 
-    if (hi == x.x) {
+    if (hi == x.h) {
 
         // Upper part is an integer
-        T lo = dbl::floor(x.y);
+        T lo = dbl::floor(x.l);
         return Double<T>::quickTwoSum(hi, lo);
 
     } else {
@@ -1223,65 +1201,63 @@ fma(const Double<T> &x, const Double<T> &y, const Double<T> &z)
 template <class T> inline bool
 isfinite(const Double<T> &x)
 {
-    return isfinite(x.x);
+    return isfinite(x.h);
 }
 
 template <class T> inline bool
 isinf(const Double<T> &x)
 {
-    return isinf(x.x);
+    return isinf(x.h);
 }
 
 template <class T> inline bool
 isnan(const Double<T> &x)
 {
-    return isnan(x.x);
+    return isnan(x.h);
 }
 
 template <class T> inline bool
 isnormal(const Double<T> &x)
 {
-    return isnormal(x.x);
+    return isnormal(x.h);
 }
 
 template <class T> inline bool
 signbit(const Double<T> &x)
 {
-    return x.x != T(0.0) || x.y == T(0.0) ? dbl::signbit(x.x) : dbl::signbit(x.y);
+    return x.h != T(0.0) || x.l == T(0.0) ? dbl::signbit(x.h) : dbl::signbit(x.l);
 }
 
 template <class T> inline bool
 iszero(const Double<T> &x)
 {
-    return x.x == T(0.0) && x.y == T(0.0);
+    return x.h == T(0.0) && x.l == T(0.0);
 }
 
 template <class T> inline bool
 isone(const Double<T> &x)
 {
-    return x.x == 1.0 && x.y == 0.0;
+    return x.h == 1.0 && x.l == 0.0;
 }
 
 template <class T> inline bool
 ispositive(const Double<T> &x)
 {
-    return x.x > 0.0;
+    return x.h > 0.0;
 }
 
 template <class T> inline bool
 isnegative(const Double<T> &x)
 {
-    return x.x < T(0.0);
+    return x.h < T(0.0);
 }
 
 template <class T>
 std::ostream& operator<<(std::ostream& os, const Double<T>& obj)
 {
-    os << "(" << obj.getX();
+    os << "(" << obj.h;
     os << ",";
-    // os << (obj.getY() < T(0.0) ? " - " : " + ");
-    // os << dbl::abs(obj.getY());
-    os << obj.getY();
+    os << obj.l;
     os << ")";
 
     return os;

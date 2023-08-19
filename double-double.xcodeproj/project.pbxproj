@@ -7,19 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		503867582A8AB0CA0018498B /* smoke_tests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503867572A8AB0CA0018498B /* smoke_tests.cpp */; };
-		5038675A2A8B75B40018498B /* explog_tests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503867592A8B75B40018498B /* explog_tests.cpp */; };
-		5038675C2A8BB7950018498B /* power_tests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5038675B2A8BB7950018498B /* power_tests.cpp */; };
-		5038675F2A8BE5D40018498B /* rounding_tests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5038675E2A8BE5D30018498B /* rounding_tests.cpp */; };
-		503867612A8C1E620018498B /* manipulation_tests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503867602A8C1E620018498B /* manipulation_tests.cpp */; };
-		503867632A8C214A0018498B /* minmax_tests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503867622A8C214A0018498B /* minmax_tests.cpp */; };
-		503867652A8CD2940018498B /* other_tests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503867642A8CD2940018498B /* other_tests.cpp */; };
-		503867672A8CD80F0018498B /* classification_tests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503867662A8CD80F0018498B /* classification_tests.cpp */; };
 		5038676B2A8E33C60018498B /* quaddouble_tests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5038676A2A8E33C60018498B /* quaddouble_tests.cpp */; };
+		5038676D2A9153E20018498B /* smoke_tests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503867572A8AB0CA0018498B /* smoke_tests.cpp */; };
+		5038676E2A9153E40018498B /* arithmetic_tests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5051DEF22A876E8300EED9D7 /* arithmetic_tests.cpp */; };
+		5038676F2A9153E70018498B /* comparison_tests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5051DEF52A8785D800EED9D7 /* comparison_tests.cpp */; };
+		503867702A9153EB0018498B /* explog_tests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503867592A8B75B40018498B /* explog_tests.cpp */; };
+		503867712A9153EE0018498B /* power_tests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5038675B2A8BB7950018498B /* power_tests.cpp */; };
+		503867722A9153F10018498B /* rounding_tests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5038675E2A8BE5D30018498B /* rounding_tests.cpp */; };
+		503867732A9153F40018498B /* manipulation_tests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503867602A8C1E620018498B /* manipulation_tests.cpp */; };
+		503867742A9153F60018498B /* minmax_tests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503867622A8C214A0018498B /* minmax_tests.cpp */; };
+		503867752A9153F90018498B /* other_tests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503867642A8CD2940018498B /* other_tests.cpp */; };
+		503867762A9153FC0018498B /* classification_tests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503867662A8CD80F0018498B /* classification_tests.cpp */; };
 		5051DEE82A876C4800EED9D7 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5051DEE72A876C4800EED9D7 /* main.cpp */; };
-		5051DEF02A876D1D00EED9D7 /* double-double.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5051DEEE2A876D1D00EED9D7 /* double-double.cpp */; };
-		5051DEF62A8785D800EED9D7 /* comparison_tests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5051DEF52A8785D800EED9D7 /* comparison_tests.cpp */; };
-		5051DEF72A87864000EED9D7 /* arithmetic_tests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5051DEF22A876E8300EED9D7 /* arithmetic_tests.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -45,9 +44,9 @@
 		503867642A8CD2940018498B /* other_tests.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = other_tests.cpp; sourceTree = "<group>"; };
 		503867662A8CD80F0018498B /* classification_tests.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = classification_tests.cpp; sourceTree = "<group>"; };
 		5038676A2A8E33C60018498B /* quaddouble_tests.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = quaddouble_tests.cpp; sourceTree = "<group>"; };
+		5038676C2A8FAF0A0018498B /* double-double.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "double-double.entitlements"; sourceTree = "<group>"; };
 		5051DEE42A876C4800EED9D7 /* double-double */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "double-double"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5051DEE72A876C4800EED9D7 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
-		5051DEEE2A876D1D00EED9D7 /* double-double.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "double-double.cpp"; sourceTree = "<group>"; };
 		5051DEEF2A876D1D00EED9D7 /* double-double.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "double-double.h"; sourceTree = "<group>"; };
 		5051DEF12A876E1600EED9D7 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		5051DEF22A876E8300EED9D7 /* arithmetic_tests.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = arithmetic_tests.cpp; sourceTree = "<group>"; };
@@ -70,8 +69,8 @@
 		5051DEDB2A876C4800EED9D7 = {
 			isa = PBXGroup;
 			children = (
+				5038676C2A8FAF0A0018498B /* double-double.entitlements */,
 				5051DEF12A876E1600EED9D7 /* CMakeLists.txt */,
-				5051DEEE2A876D1D00EED9D7 /* double-double.cpp */,
 				5051DEEF2A876D1D00EED9D7 /* double-double.h */,
 				5051DEE62A876C4800EED9D7 /* unittests */,
 				5051DEE52A876C4800EED9D7 /* Products */,
@@ -165,19 +164,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				503867612A8C1E620018498B /* manipulation_tests.cpp in Sources */,
-				503867582A8AB0CA0018498B /* smoke_tests.cpp in Sources */,
+				503867732A9153F40018498B /* manipulation_tests.cpp in Sources */,
 				5051DEE82A876C4800EED9D7 /* main.cpp in Sources */,
-				503867672A8CD80F0018498B /* classification_tests.cpp in Sources */,
+				5038676E2A9153E40018498B /* arithmetic_tests.cpp in Sources */,
+				503867762A9153FC0018498B /* classification_tests.cpp in Sources */,
+				503867702A9153EB0018498B /* explog_tests.cpp in Sources */,
+				503867722A9153F10018498B /* rounding_tests.cpp in Sources */,
 				5038676B2A8E33C60018498B /* quaddouble_tests.cpp in Sources */,
-				5038675A2A8B75B40018498B /* explog_tests.cpp in Sources */,
-				5038675F2A8BE5D40018498B /* rounding_tests.cpp in Sources */,
-				5051DEF72A87864000EED9D7 /* arithmetic_tests.cpp in Sources */,
-				5051DEF62A8785D800EED9D7 /* comparison_tests.cpp in Sources */,
-				5038675C2A8BB7950018498B /* power_tests.cpp in Sources */,
-				5051DEF02A876D1D00EED9D7 /* double-double.cpp in Sources */,
-				503867632A8C214A0018498B /* minmax_tests.cpp in Sources */,
-				503867652A8CD2940018498B /* other_tests.cpp in Sources */,
+				5038676F2A9153E70018498B /* comparison_tests.cpp in Sources */,
+				503867712A9153EE0018498B /* power_tests.cpp in Sources */,
+				5038676D2A9153E20018498B /* smoke_tests.cpp in Sources */,
+				503867742A9153F60018498B /* minmax_tests.cpp in Sources */,
+				503867752A9153F90018498B /* other_tests.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -296,9 +294,16 @@
 		5051DEEC2A876C4800EED9D7 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "double-double.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 3NG65ZLYW7;
 				ENABLE_HARDENED_RUNTIME = YES;
+				HEADER_SEARCH_PATHS = /opt/homebrew/Cellar/gmp/6.2.1_1/include/;
+				LIBRARY_SEARCH_PATHS = /opt/homebrew/Cellar/gmp/6.2.1_1/lib/;
+				OTHER_LDFLAGS = (
+					"-lgmp",
+					"-lgmpxx",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -306,9 +311,16 @@
 		5051DEED2A876C4800EED9D7 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "double-double.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 3NG65ZLYW7;
 				ENABLE_HARDENED_RUNTIME = YES;
+				HEADER_SEARCH_PATHS = /opt/homebrew/Cellar/gmp/6.2.1_1/include/;
+				LIBRARY_SEARCH_PATHS = /opt/homebrew/Cellar/gmp/6.2.1_1/lib/;
+				OTHER_LDFLAGS = (
+					"-lgmp",
+					"-lgmpxx",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

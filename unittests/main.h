@@ -1,12 +1,13 @@
 #pragma once
 
+#define DBL_DEBUG
+#define NUM_TESTS 10000
+#pragma STDC FENV_ACCESS ON
+
 #include "doctest.h"
 #include "double-double.h"
 
 using namespace dbl;
-
-#pragma STDC FENV_ACCESS ON
-#define NUM_TESTS 10000
 
 static inline double rand_int()
 {

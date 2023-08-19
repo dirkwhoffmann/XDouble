@@ -6,7 +6,7 @@
 // -----------------------------------------------------------------------------
 
 // -----------------------------------------------------------------------------
-// DISCLAIMER: THIS IS AN EARLY BETA-VERSION. THE CODE IS NOT PRODUCTION-READY.
+//         THIS IS A BETA-VERSION. THE CODE IS NOT PRODUCTION-READY
 // -----------------------------------------------------------------------------
 
 // -----------------------------------------------------------------------------
@@ -51,6 +51,13 @@
 #include <iostream>
 #include <iomanip>
 
+// REMOVE ASAP
+// #include <typeinfo>
+
+#ifdef DBL_DEBUG
+#include "gmpxx.h"
+#endif
+
 namespace dbl {
 
 // Import cmath API into namespace
@@ -82,8 +89,11 @@ using std::nan;
 using std::fdim;
 using std::fmax;
 using std::fmin;
+
 using std::fabs;
 using std::abs;
+using std::fma;
+
 using std::isfinite;
 using std::isinf;
 using std::isnan;
@@ -130,13 +140,13 @@ template <class T> Double<T> nearbyint(const Double<T> &x);
 template <class T> Double<T> nearbyint(const Double<T> &x, int fracdigits);
 
 template <class T>  Double<T> copysign(const Double<T> &x, const Double<T> &y);
-
 template <class T> Double<T> fdim(const Double<T> &x, const Double<T> &y);
 template <class T> Double<T> fmax(const Double<T> &x, const Double<T> &y);
 template <class T> Double<T> fmin(const Double<T> &x, const Double<T> &y);
 
 template <class T> Double<T> fabs(const Double<T> &x);
 template <class T> Double<T> abs(const Double<T> &x);
+template <class T> Double<T> fma(const Double<T> &x, const Double<T> &y, const Double<T> &z);
 
 template <class T> bool isfinite(const Double<T> &x);
 template <class T> bool isinf(const Double<T> &x);
@@ -151,7 +161,7 @@ template <class T> bool isnegative(const Double<T> &x);
 
 template <class T> class Double {
 
-    constexpr static bool useFma = true;
+    constexpr static bool useFma = false;
 
 public:
 
@@ -235,13 +245,15 @@ public:
 
     static Double<T> nan()
     {
-        return std::numeric_limits<double>::quiet_NaN();
+        return Double<T>(std::numeric_limits<double>::quiet_NaN());
     }
 
     static Double<T> inf()
     {
-        return std::numeric_limits<double>::infinity();
+        return Double<T>(std::numeric_limits<double>::infinity());
     }
+
+    static int digits();
 
 
     //
@@ -262,6 +274,17 @@ public:
         return *this;
     }
 
+
+    //
+    // Cast operators
+    //
+
+    operator int() const { return static_cast<int>(to_long_double()); }
+    operator long() const { return static_cast<long>(to_long_double()); }
+    operator long long() const { return static_cast<long long>(to_long_double()); }
+    operator float() const { return static_cast<float>(to_long_double()); }
+    operator double() const { return static_cast<float>(to_long_double()); }
+    operator long double() const { return to_long_double(); }
 
     //
     // Conversion functions
@@ -294,8 +317,27 @@ public:
 
     long double to_long_double() const
     {
+        // printf("long double to_long_double() const\n");
         return static_cast<long double>(x) + static_cast<long double>(y);
     }
+
+#ifdef DBL_DEBUG
+    mpf_class to_mpf() const
+    {
+        constexpr int precision = 256;
+
+        mpf_class result = 0.0;
+
+        if constexpr (std::is_same<T, float>::value) {
+            result = mpf_class(x, precision) + mpf_class(y, precision);
+        } else if constexpr (std::is_same<T, double>::value) {
+            result = mpf_class(x, precision) + mpf_class(y, precision);
+        } else {
+            result = x.to_mpf() + y.to_mpf();
+        }
+        return result;
+    }
+#endif
 
     char to_character() const
     {
@@ -320,10 +362,10 @@ public:
         Double<T> l; Double<T> r = modf(&l);
 
         // Compute integral digits
-        for (int i = 0; i < ldigits && l.abs() >= 1; i++) {
+        for (int i = 0; i < ldigits && l.abs() >= Double<T>(1.0); i++) {
 
-            l /= 10;
-            Double<T> digit = l.modf(&l) * 10;
+            l /= Double<T>(10.0);
+            Double<T> digit = l.modf(&l) * Double<T>(10.0);
             result = digit.to_character() + result;
         }
 
@@ -333,7 +375,7 @@ public:
         // Compute fractional digits
         for (int i = 0; i < rdigits; i++) {
 
-            r *= 10;
+            r *= Double<T>(10.0);
             Double<T> digit; r = r.modf(&digit);
             result = result + digit.to_character();
         }
@@ -399,21 +441,53 @@ public:
         T s = a + b;
         T v = s - a;
         T e = (a - (s - v)) + (b - v);
-
-        // std::cout << "   a = " << a << " b = " << b << std::endl;
-        // std::cout << "   s = " << s << " v = " << v << " e = " << e << std::endl;
         return Double<T>(s,e);
     }
 
     static Double<T> split(T a) {
 
-        auto digits = std::numeric_limits<T>::digits / 2 + 1;
+        /*
+        int digits;
 
-        T t = (std::ldexp(T(1),digits) + 1) * a;
+        if (std::is_same<T, Double<float>>::value) {
+            digits = std::numeric_limits<float>::digits - 6;
+        } else if (std::is_same<T, Double<double>>::value) {
+            digits = std::numeric_limits<double>::digits - 6;
+        } else {
+            digits = std::numeric_limits<T>::digits / 2 + 1;
+        }
+        // printf("digits = %d %f\n", digits, (double)(dbl::ldexp(T(1),digits) + T(1)));
+         */
+
+        T t = (dbl::ldexp(T(1), digits()) + T(1)) * a;
         T h = t - (t - a);
         T l = a - h;
 
         return Double<T>(h,l);
+    }
+
+    static void split3(T a, T *s1, T *s2, T *s3) {
+
+        if (std::is_same<T, Double<float>>::value || std::is_same<T, Double<double>>::value) {
+
+            auto s = split(a);
+            *s1 = s.x;
+            *s2 = s.y;
+            *s3 = 0.0;
+            return;
+        }
+
+        T t = (dbl::ldexp(T(1), 18) + T(1)) * a;
+        T h = t - (t - a);
+        *s1 = h;
+
+        T l = a - h;
+        T t2 = (dbl::ldexp(T(1), 18) + T(1)) * l;
+        T h2 = t2 - (t2 - l);
+        *s2 = h2;
+
+        T l2 = l - h2;
+        *s3 = l2;
     }
 
     static Double<T> twoProd(T a, T b) {
@@ -421,7 +495,7 @@ public:
         if constexpr (useFma) {
 
             auto p =  a * b;
-            auto e = std::fma(a, b, -p);
+            auto e = dbl::fma(a, b, -p);
 
             return Double<T>(p,e);
 
@@ -445,9 +519,28 @@ public:
     {
         if (isfinite() && rhs.isfinite()) {
 
+
             auto sum = twoSum(x, rhs.x);
             sum.y += y + rhs.y;
             *this = quickTwoSum(sum.x, sum.y);
+            /*
+            T xl = x;
+            T xh = y;
+            T yl = rhs.x;
+            T yh = rhs.y;
+
+            //const [sl,sh] = twoSum(xh,yh);
+            T sh = xh + yh; T _1 = sh - xh; T sl = (xh - (sh - _1)) + (yh - _1);
+            //const [tl,th] = twoSum(xl,yl);
+            T th = xl + yl; T _2 = th - xl; T tl = (xl - (th - _2)) + (yl - _2);
+            T c = sl + th;
+            //const [vl,vh] = fastTwoSum(sh,c)
+            T vh = sh + c; T vl = c - (vh - sh);
+            T w = tl + vl;
+            //const [zl,zh] = fastTwoSum(vh,w)
+            T zh = vh + w; T zl = w - (zh - vh);
+            *this = Double<T>(zh, zl);
+            */
 
         } else if (isnan() || rhs.isnan()) {
 
@@ -549,15 +642,30 @@ public:
         }
         if (rhs.isinf()) {
 
-            *this = signbit() ^ rhs.signbit() ? -0.0 : 0.0;
+            *this = signbit() ^ rhs.signbit() ? -Double<T>() : Double<T>();
             return *this;
         }
 
+        /*
         auto r = x / rhs.x;
+
         auto val = twoProd(r, rhs.x);
         auto e = (x - val.x - val.y + y - r * rhs.y) / rhs.x;
 
         *this = quickTwoSum(r, e);
+        return *this;
+        */
+
+        Double<T> r = *this;
+        T q1 = r.x / rhs.x;
+
+        r -= Double<T>(q1) * rhs;
+        T q2 = r.x / rhs.x;
+
+        r -= Double<T>(q2) * rhs;
+        T q3 = r.x / rhs.x;
+
+        *this = Double<T>(q1) + Double<T>(q2) + Double<T>(q3);
         return *this;
     }
 
@@ -680,6 +788,7 @@ public:
 
     Double<T> fabs() const { return dbl::fabs(*this); }
     Double<T> abs() const { return dbl::abs(*this); }
+    Double<T> fma() const { return dbl::fma(*this); }
 
 
     //
@@ -706,33 +815,33 @@ public:
 template <class T> inline Double<T>
 exp(const Double<T> &op)
 {
-    auto n = std::round(op.x);
-    auto w = op - n;
+    auto n = dbl::round(op.x);
+    auto w = op - Double<T>(n);
 
     auto u = (((((((((((w +
-                        156) * w + 12012) * w +
-                      600600) * w + 21621600) * w +
-                    588107520) * w + 12350257920) * w +
-                  201132771840) * w + 2514159648000) * w +
-                23465490048000) * w + 154872234316800) * w +
-              647647525324800) * w + 1295295050649600;
+                        156.0) * w + 12012.0) * w +
+                      600600.0) * w + 21621600.0) * w +
+                    588107520.0) * w + 12350257920.0) * w +
+                  201132771840.0) * w + 2514159648000.0) * w +
+                23465490048000.0) * w + 154872234316800.0) * w +
+              647647525324800.0) * w + 1295295050649600.0;
 
     auto v = (((((((((((w -
-                        156) * w + 12012) * w -
-                      600600) * w + 21621600) * w -
-                    588107520) * w + 12350257920) * w -
-                  201132771840) * w + 2514159648000) * w -
-                23465490048000) * w + 154872234316800) * w -
-              647647525324800) * w + 1295295050649600;
+                        156.0) * w + 12012.0) * w -
+                      600600.0) * w + 21621600.0) * w -
+                    588107520.0) * w + 12350257920.0) * w -
+                  201132771840.0) * w + 2514159648000.0) * w -
+                23465490048000.0) * w + 154872234316800.0) * w -
+              647647525324800.0) * w + 1295295050649600.0;
 
-    return Double<T>::e.pow(n) * (u / v);
+    return Double<T>::e.pow((int)n) * (u / v);
 }
 
 template <class T> inline Double<T>
 frexp(const Double<T> &op, int *exp)
 {
-    auto r = std::frexp(op.x, exp);
-    auto e = std::ldexp(op.y, -(*exp));
+    auto r = dbl::frexp(op.x, exp);
+    auto e = dbl::ldexp(op.y, -(*exp));
 
     return Double<T>(r, e);
 }
@@ -747,7 +856,7 @@ frexp10(const Double<T> &op, int *exp)
 template <class T> inline Double<T>
 ldexp(const Double<T> &op, int exp)
 {
-    return Double<T>(std::ldexp(op.x, exp), std::ldexp(op.y, exp));
+    return Double<T>(dbl::ldexp(op.x, exp), dbl::ldexp(op.y, exp));
 }
 
 template <class T> inline Double<T>
@@ -762,7 +871,7 @@ log(const Double<T> &op)
     if (op.isnegative()) return Double<T>::nan();
     if (op.iszero()) return -Double<T>::inf();
 
-    auto r = Double<T>(std::log(op.x));
+    auto r = Double<T>(dbl::log(op.x));
     auto u = r.exp();
     r -= 2.0 * (u - op) / (u + op);
 
@@ -804,10 +913,10 @@ log2(const Double<T> &op)
 template <class T> inline Double<T>
 pow(const Double<T> &base, int exponent)
 {
-    Double<T> result = 1;
+    Double<T> result = Double<T>(1);
     auto b = base;
 
-    for (int i = std::abs(exponent); i; i >>= 1) {
+    for (int i = dbl::abs(exponent); i; i >>= 1) {
 
         if (i & 1) result *= b;
         b *= b;
@@ -831,7 +940,7 @@ sqr(const Double<T> &x)
 template <class T> inline Double<T>
 sqrt(const Double<T> &x)
 {
-    if (x.iszero()) return 0.0;
+    if (x.iszero()) return Double<T>(0.0);
     if (x.isnegative()) return Double<T>::nan();
 
     auto r = Double<T>(1.0 / dbl::sqrt(x.x));
@@ -888,7 +997,7 @@ floor(const Double<T> &x)
     if (hi == x.x) {
 
         // Upper part is an integer
-        T lo = std::floor(x.y);
+        T lo = dbl::floor(x.y);
         return Double<T>::quickTwoSum(hi, lo);
 
     } else {
@@ -917,7 +1026,7 @@ fmod(const Double<T> &numer, const Double<T> &denom)
 template <class T> inline Double<T>
 trunc(const Double<T> &x)
 {
-    return isnegative(x) ? ceil(x) : floor(x);
+    return dbl::isnegative(x) ? ceil(x) : floor(x);
 }
 
 template <class T> inline Double<T>
@@ -951,7 +1060,7 @@ roundEven(const Double<T> &x)
         auto v2 = v1.ceil();
 
         if (v1 != v2) return v2;
-        return x.fmod(2.0) < -1 ? v2 : v2 + 1;
+        return x.fmod(2.0) < Double<T>(-1.0) ? v2 : v2 + Double<T>(1);
 
     } else {
 
@@ -959,7 +1068,7 @@ roundEven(const Double<T> &x)
         auto v2 = v1.floor();
 
         if (v1 != v2) return v2;
-        return x.fmod(2.0) < 1 ? v2 - 1 : v2;
+        return x.fmod(2.0) < Double<T>(1.0) ? v2 - Double<T>(1.0) : v2;
     }
 }
 
@@ -1051,7 +1160,7 @@ nearbyint(const Double<T> &x, int fracdigits)
 template <class T> inline Double<T>
 copysign(const Double<T> &x, const Double<T> &y)
 {
-    return signbit(y) ? -x : x;
+    return dbl::signbit(y) ? -x : x;
 }
 
 
@@ -1091,13 +1200,19 @@ fmin(const Double<T> &x,const Double<T> &y)
 template <class T> inline Double<T>
 fabs(const Double<T> &x)
 {
-    return isnegative(x) ? -x : x;
+    return dbl::isnegative(x) ? -x : x;
 }
 
 template <class T> inline Double<T>
 abs(const Double<T> &x)
 {
     return fabs(x);
+}
+
+template <class T> inline Double<T>
+fma(const Double<T> &x, const Double<T> &y, const Double<T> &z)
+{
+    return x * y + z;
 }
 
 
@@ -1132,13 +1247,13 @@ isnormal(const Double<T> &x)
 template <class T> inline bool
 signbit(const Double<T> &x)
 {
-    return x.x != 0 || x.y == 0 ? signbit(x.x) : signbit(x.y);
+    return x.x != T(0.0) || x.y == T(0.0) ? dbl::signbit(x.x) : dbl::signbit(x.y);
 }
 
 template <class T> inline bool
 iszero(const Double<T> &x)
 {
-    return x.x == 0.0 && x.y == 0.0;
+    return x.x == T(0.0) && x.y == T(0.0);
 }
 
 template <class T> inline bool
@@ -1156,22 +1271,21 @@ ispositive(const Double<T> &x)
 template <class T> inline bool
 isnegative(const Double<T> &x)
 {
-    return x.x < 0.0;
+    return x.x < T(0.0);
 }
 
 template <class T>
 std::ostream& operator<<(std::ostream& os, const Double<T>& obj)
 {
-    os << obj.getX();
-    os << (obj.getY() < 0 ? " - " : " + ");
-    os << std::abs(obj.getY());
+    os << "(" << obj.getX();
+    os << ",";
+    // os << (obj.getY() < T(0.0) ? " - " : " + ");
+    // os << dbl::abs(obj.getY());
+    os << obj.getY();
+    os << ")";
 
     return os;
 }
-
-typedef Double<float> doublefloat;
-typedef Double<double> doubledouble;
-typedef Double<long double> longdoubledouble;
 
 template <class T> inline const Double<T>
 Double<T>::e          ("2.71828182 84590452 35360287 47135266 24977572 47093699 95957496 69676277");
@@ -1199,5 +1313,21 @@ template <class T> inline const Double<T>
 Double<T>::egamma     ("0.57721566 49015328 60606512 09008240 24310421 59335939 92359880 57672349");
 template <class T> inline const Double<T>
 Double<T>::phi        ("1.61803398 87498948 48204586 83436563 81177203 09179805 76286213 54486227");
+
+typedef Double<float> doublefloat;
+typedef Double<double> doubledouble;
+typedef Double<long double> longdoubledouble;
+typedef Double<doublefloat> quadfloat;
+typedef Double<doubledouble> quaddouble;
+
+template<class T> inline int Double<T>::digits() {
+    return T::digits() - 6;
+}
+template<> inline int Double<float>::digits() {
+    return std::numeric_limits<float>::digits/ 2 + 1;
+}
+template<> inline int Double<double>::digits() {
+    return std::numeric_limits<double>::digits/ 2 + 1;
+}
 
 }

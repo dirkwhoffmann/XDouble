@@ -39,13 +39,13 @@ TEST_CASE("Rounding and remainder functions") {
         for (int i = 0; p[i].v != 999; i++) {
 
             fesetround(FE_DOWNWARD);
-            CHECK(doubledouble(p[i].v).ceil() == p[i].down);
+            CHECK((float)doubledouble(p[i].v).ceil() == p[i].down);
             fesetround(FE_TONEAREST);
-            CHECK(doubledouble(p[i].v).ceil() == p[i].round);
+            CHECK((float)doubledouble(p[i].v).ceil() == p[i].round);
             fesetround(FE_TOWARDZERO);
-            CHECK(doubledouble(p[i].v).ceil() == p[i].zero);
+            CHECK((float)doubledouble(p[i].v).ceil() == p[i].zero);
             fesetround(FE_UPWARD);
-            CHECK(doubledouble(p[i].v).ceil() == p[i].up);
+            CHECK((float)doubledouble(p[i].v).ceil() == p[i].up);
         }
 
         doubledouble pi("3.14159265358979323846264338327950");
@@ -97,13 +97,13 @@ TEST_CASE("Rounding and remainder functions") {
         for (int i = 0; p[i].v != 999; i++) {
 
             fesetround(FE_DOWNWARD);
-            CHECK(doubledouble(p[i].v).floor() == p[i].down);
+            CHECK((float)doubledouble(p[i].v).floor() == p[i].down);
             fesetround(FE_TONEAREST);
-            CHECK(doubledouble(p[i].v).floor() == p[i].round);
+            CHECK((float)doubledouble(p[i].v).floor() == p[i].round);
             fesetround(FE_TOWARDZERO);
-            CHECK(doubledouble(p[i].v).floor() == p[i].zero);
+            CHECK((float)doubledouble(p[i].v).floor() == p[i].zero);
             fesetround(FE_UPWARD);
-            CHECK(doubledouble(p[i].v).floor() == p[i].up);
+            CHECK((float)doubledouble(p[i].v).floor() == p[i].up);
         }
 
         doubledouble pi("3.14159265358979323846264338327950");
@@ -192,13 +192,13 @@ TEST_CASE("Rounding and remainder functions") {
         for (int i = 0; p[i].v != 999; i++) {
 
             fesetround(FE_DOWNWARD);
-            CHECK(doubledouble(p[i].v).trunc() == p[i].down);
+            CHECK((float)doubledouble(p[i].v).trunc() == p[i].down);
             fesetround(FE_TONEAREST);
-            CHECK(doubledouble(p[i].v).trunc() == p[i].round);
+            CHECK((float)doubledouble(p[i].v).trunc() == p[i].round);
             fesetround(FE_TOWARDZERO);
-            CHECK(doubledouble(p[i].v).trunc() == p[i].zero);
+            CHECK((float)doubledouble(p[i].v).trunc() == p[i].zero);
             fesetround(FE_UPWARD);
-            CHECK(doubledouble(p[i].v).trunc() == p[i].up);
+            CHECK((float)doubledouble(p[i].v).trunc() == p[i].up);
         }
 
         doubledouble pi("3.14159265358979323846264338327950");
@@ -250,13 +250,13 @@ TEST_CASE("Rounding and remainder functions") {
         for (int i = 0; p[i].v != 999; i++) {
 
             fesetround(FE_DOWNWARD);
-            CHECK(doubledouble(p[i].v).round() == p[i].down);
+            CHECK((float)doubledouble(p[i].v).round() == p[i].down);
             fesetround(FE_TONEAREST);
-            CHECK(doubledouble(p[i].v).round() == p[i].round);
+            CHECK((float)doubledouble(p[i].v).round() == p[i].round);
             fesetround(FE_TOWARDZERO);
-            CHECK(doubledouble(p[i].v).round() == p[i].zero);
+            CHECK((float)doubledouble(p[i].v).round() == p[i].zero);
             fesetround(FE_UPWARD);
-            CHECK(doubledouble(p[i].v).round() == p[i].up);
+            CHECK((float)doubledouble(p[i].v).round() == p[i].up);
         }
 
         doubledouble pi("3.14159265358979323846264338327950");
@@ -308,13 +308,13 @@ TEST_CASE("Rounding and remainder functions") {
         for (int i = 0; p[i].v != 999; i++) {
 
             fesetround(FE_DOWNWARD);
-            CHECK(doubledouble(p[i].v).roundEven() == p[i].down);
+            CHECK((float)doubledouble(p[i].v).roundEven() == p[i].down);
             fesetround(FE_TONEAREST);
-            CHECK(doubledouble(p[i].v).roundEven() == p[i].round);
+            CHECK((float)doubledouble(p[i].v).roundEven() == p[i].round);
             fesetround(FE_TOWARDZERO);
-            CHECK(doubledouble(p[i].v).roundEven() == p[i].zero);
+            CHECK((float)doubledouble(p[i].v).roundEven() == p[i].zero);
             fesetround(FE_UPWARD);
-            CHECK(doubledouble(p[i].v).roundEven() == p[i].up);
+            CHECK((float)doubledouble(p[i].v).roundEven() == p[i].up);
         }
     }
 
@@ -370,13 +370,13 @@ TEST_CASE("Rounding and remainder functions") {
         for (int i = 0; p[i].v != 999; i++) {
 
             fesetround(FE_DOWNWARD);
-            CHECK(doubledouble(p[i].v).rint() == p[i].down);
+            CHECK((float)doubledouble(p[i].v).rint() == p[i].down);
             fesetround(FE_TONEAREST);
-            CHECK(doubledouble(p[i].v).rint() == p[i].round);
+            CHECK((float)doubledouble(p[i].v).rint() == p[i].round);
             fesetround(FE_TOWARDZERO);
-            CHECK(doubledouble(p[i].v).rint() == p[i].zero);
+            CHECK((float)doubledouble(p[i].v).rint() == p[i].zero);
             fesetround(FE_UPWARD);
-            CHECK(doubledouble(p[i].v).rint() == p[i].up);
+            CHECK((float)doubledouble(p[i].v).rint() == p[i].up);
         }
 
         doubledouble pi("3.14159265358979323846264338327950");
@@ -457,13 +457,13 @@ TEST_CASE("Rounding and remainder functions") {
         for (int i = 0; p[i].v != 999; i++) {
 
             fesetround(FE_DOWNWARD);
-            CHECK(doubledouble(p[i].v).nearbyint() == p[i].down);
+            CHECK((float)doubledouble(p[i].v).nearbyint() == p[i].down);
             fesetround(FE_TONEAREST);
-            CHECK(doubledouble(p[i].v).nearbyint() == p[i].round);
+            CHECK((float)doubledouble(p[i].v).nearbyint() == p[i].round);
             fesetround(FE_TOWARDZERO);
-            CHECK(doubledouble(p[i].v).nearbyint() == p[i].zero);
+            CHECK((float)doubledouble(p[i].v).nearbyint() == p[i].zero);
             fesetround(FE_UPWARD);
-            CHECK(doubledouble(p[i].v).nearbyint() == p[i].up);
+            CHECK((float)doubledouble(p[i].v).nearbyint() == p[i].up);
         }
 
         for (int i = 0; i < NUM_TESTS; i++) {

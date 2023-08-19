@@ -17,9 +17,6 @@ if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release)
 endif()
 
-# Add the core library
-add_library(doubledouble double-double.cpp)
-
 # Specify compile options
 target_compile_options(doubledouble PUBLIC -Wall -Werror -Wno-unknown-pragmas)
 if(MSVC)

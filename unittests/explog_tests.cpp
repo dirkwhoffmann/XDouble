@@ -6,12 +6,19 @@ TEST_CASE("Exponential and logarithmic functions") {
     
     SUBCASE("exp") {
 
+
         CHECK(doubledouble("0"   ).exp().to_string(30) == "1.000000000000000000000000000000");
         CHECK(doubledouble("0.1" ).exp().to_string(30) == "1.105170918075647624811707826490");
         CHECK(doubledouble("0.5" ).exp().to_string(30) == "1.648721270700128146848650787814");
         CHECK(doubledouble("-0.1").exp().to_string(30) ==  ".904837418035959573164249059446");
         CHECK(doubledouble("-0.5").exp().to_string(30) ==  ".606530659712633423603799534991");
 
+        doubledouble q1 = doubledouble("0.1" ).exp();
+        quaddouble q2 = quaddouble("0.1" ).exp();
+
+        printf("q1 :: %s\n", q1.to_string(40).c_str());
+        printf("q2 :: %s\n", q2.to_string(40).c_str());
+         
         for (int i = 0; i < NUM_TESTS; i++) {
 
             double x = rand_double();
@@ -120,7 +127,7 @@ TEST_CASE("Exponential and logarithmic functions") {
             double x = rand_double_pos();
             doubledouble i1; double i2;
             CHECK(doubledouble(x).modf(&i1).to_float() == (float)std::modf(x, &i2));
-            CHECK(i1 == i2);
+            CHECK((float)i1 == (float)i2);
         }
     }
 }

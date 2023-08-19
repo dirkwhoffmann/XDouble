@@ -6,8 +6,8 @@ TEST_CASE("Basic arithmetic") {
 
     SUBCASE("Negation") {
 
-        CHECK(-doubledouble(42.0) == -42.0);
-        CHECK(-doubledouble(-42.0) == 42.0);
+        CHECK(-doubledouble(42.0).to_double() == -42.0);
+        CHECK(-doubledouble(-42.0).to_double() == 42.0);
     }
 
     SUBCASE("Addition") {

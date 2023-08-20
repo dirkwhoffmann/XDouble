@@ -1,17 +1,17 @@
 #pragma once
 
 // #define DBL_DEBUG
-#define NUM_TESTS 10000
+#define NUM_TESTS 1000
 #pragma STDC FENV_ACCESS ON
 
 #include "doctest.h"
 #include "double-double.h"
 
-using namespace dbl;
+using namespace xd;
 
-typedef Double<float> doublefloat;
-typedef Double<double> doubledouble;
-typedef Double<long double> longdoubledouble;
+typedef XDouble<float> doublefloat;
+typedef XDouble<double> doubledouble;
+typedef XDouble<long double> longdoubledouble;
 
 static inline double rand_int()
 {

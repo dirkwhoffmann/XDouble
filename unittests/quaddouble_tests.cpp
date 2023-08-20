@@ -2,30 +2,29 @@
 
 TEST_CASE("Quad-double tests") {
 
-    /* This test case verifies that double-double types can be used as the base
-     * type of another double-double type. Theoretically, this should lead to
-     * ever growing accuracies. However, inserting a double-double type into
-     * another double-double type causes precision problems when performing
-     * certain calculations. At the moment, I am not sure where these precision
-     * problems come from and how they can be avoided. Any help on this is
-     * greatly appreciated.
+    /* This test case verifies that XDouble types can be defines with other
+     * XDouble types as base types. Theoretically, this should lead to ever
+     * growing accuracies. However, building an XDouble type on top of another
+     * XDouble type causes precision problems when performing certain
+     * calculations. At the moment, I am unsure where those precision problems
+     * come from and how they can be tackled. Any help on this issue is highly
+     * appreciated.
      */
 
-    // typedef Double<doubledouble> quaddouble;
-    typedef Double<Double<Double<long double>>> quaddouble;
+    typedef XDouble<XDouble<XDouble<long double>>> multidouble;
 
     srand(0);
 
     SUBCASE("Constructors") {
 
-        quaddouble x1;
-        quaddouble x2(1e-10);
-        quaddouble x3(quaddouble::pi.h);
-        quaddouble x4(quaddouble::pi.h, x2.h);
-        quaddouble x5("3.1415");
-        quaddouble x6("3", "1415");
-        quaddouble x7 = quaddouble::nan();
-        quaddouble x8 = quaddouble::inf();
+        multidouble x1;
+        multidouble x2(1e-10);
+        multidouble x3(multidouble::pi.h);
+        multidouble x4(multidouble::pi.h, x2.h);
+        multidouble x5("3.1415");
+        multidouble x6("3", "1415");
+        multidouble x7 = multidouble::nan();
+        multidouble x8 = multidouble::inf();
 
         CHECK(x1.to_string(2) == "0.00");
         CHECK(x2.to_string(2) == "0.00");
@@ -39,19 +38,19 @@ TEST_CASE("Quad-double tests") {
 
     SUBCASE("Conversion functions") {
 
-        CHECK((int)quaddouble(3.14) == 3);
-        CHECK((long)quaddouble(3.6) == 3);
-        CHECK((long long)quaddouble(3.6) == 3);
-        CHECK((float)quaddouble(3.5) == 3.5);
-        CHECK((double)quaddouble(3.5) == 3.5);
-        CHECK((long double)quaddouble(3.5) == 3.5);
-        CHECK(quaddouble(3.1415).to_string(4) == "3.1415");
+        CHECK((int)multidouble(3.14) == 3);
+        CHECK((long)multidouble(3.6) == 3);
+        CHECK((long long)multidouble(3.6) == 3);
+        CHECK((float)multidouble(3.5) == 3.5);
+        CHECK((double)multidouble(3.5) == 3.5);
+        CHECK((long double)multidouble(3.5) == 3.5);
+        CHECK(multidouble(3.1415).to_string(4) == "3.1415");
     }
 
     SUBCASE("Comparison operators") {
 
-        auto pi = quaddouble::pi;
-        auto e = quaddouble::e;
+        auto pi = multidouble::pi;
+        auto e = multidouble::e;
 
         CHECK(pi == pi);
         CHECK(pi != e);
@@ -63,20 +62,20 @@ TEST_CASE("Quad-double tests") {
 
     SUBCASE("Arithmetic") {
 
-        quaddouble x(3.14);
+        multidouble x(3.14);
 
-        CHECK(-x == quaddouble(-3.14));
-        CHECK(x + x == quaddouble(6.28));
-        CHECK(x + x == quaddouble(6.28));
-        CHECK(x - x == quaddouble(0.0));
-        CHECK(x * x > quaddouble(9.0));
-        CHECK(x / x == quaddouble(1.0));
+        CHECK(-x == multidouble(-3.14));
+        CHECK(x + x == multidouble(6.28));
+        CHECK(x + x == multidouble(6.28));
+        CHECK(x - x == multidouble(0.0));
+        CHECK(x * x > multidouble(9.0));
+        CHECK(x / x == multidouble(1.0));
     }
 
     SUBCASE("Other functions") {
 
-        quaddouble x(3.14);
-        quaddouble y(2.0);
+        multidouble x(3.14);
+        multidouble y(2.0);
         int exp;
 
         CHECK(x.exp().isfinite());
@@ -98,11 +97,11 @@ TEST_CASE("Quad-double tests") {
 
     SUBCASE("Classification functions") {
 
-        quaddouble x(3.14);
+        multidouble x(3.14);
 
         CHECK(x.isfinite());
-        CHECK(quaddouble::inf().isinf());
-        CHECK(quaddouble::nan().isnan());
+        CHECK(multidouble::inf().isinf());
+        CHECK(multidouble::nan().isnan());
         CHECK(x.isnormal());
         CHECK(x.signbit() == 0);
         CHECK(!x.iszero());

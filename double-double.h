@@ -48,7 +48,7 @@
 #include "gmpxx.h"
 #endif
 
-namespace dbl {
+namespace xd {
 
 using std::exp;
 using std::frexp;
@@ -89,65 +89,68 @@ using std::isnan;
 using std::isnormal;
 using std::signbit;
 
-template <class T> struct Double;
+template <class T> struct XDouble;
 
-template <class T> Double<T> exp(const Double<T> &op);
-template <class T> Double<T> frexp(const Double<T> &op, int *exp);
-template <class T> Double<T> frexp10(const Double<T> &op, int *exp);
-template <class T> Double<T> ldexp(const Double<T> &op, int exp);
-template <class T> Double<T> ldexp10(const Double<T> &op, int exp);
-template <class T> Double<T> log(const Double<T> &op);
-template <class T> Double<T> log10(const Double<T> &op);
-template <class T> Double<T> modf(const Double<T> &op, Double<T> *iptr);
-template <class T> Double<T> exp2(const Double<T> &op);
-template <class T> Double<T> log2(const Double<T> &op);
+template <class T> XDouble<T> exp(const XDouble<T> &op);
+template <class T> XDouble<T> frexp(const XDouble<T> &op, int *exp);
+template <class T> XDouble<T> frexp10(const XDouble<T> &op, int *exp);
+template <class T> XDouble<T> ldexp(const XDouble<T> &op, int exp);
+template <class T> XDouble<T> ldexp10(const XDouble<T> &op, int exp);
+template <class T> XDouble<T> log(const XDouble<T> &op);
+template <class T> XDouble<T> log10(const XDouble<T> &op);
+template <class T> XDouble<T> modf(const XDouble<T> &op, XDouble<T> *iptr);
+template <class T> XDouble<T> exp2(const XDouble<T> &op);
+template <class T> XDouble<T> log2(const XDouble<T> &op);
 
-template <class T> Double<T> pow(const Double<T> &base, int exponent);
-template <class T> Double<T> pow(const Double<T> &base, const Double<T> &exponent);
-template <class T> Double<T> sqr(const Double<T> &x);
-template <class T> Double<T> sqrt(const Double<T> &x);
+template <class T> XDouble<T> powd(const XDouble<T> &base, int exponent);
+template <class T> XDouble<T> pow(const XDouble<T> &base, const XDouble<T> &exponent);
+template <class T> XDouble<T> sqr(const XDouble<T> &x);
+template <class T> XDouble<T> sqrt(const XDouble<T> &x);
 
-template <class T> Double<T> ceil(const Double<T> &x);
-template <class T> Double<T> ceil(const Double<T> &x, int fracdigits);
-template <class T> Double<T> floor(const Double<T> &x);
-template <class T> Double<T> floor(const Double<T> &x, int fracdigits);
-template <class T> Double<T> fmod(const Double<T> &numer, const Double<T> &denom);
-template <class T> Double<T> trunc(const Double<T> &x);
-template <class T> Double<T> trunc(const Double<T> &x, int fracdigits);
-template <class T> Double<T> round(const Double<T> &x);
-template <class T> Double<T> round(const Double<T> &x, int fracdigits);
-template <class T> Double<T> roundEven(const Double<T> &x);
-template <class T> Double<T> roundEven(const Double<T> &x, int fracdigits);
-template <class T> long lround(const Double<T> &x);
-template <class T> long long llround(const Double<T> &x);
-template <class T> Double<T> rint(const Double<T> &x);
-template <class T> Double<T> rint(const Double<T> &x, int fracdigits);
-template <class T> long lrint(const Double<T> &x);
-template <class T> long long llrint(const Double<T> &x);
-template <class T> Double<T> nearbyint(const Double<T> &x);
-template <class T> Double<T> nearbyint(const Double<T> &x, int fracdigits);
+template <class T> XDouble<T> ceil(const XDouble<T> &x);
+template <class T> XDouble<T> ceil(const XDouble<T> &x, int fracdigits);
+template <class T> XDouble<T> floor(const XDouble<T> &x);
+template <class T> XDouble<T> floor(const XDouble<T> &x, int fracdigits);
+template <class T> XDouble<T> fmod(const XDouble<T> &numer, const XDouble<T> &denom);
+template <class T> XDouble<T> trunc(const XDouble<T> &x);
+template <class T> XDouble<T> trunc(const XDouble<T> &x, int fracdigits);
+template <class T> XDouble<T> round(const XDouble<T> &x);
+template <class T> XDouble<T> round(const XDouble<T> &x, int fracdigits);
+template <class T> XDouble<T> roundEven(const XDouble<T> &x);
+template <class T> XDouble<T> roundEven(const XDouble<T> &x, int fracdigits);
+template <class T> long lround(const XDouble<T> &x);
+template <class T> long long llround(const XDouble<T> &x);
+template <class T> XDouble<T> rint(const XDouble<T> &x);
+template <class T> XDouble<T> rint(const XDouble<T> &x, int fracdigits);
+template <class T> long lrint(const XDouble<T> &x);
+template <class T> long long llrint(const XDouble<T> &x);
+template <class T> XDouble<T> nearbyint(const XDouble<T> &x);
+template <class T> XDouble<T> nearbyint(const XDouble<T> &x, int fracdigits);
 
-template <class T>  Double<T> copysign(const Double<T> &x, const Double<T> &y);
-template <class T> Double<T> fdim(const Double<T> &x, const Double<T> &y);
-template <class T> Double<T> fmax(const Double<T> &x, const Double<T> &y);
-template <class T> Double<T> fmin(const Double<T> &x, const Double<T> &y);
+template <class T>  XDouble<T> copysign(const XDouble<T> &x, const XDouble<T> &y);
+template <class T> XDouble<T> fdim(const XDouble<T> &x, const XDouble<T> &y);
+template <class T> XDouble<T> fmax(const XDouble<T> &x, const XDouble<T> &y);
+template <class T> XDouble<T> fmin(const XDouble<T> &x, const XDouble<T> &y);
 
-template <class T> Double<T> fabs(const Double<T> &x);
-template <class T> Double<T> abs(const Double<T> &x);
-template <class T> Double<T> fma(const Double<T> &x, const Double<T> &y, const Double<T> &z);
+template <class T> XDouble<T> fabs(const XDouble<T> &x);
+template <class T> XDouble<T> abs(const XDouble<T> &x);
+template <class T> XDouble<T> fma(const XDouble<T> &x, const XDouble<T> &y, const XDouble<T> &z);
 
-template <class T> bool isfinite(const Double<T> &x);
-template <class T> bool isinf(const Double<T> &x);
-template <class T> bool isnan(const Double<T> &x);
-template <class T> bool isnormal(const Double<T> &x);
-template <class T> bool signbit(const Double<T> &x);
+template <class T> bool isfinite(const XDouble<T> &x);
+template <class T> bool isinf(const XDouble<T> &x);
+template <class T> bool isnan(const XDouble<T> &x);
+template <class T> bool isnormal(const XDouble<T> &x);
+template <class T> bool signbit(const XDouble<T> &x);
 
-template <class T> bool iszero(const Double<T> &x);
-template <class T> bool isone(const Double<T> &x);
-template <class T> bool ispositive(const Double<T> &x);
-template <class T> bool isnegative(const Double<T> &x);
+template <class T> bool isinteger(const XDouble<T> &x);
+template <class T> bool iszero(const XDouble<T> &x);
+template <class T> bool ispluszero(const XDouble<T> &x);
+template <class T> bool isminuszero(const XDouble<T> &x);
+template <class T> bool isone(const XDouble<T> &x);
+template <class T> bool ispositive(const XDouble<T> &x);
+template <class T> bool isnegative(const XDouble<T> &x);
 
-template <class T> struct Double {
+template <class T> struct XDouble {
 
     constexpr static bool useFma = false;
 
@@ -157,13 +160,13 @@ template <class T> struct Double {
     // Constructors
     //
 
-    Double() noexcept : h(0), l(0) { }
-    Double(T h, T l) noexcept : h(h), l(l) { }
-    Double(long double h) noexcept : Double(T(h), T(0)) { }
-    Double(const Double<T>& other) noexcept : h(other.h), l(other.l) { }
-    Double(Double<T>&& other) noexcept : Double() { swap(*this, other); }
+    XDouble() noexcept : h(0), l(0) { }
+    XDouble(T h, T l) noexcept : h(h), l(l) { }
+    XDouble(long double h) noexcept : XDouble(T(h), T(0)) { }
+    XDouble(const XDouble<T>& other) noexcept : h(other.h), l(other.l) { }
+    XDouble(XDouble<T>&& other) noexcept : XDouble() { swap(*this, other); }
 
-    Double(const std::string &s) noexcept : Double()
+    XDouble(const std::string &s) noexcept : XDouble()
     {
         std::string ls = s;
         std::string rs = "";
@@ -174,31 +177,31 @@ template <class T> struct Double {
             rs = s.substr(pos + 1, std::string::npos);
         }
 
-        *this = Double(ls, rs);
+        *this = XDouble(ls, rs);
     }
 
-    Double(const std::string &ls, const std::string &rs) noexcept : Double()
+    XDouble(const std::string &ls, const std::string &rs) noexcept : XDouble()
     {
-        Double<T> l, r;
+        XDouble<T> l, r;
 
         // Check if the number is positive or negative
         bool neg = ls.empty() ? false : ls[0] == '-';
 
         // Parse the integral digits
         for (auto it = ls.begin() ; it != ls.end(); ++it) {
-            if (*it >= '0' && *it <= '9') l = l * Double<T>(10) + Double<T>(*it - '0');
+            if (*it >= '0' && *it <= '9') l = l * XDouble<T>(10) + XDouble<T>(*it - '0');
         }
 
         // Parse the fractional digits (in reverse order)
         for (auto it = rs.crbegin() ; it != rs.crend(); ++it) {
-            if (*it >= '0' && *it <= '9') r = (r + Double<T>(*it - '0')) / Double<T>(10);
+            if (*it >= '0' && *it <= '9') r = (r + XDouble<T>(*it - '0')) / XDouble<T>(10);
         }
 
         // Assemble the result
         *this = neg ? -(l + r) : (l + r);
     }
 
-    friend void swap(Double<T>& first, Double<T>& second) noexcept
+    friend void swap(XDouble<T>& first, XDouble<T>& second) noexcept
     {
         std::swap(first.h, second.h);
         std::swap(first.l, second.l);
@@ -209,28 +212,28 @@ template <class T> struct Double {
     // Constants
     //
 
-    static const Double<T> e;
-    static const Double<T> log2e;
-    static const Double<T> log10e;
-    static const Double<T> pi;
-    static const Double<T> inv_pi;
-    static const Double<T> inv_sqrtpi;
-    static const Double<T> ln2;
-    static const Double<T> ln10;
-    static const Double<T> sqrt2;
-    static const Double<T> sqrt3;
-    static const Double<T> inv_sqrt3;
-    static const Double<T> egamma;
-    static const Double<T> phi;
+    static const XDouble<T> e;
+    static const XDouble<T> log2e;
+    static const XDouble<T> log10e;
+    static const XDouble<T> pi;
+    static const XDouble<T> inv_pi;
+    static const XDouble<T> inv_sqrtpi;
+    static const XDouble<T> ln2;
+    static const XDouble<T> ln10;
+    static const XDouble<T> sqrt2;
+    static const XDouble<T> sqrt3;
+    static const XDouble<T> inv_sqrt3;
+    static const XDouble<T> egamma;
+    static const XDouble<T> phi;
 
-    static Double<T> nan()
+    static XDouble<T> nan()
     {
-        return Double<T>(std::numeric_limits<double>::quiet_NaN());
+        return XDouble<T>(std::numeric_limits<double>::quiet_NaN());
     }
 
-    static Double<T> inf()
+    static XDouble<T> inf()
     {
-        return Double<T>(std::numeric_limits<double>::infinity());
+        return XDouble<T>(std::numeric_limits<double>::infinity());
     }
 
     static int digits()
@@ -251,7 +254,7 @@ template <class T> struct Double {
     // Assignment operators
     //
 
-    Double<T>& operator=(Double<T> rhs)
+    XDouble<T>& operator=(XDouble<T> rhs)
     {
         swap(*this, rhs);
         return *this;
@@ -340,13 +343,13 @@ template <class T> struct Double {
         if (isinf()) return signbit() ? "-inf" : "inf";
 
         // Split number into its integral (l) and fractional (r) part
-        Double<T> l; Double<T> r = modf(&l);
+        XDouble<T> l; XDouble<T> r = modf(&l);
 
         // Compute integral digits
         for (int i = 0; i < ldigits; i++) {
 
             l /= 10.0;
-            Double<T> digit = l.modf(&l) * 10.0;
+            XDouble<T> digit = l.modf(&l) * 10.0;
             result = digit.to_character() + result;
             if (l.abs() < 1.0) break;
         }
@@ -358,7 +361,7 @@ template <class T> struct Double {
         for (int i = 0; i < rdigits; i++) {
 
             r *= 10.0;
-            Double<T> digit; r = r.modf(&digit);
+            XDouble<T> digit; r = r.modf(&digit);
             result = result + digit.to_character();
         }
 
@@ -370,92 +373,92 @@ template <class T> struct Double {
     // Comparison operators
     //
 
-    bool operator==(const Double<T>& rhs) const
+    bool operator==(const XDouble<T>& rhs) const
     {
         if (isnan() || rhs.isnan()) return false;
         if (isinf()) return h == rhs.h;
         return h == rhs.h && l == rhs.l;
     }
-    bool operator==(double rhs) const { return *this == Double<T>(rhs); }
-    bool operator==(long double rhs) const { return *this == Double<T>(rhs); }
+    bool operator==(double rhs) const { return *this == XDouble<T>(rhs); }
+    bool operator==(long double rhs) const { return *this == XDouble<T>(rhs); }
 
-    bool operator!=(const Double<T>& rhs) const
+    bool operator!=(const XDouble<T>& rhs) const
     {
         return !(*this == rhs);
     }
-    bool operator!=(double rhs) const { return *this != Double<T>(rhs); }
-    bool operator!=(long double rhs) const { return *this != Double<T>(rhs); }
+    bool operator!=(double rhs) const { return *this != XDouble<T>(rhs); }
+    bool operator!=(long double rhs) const { return *this != XDouble<T>(rhs); }
 
-    bool operator<(const Double<T>& rhs) const
+    bool operator<(const XDouble<T>& rhs) const
     {
         if (isnan() || rhs.isnan()) return false;
         return h < rhs.h || (h == rhs.h && l < rhs.l);
     }
-    bool operator<(double rhs) const { return *this < Double<T>(rhs); }
-    bool operator<(long double rhs) const { return *this < Double<T>(rhs); }
+    bool operator<(double rhs) const { return *this < XDouble<T>(rhs); }
+    bool operator<(long double rhs) const { return *this < XDouble<T>(rhs); }
 
-    bool operator>(const Double<T>& rhs) const
+    bool operator>(const XDouble<T>& rhs) const
     {
         if (isnan() || rhs.isnan()) return false;
         return rhs < *this;
     }
-    bool operator>(double rhs) const { return *this > Double<T>(rhs); }
-    bool operator>(long double rhs) const { return *this > Double<T>(rhs); }
+    bool operator>(double rhs) const { return *this > XDouble<T>(rhs); }
+    bool operator>(long double rhs) const { return *this > XDouble<T>(rhs); }
 
-    bool operator<=(const Double<T>& rhs) const
+    bool operator<=(const XDouble<T>& rhs) const
     {
         if (isnan() || rhs.isnan()) return false;
         return !(*this > rhs);
     }
-    bool operator<=(double rhs) const { return *this <= Double<T>(rhs); }
-    bool operator<=(long double rhs) const { return *this <= Double<T>(rhs); }
+    bool operator<=(double rhs) const { return *this <= XDouble<T>(rhs); }
+    bool operator<=(long double rhs) const { return *this <= XDouble<T>(rhs); }
 
-    bool operator>=(const Double<T>& rhs) const
+    bool operator>=(const XDouble<T>& rhs) const
     {
         if (isnan() || rhs.isnan()) return false;
         return !(*this < rhs);
     }
-    bool operator>=(double rhs) const { return *this >= Double<T>(rhs); }
-    bool operator>=(long double rhs) const { return *this >= Double<T>(rhs); }
+    bool operator>=(double rhs) const { return *this >= XDouble<T>(rhs); }
+    bool operator>=(long double rhs) const { return *this >= XDouble<T>(rhs); }
 
 
     //
     // Basic arithmetic functions
     //
 
-    static Double<T> quickTwoSum(T a, T b) {
+    static XDouble<T> quickTwoSum(T a, T b) {
 
         T s = a + b;
         T e = b - (s - a);
 
-        return Double<T>(s,e);
+        return XDouble<T>(s,e);
     }
 
-    static Double<T> twoSum(T a, T b) {
+    static XDouble<T> twoSum(T a, T b) {
 
         T s = a + b;
         T v = s - a;
         T e = (a - (s - v)) + (b - v);
-        return Double<T>(s,e);
+        return XDouble<T>(s,e);
     }
 
-    static Double<T> split(T a) {
+    static XDouble<T> split(T a) {
 
-        T t = (dbl::ldexp(T(1), digits()) + T(1)) * a;
+        T t = (xd::ldexp(T(1), digits()) + T(1)) * a;
         T h = t - (t - a);
         T l = a - h;
 
-        return Double<T>(h,l);
+        return XDouble<T>(h,l);
     }
 
-    static Double<T> twoProd(T a, T b) {
+    static XDouble<T> twoProd(T a, T b) {
 
         if constexpr (useFma) {
 
             auto p =  a * b;
-            auto e = dbl::fma(a, b, -p);
+            auto e = xd::fma(a, b, -p);
 
-            return Double<T>(p,e);
+            return XDouble<T>(p,e);
 
         } else {
 
@@ -464,16 +467,16 @@ template <class T> struct Double {
             auto bb = split(b);
             auto e = ((aa.h * bb.h - p) + aa.h * bb.l + aa.l * bb.h) + aa.l * bb.l;
 
-            return Double<T>(p,e);
+            return XDouble<T>(p,e);
         }
     }
 
-    Double<T> operator-() const
+    XDouble<T> operator-() const
     {
-        return Double<T>(-h, -l);
+        return XDouble<T>(-h, -l);
     }
 
-    Double<T> &operator+=(const Double<T> &rhs)
+    XDouble<T> &operator+=(const XDouble<T> &rhs)
     {
         if (isfinite() && rhs.isfinite()) {
 
@@ -497,27 +500,27 @@ template <class T> struct Double {
         return *this;
     }
 
-    Double<T> operator+(const Double<T> &rhs) const
+    XDouble<T> operator+(const XDouble<T> &rhs) const
     {
-        Double<T> result;
+        XDouble<T> result;
         result = *this;
         result += rhs;
 
         return result;
     }
 
-    friend Double<T> operator+(double lhs, Double<T> rhs) { return Double<T>(lhs) + rhs; }
-    friend Double<T> operator+(long double lhs, Double<T> rhs) { return Double<T>(lhs) + rhs; }
-    friend Double<T> operator+(Double<T> lhs, double rhs) { return lhs + Double<T>(rhs); }
-    friend Double<T> operator+(Double<T> lhs, long double rhs) { return lhs + Double<T>(rhs); }
+    friend XDouble<T> operator+(double lhs, XDouble<T> rhs) { return XDouble<T>(lhs) + rhs; }
+    friend XDouble<T> operator+(long double lhs, XDouble<T> rhs) { return XDouble<T>(lhs) + rhs; }
+    friend XDouble<T> operator+(XDouble<T> lhs, double rhs) { return lhs + XDouble<T>(rhs); }
+    friend XDouble<T> operator+(XDouble<T> lhs, long double rhs) { return lhs + XDouble<T>(rhs); }
 
-    Double<T> &operator-=(const Double<T> &rhs)
+    XDouble<T> &operator-=(const XDouble<T> &rhs)
     {
         *this += -rhs;
         return *this;
     }
 
-    Double<T> operator-(const Double<T> &rhs) const
+    XDouble<T> operator-(const XDouble<T> &rhs) const
     {
         auto result = *this;
         result -= rhs;
@@ -525,12 +528,12 @@ template <class T> struct Double {
         return result;
     }
 
-    friend Double<T> operator-(double lhs, Double<T> rhs) { return Double<T>(lhs) - rhs; }
-    friend Double<T> operator-(long double lhs, Double<T> rhs) { return Double<T>(lhs) - rhs; }
-    friend Double<T> operator-(Double<T> lhs, double rhs) { return lhs - Double<T>(rhs); }
-    friend Double<T> operator-(Double<T> lhs, long double rhs) { return lhs - Double<T>(rhs); }
+    friend XDouble<T> operator-(double lhs, XDouble<T> rhs) { return XDouble<T>(lhs) - rhs; }
+    friend XDouble<T> operator-(long double lhs, XDouble<T> rhs) { return XDouble<T>(lhs) - rhs; }
+    friend XDouble<T> operator-(XDouble<T> lhs, double rhs) { return lhs - XDouble<T>(rhs); }
+    friend XDouble<T> operator-(XDouble<T> lhs, long double rhs) { return lhs - XDouble<T>(rhs); }
 
-    Double<T> &operator*=(const Double<T> &rhs)
+    XDouble<T> &operator*=(const XDouble<T> &rhs)
     {
         if (isfinite() && rhs.isfinite()) {
 
@@ -550,7 +553,7 @@ template <class T> struct Double {
         return *this;
     }
 
-    Double<T> operator*(const Double<T> &rhs) const
+    XDouble<T> operator*(const XDouble<T> &rhs) const
     {
         auto result = *this;
         result *= rhs;
@@ -558,12 +561,12 @@ template <class T> struct Double {
         return result;
     }
 
-    friend Double<T> operator*(double lhs, Double<T> rhs) { return Double<T>(lhs) * rhs; }
-    friend Double<T> operator*(long double lhs, Double<T> rhs) { return Double<T>(lhs) * rhs; }
-    friend Double<T> operator*(Double<T> lhs, double rhs) { return lhs * Double<T>(rhs); }
-    friend Double<T> operator*(Double<T> lhs, long double rhs) { return lhs * Double<T>(rhs); }
+    friend XDouble<T> operator*(double lhs, XDouble<T> rhs) { return XDouble<T>(lhs) * rhs; }
+    friend XDouble<T> operator*(long double lhs, XDouble<T> rhs) { return XDouble<T>(lhs) * rhs; }
+    friend XDouble<T> operator*(XDouble<T> lhs, double rhs) { return lhs * XDouble<T>(rhs); }
+    friend XDouble<T> operator*(XDouble<T> lhs, long double rhs) { return lhs * XDouble<T>(rhs); }
 
-    Double<T> &operator/=(const Double<T> &rhs)
+    XDouble<T> &operator/=(const XDouble<T> &rhs)
     {
         if (rhs.iszero()) {
 
@@ -587,24 +590,24 @@ template <class T> struct Double {
         }
         if (rhs.isinf()) {
 
-            *this = signbit() ^ rhs.signbit() ? -Double<T>() : Double<T>();
+            *this = signbit() ^ rhs.signbit() ? -XDouble<T>() : XDouble<T>();
             return *this;
         }
 
-        Double<T> r = *this;
+        XDouble<T> r = *this;
         T q1 = r.h / rhs.h;
 
-        r -= Double<T>(q1) * rhs;
+        r -= XDouble<T>(q1) * rhs;
         T q2 = r.h / rhs.h;
 
-        r -= Double<T>(q2) * rhs;
+        r -= XDouble<T>(q2) * rhs;
         T q3 = r.h / rhs.h;
 
-        *this = Double<T>(q1) + Double<T>(q2) + Double<T>(q3);
+        *this = XDouble<T>(q1) + XDouble<T>(q2) + XDouble<T>(q3);
         return *this;
     }
 
-    Double<T> operator/(const Double<T> &rhs) const
+    XDouble<T> operator/(const XDouble<T> &rhs) const
     {
         auto result = *this;
         result /= rhs;
@@ -612,10 +615,10 @@ template <class T> struct Double {
         return result;
     }
 
-    friend Double<T> operator/(double lhs, Double<T> rhs) { return Double<T>(lhs) / rhs; }
-    friend Double<T> operator/(long double lhs, Double<T> rhs) { return Double<T>(lhs) / rhs; }
-    friend Double<T> operator/(Double<T> lhs, double rhs) { return lhs / Double<T>(rhs); }
-    friend Double<T> operator/(Double<T> lhs, long double rhs) { return lhs / Double<T>(rhs); }
+    friend XDouble<T> operator/(double lhs, XDouble<T> rhs) { return XDouble<T>(lhs) / rhs; }
+    friend XDouble<T> operator/(long double lhs, XDouble<T> rhs) { return XDouble<T>(lhs) / rhs; }
+    friend XDouble<T> operator/(XDouble<T> lhs, double rhs) { return lhs / XDouble<T>(rhs); }
+    friend XDouble<T> operator/(XDouble<T> lhs, long double rhs) { return lhs / XDouble<T>(rhs); }
 
     void operator++()
     {
@@ -649,26 +652,26 @@ template <class T> struct Double {
     // Exponential and logarithmic functions
     //
 
-    Double<T> exp() const { return dbl::exp(*this); }
-    Double<T> frexp(int *exp) const { return dbl::frexp(*this, exp); }
-    Double<T> frexp10(int *exp) const { return dbl::frexp10(*this, exp); }
-    Double<T> ldexp(int exp) const { return dbl::ldexp(*this, exp); }
-    Double<T> ldexp10(int exp) const { return dbl::ldexp10(*this, exp); }
-    Double<T> log() const { return dbl::log(*this); }
-    Double<T> log10() const  { return dbl::log10(*this); }
-    Double<T> modf(Double<T> *iptr) const { return dbl::modf(*this, iptr); }
-    Double<T> exp2() const { return dbl::exp2(*this); }
-    Double<T> log2() const { return dbl::log2(*this); }
+    XDouble<T> exp() const { return xd::exp(*this); }
+    XDouble<T> frexp(int *exp) const { return xd::frexp(*this, exp); }
+    XDouble<T> frexp10(int *exp) const { return xd::frexp10(*this, exp); }
+    XDouble<T> ldexp(int exp) const { return xd::ldexp(*this, exp); }
+    XDouble<T> ldexp10(int exp) const { return xd::ldexp10(*this, exp); }
+    XDouble<T> log() const { return xd::log(*this); }
+    XDouble<T> log10() const  { return xd::log10(*this); }
+    XDouble<T> modf(XDouble<T> *iptr) const { return xd::modf(*this, iptr); }
+    XDouble<T> exp2() const { return xd::exp2(*this); }
+    XDouble<T> log2() const { return xd::log2(*this); }
 
 
     //
     // Power functions
     //
 
-    Double<T> pow(int exponent) const { return dbl::pow(*this, exponent); }
-    Double<T> pow(const Double<T> &exponent) const { return dbl::pow(*this, exponent); }
-    Double<T> sqr() const { return dbl::sqr(*this); }
-    Double<T> sqrt() const { return dbl::sqrt(*this); }
+    XDouble<T> powd(int exponent) const { return xd::powd(*this, exponent); }
+    XDouble<T> pow(const XDouble<T> &exponent) const { return xd::pow(*this, exponent); }
+    XDouble<T> sqr() const { return xd::sqr(*this); }
+    XDouble<T> sqrt() const { return xd::sqrt(*this); }
 
 
     //
@@ -682,65 +685,68 @@ template <class T> struct Double {
     // Rounding and remainder functions
     //
 
-    Double<T> ceil() const { return dbl::ceil(*this); }
-    Double<T> ceil(int fracdigits) const { return dbl::ceil(*this, fracdigits); }
-    Double<T> floor() const { return dbl::floor(*this); }
-    Double<T> floor(int fracdigits) const { return dbl::floor(*this, fracdigits); }
-    Double<T> fmod(Double<T> denom) const { return dbl::fmod(*this, denom); }
-    Double<T> trunc() const { return dbl::trunc(*this); }
-    Double<T> trunc(int fracdigits) const { return dbl::trunc(*this, fracdigits); }
-    Double<T> round() const { return dbl::round(*this); }
-    Double<T> round(int fracdigits) const { return dbl::round(*this, fracdigits); }
-    Double<T> roundEven() const { return dbl::roundEven(*this); }
-    Double<T> roundEven(int fracdigits) const  { return dbl::roundEven(*this, fracdigits); }
-    long lround() const { return dbl::lround(*this); }
-    long long llround() const { return dbl::llround(*this); }
-    Double<T> rint() const { return dbl::rint(*this); }
-    Double<T> rint(int fracdigits) const { return dbl::rint(*this, fracdigits); }
-    long lrint() const { return dbl::lrint(*this); }
-    long long llrint() const { return dbl::llrint(*this); }
-    Double<T> nearbyint() const { return dbl::nearbyint(*this); }
-    Double<T> nearbyint(int fracdigits) const { return dbl::nearbyint(*this, fracdigits); }
+    XDouble<T> ceil() const { return xd::ceil(*this); }
+    XDouble<T> ceil(int fracdigits) const { return xd::ceil(*this, fracdigits); }
+    XDouble<T> floor() const { return xd::floor(*this); }
+    XDouble<T> floor(int fracdigits) const { return xd::floor(*this, fracdigits); }
+    XDouble<T> fmod(XDouble<T> denom) const { return xd::fmod(*this, denom); }
+    XDouble<T> trunc() const { return xd::trunc(*this); }
+    XDouble<T> trunc(int fracdigits) const { return xd::trunc(*this, fracdigits); }
+    XDouble<T> round() const { return xd::round(*this); }
+    XDouble<T> round(int fracdigits) const { return xd::round(*this, fracdigits); }
+    XDouble<T> roundEven() const { return xd::roundEven(*this); }
+    XDouble<T> roundEven(int fracdigits) const  { return xd::roundEven(*this, fracdigits); }
+    long lround() const { return xd::lround(*this); }
+    long long llround() const { return xd::llround(*this); }
+    XDouble<T> rint() const { return xd::rint(*this); }
+    XDouble<T> rint(int fracdigits) const { return xd::rint(*this, fracdigits); }
+    long lrint() const { return xd::lrint(*this); }
+    long long llrint() const { return xd::llrint(*this); }
+    XDouble<T> nearbyint() const { return xd::nearbyint(*this); }
+    XDouble<T> nearbyint(int fracdigits) const { return xd::nearbyint(*this, fracdigits); }
 
 
     //
     // Floating-point manipulation functions
     //
 
-    Double<T> copysign(const Double<T> &y) const { return dbl::copysign(*this, y); }
+    XDouble<T> copysign(const XDouble<T> &y) const { return xd::copysign(*this, y); }
 
 
     //
     // Minimum, maximum, difference functions
     //
 
-    Double<T> fdim(const Double<T> &y) const { return dbl::fdim(*this, y); }
-    Double<T> fmax(const Double<T> &y) const { return dbl::fmax(*this, y); }
-    Double<T> fmin(const Double<T> &y) const { return dbl::fmin(*this, y); }
+    XDouble<T> fdim(const XDouble<T> &y) const { return xd::fdim(*this, y); }
+    XDouble<T> fmax(const XDouble<T> &y) const { return xd::fmax(*this, y); }
+    XDouble<T> fmin(const XDouble<T> &y) const { return xd::fmin(*this, y); }
 
 
     //
     // Other functions
     //
 
-    Double<T> fabs() const { return dbl::fabs(*this); }
-    Double<T> abs() const { return dbl::abs(*this); }
+    XDouble<T> fabs() const { return xd::fabs(*this); }
+    XDouble<T> abs() const { return xd::abs(*this); }
 
 
     //
     // Classification functions
     //
 
-    bool isfinite() const { return dbl::isfinite(*this); }
-    bool isinf() const { return dbl::isinf(*this); }
-    bool isnan() const { return dbl::isnan(*this); }
-    bool isnormal() const { return dbl::isnormal(*this); }
-    bool signbit() const { return dbl::signbit(*this); }
+    bool isfinite() const { return xd::isfinite(*this); }
+    bool isinf() const { return xd::isinf(*this); }
+    bool isnan() const { return xd::isnan(*this); }
+    bool isnormal() const { return xd::isnormal(*this); }
+    bool signbit() const { return xd::signbit(*this); }
 
-    bool iszero() const { return dbl::iszero(*this); }
-    bool isone() const { return dbl::isone(*this); }
-    bool ispositive() const { return dbl::ispositive(*this); }
-    bool isnegative() const { return dbl::isnegative(*this); }
+    bool isinteger() const { return xd::isinteger(*this); }
+    bool iszero() const { return xd::iszero(*this); }
+    bool ispluszero() const { return xd::ispluszero(*this); }
+    bool isminuszero() const { return xd::isminuszero(*this); }
+    bool isone() const { return xd::isone(*this); }
+    bool ispositive() const { return xd::ispositive(*this); }
+    bool isnegative() const { return xd::isnegative(*this); }
 };
 
 
@@ -748,11 +754,11 @@ template <class T> struct Double {
 // Exponential and logarithmic functions
 //
 
-template <class T> inline Double<T>
-exp(const Double<T> &op)
+template <class T> inline XDouble<T>
+exp(const XDouble<T> &op)
 {
-    auto n = dbl::round(op.h);
-    auto w = op - Double<T>(n);
+    auto n = xd::round(op.h);
+    auto w = op - XDouble<T>(n);
 
     auto u = (((((((((((w +
                         156.0) * w + 12012.0) * w +
@@ -770,76 +776,77 @@ exp(const Double<T> &op)
                 23465490048000.0) * w + 154872234316800.0) * w -
               647647525324800.0) * w + 1295295050649600.0;
 
-    return Double<T>::e.pow((int)n) * (u / v);
+    return XDouble<T>::e.powd((int)n) * (u / v);
 }
 
-template <class T> inline Double<T>
-frexp(const Double<T> &op, int *exp)
+template <class T> inline XDouble<T>
+frexp(const XDouble<T> &op, int *exp)
 {
-    auto r = dbl::frexp(op.h, exp);
-    auto e = dbl::ldexp(op.l, -(*exp));
+    auto r = xd::frexp(op.h, exp);
+    auto e = xd::ldexp(op.l, -(*exp));
 
-    return Double<T>(r, e);
+    return XDouble<T>(r, e);
 }
 
-template <class T> inline Double<T>
-frexp10(const Double<T> &op, int *exp)
+template <class T> inline XDouble<T>
+frexp10(const XDouble<T> &op, int *exp)
 {
     *exp = op.iszero() ? 0 : 1 + (op.fabs().log10().floor().to_int());
-    return op * Double<T>(10).pow(-(*exp));
+    return op * XDouble<T>(10).pow(-(*exp));
 }
 
-template <class T> inline Double<T>
-ldexp(const Double<T> &op, int exp)
+template <class T> inline XDouble<T>
+ldexp(const XDouble<T> &op, int exp)
 {
-    return Double<T>(dbl::ldexp(op.h, exp), dbl::ldexp(op.l, exp));
+    return XDouble<T>(xd::ldexp(op.h, exp), xd::ldexp(op.l, exp));
 }
 
-template <class T> inline Double<T>
-ldexp10(const Double<T> &op, int exp)
+template <class T> inline XDouble<T>
+ldexp10(const XDouble<T> &op, int exp)
 {
-    return op * Double<T>(10).pow(exp);
+    return op * XDouble<T>(10).pow(exp);
 }
 
-template <class T> inline Double<T>
-log(const Double<T> &op)
+template <class T> inline XDouble<T>
+log(const XDouble<T> &op)
 {
-    if (op.isnegative()) return Double<T>::nan();
-    if (op.iszero()) return -Double<T>::inf();
+    if (op.isnegative()) return XDouble<T>::nan();
+    if (op.iszero()) return -XDouble<T>::inf();
+    if (op.isinf()) return XDouble<T>::inf();
 
-    auto r = Double<T>(dbl::log(op.h));
+    auto r = XDouble<T>(xd::log(op.h));
     auto u = r.exp();
     r -= 2.0 * (u - op) / (u + op);
 
     return r;
 }
 
-template <class T> inline Double<T>
-log10(const Double<T> &op)
+template <class T> inline XDouble<T>
+log10(const XDouble<T> &op)
 {
-    return op.log() / Double<T>::ln10;
+    return op.log() / XDouble<T>::ln10;
 }
 
-template <class T> inline Double<T>
-modf(const Double<T> &op, Double<T> *iptr)
+template <class T> inline XDouble<T>
+modf(const XDouble<T> &op, XDouble<T> *iptr)
 {
     auto nearby = op.trunc();
-    auto result = (op.isinf() ? Double<T>(0.0) : op - nearby).copysign(op);
+    auto result = (op.isinf() ? XDouble<T>(0.0) : op - nearby).copysign(op);
 
     *iptr = nearby;
     return result;
 }
 
-template <class T> inline Double<T>
-exp2(const Double<T> &op)
+template <class T> inline XDouble<T>
+exp2(const XDouble<T> &op)
 {
-    return (op * Double<T>::ln2).exp();
+    return (op * XDouble<T>::ln2).exp();
 }
 
-template <class T> inline Double<T>
-log2(const Double<T> &op)
+template <class T> inline XDouble<T>
+log2(const XDouble<T> &op)
 {
-    return op.log() * Double<T>::log2e;
+    return op.log() * XDouble<T>::log2e;
 }
 
 
@@ -847,40 +854,88 @@ log2(const Double<T> &op)
 // Power functions
 //
 
-template <class T> inline Double<T>
-pow(const Double<T> &base, int exponent)
+template <class T> inline XDouble<T>
+powd(const XDouble<T> &base, int exponent)
 {
-    Double<T> result = Double<T>(1);
+    if (base.iszero()) {
+
+        if (exponent == 0) return 1.0;
+        if (exponent > 0) return 0.0;
+        return XDouble<T>::inf();
+    }
+
+    auto result = XDouble<T>(1.0);
     auto b = base;
 
-    for (int i = dbl::abs(exponent); i; i >>= 1) {
+    for (int i = xd::abs(exponent); i; i >>= 1) {
 
         if (i & 1) result *= b;
         b *= b;
     }
 
-    return exponent < 0 ? (1.0 / result) : result;
+    if (exponent >= 0) {
+        return result;
+    } else if (result == 0.0) {
+        return base.signbit() ? -XDouble<T>::inf() : XDouble<T>::inf();
+    } else {
+        return 1.0 / result;
+    }
 }
 
-template <class T> inline Double<T>
-pow(const Double<T> &base, const Double<T> &exponent)
+template <class T> inline XDouble<T>
+pow(const XDouble<T> &base, const XDouble<T> &exponent)
 {
+    if (exponent.isinteger()) {
+
+        return powd(base, (int)exponent);
+    }
+    if (base.isone() || exponent.iszero()) {
+
+        return 1.0;
+    }
+    if (base.isnan() || exponent.isnan()) {
+
+        return XDouble<T>::nan();
+    }
+    if (base.iszero()) {
+
+        if (exponent.iszero()) return 1.0;
+        if (exponent.ispositive()) return 0.0;
+        return XDouble<T>::inf();
+
+        /*
+        CHECK(doubledouble(-doubledouble::inf()).pow(-doubledouble::inf()) == 0.0);
+        CHECK(doubledouble(-doubledouble::inf()).pow(-2.0) == 0.0);
+        CHECK(doubledouble(-doubledouble::inf()).pow(-1.0) == 0.0);
+        CHECK(doubledouble(-doubledouble::inf()).pow(0.0) == 1.0); OK
+        CHECK(doubledouble(-doubledouble::inf()).pow(1.0) == doubledouble::inf());
+        CHECK(doubledouble(-doubledouble::inf()).pow(2.0) == doubledouble::inf());
+        CHECK(doubledouble(-doubledouble::inf()).pow(doubledouble::inf()) == doubledouble::inf());
+        CHECK(doubledouble(-doubledouble::inf()).pow(doubledouble::nan()) == doubledouble::nan()); OK
+         */
+
+    }
+    if (base.isinf()) {
+
+        return exponent.isnegative() ? XDouble<T>(0.0) : XDouble<T>::inf();
+    }
+
     return (log(base) * exponent).exp();
 }
 
-template <class T> inline Double<T>
-sqr(const Double<T> &x)
+template <class T> inline XDouble<T>
+sqr(const XDouble<T> &x)
 {
     return x * x;
 }
 
-template <class T> inline Double<T>
-sqrt(const Double<T> &x)
+template <class T> inline XDouble<T>
+sqrt(const XDouble<T> &x)
 {
     if (x.iszero()) return 0.0;
-    if (x.isnegative()) return Double<T>::nan();
+    if (x.isnegative()) return XDouble<T>::nan();
 
-    auto r = Double<T>(1.0 / dbl::sqrt(x.h));
+    auto r = XDouble<T>(1.0 / xd::sqrt(x.h));
     auto h = x * 0.5;
 
     r += (0.5 - h * r.sqr()) * r;
@@ -902,76 +957,76 @@ sqrt(const Double<T> &x)
 // Rounding and remainder functions
 //
 
-template <class T> inline Double<T>
-ceil(const Double<T> &x)
+template <class T> inline XDouble<T>
+ceil(const XDouble<T> &x)
 {
-    T hi = dbl::ceil(x.h);
+    T hi = xd::ceil(x.h);
 
     if (hi == x.h) {
 
         // Upper part is an integer
-        T lo = dbl::ceil(x.l);
-        return Double<T>::quickTwoSum(hi, lo);
+        T lo = xd::ceil(x.l);
+        return XDouble<T>::quickTwoSum(hi, lo);
 
     } else {
 
-        return Double<T>(hi);
+        return XDouble<T>(hi);
     }
 }
 
-template <class T> inline Double<T>
-ceil(const Double<T> &x, int fracdigits)
+template <class T> inline XDouble<T>
+ceil(const XDouble<T> &x, int fracdigits)
 {
     return x.ldexp10(fracdigits).ceil().ldexp10(-fracdigits);
 }
 
-template <class T> inline Double<T>
-floor(const Double<T> &x)
+template <class T> inline XDouble<T>
+floor(const XDouble<T> &x)
 {
-    T hi = dbl::floor(x.h);
+    T hi = xd::floor(x.h);
 
     if (hi == x.h) {
 
         // Upper part is an integer
-        T lo = dbl::floor(x.l);
-        return Double<T>::quickTwoSum(hi, lo);
+        T lo = xd::floor(x.l);
+        return XDouble<T>::quickTwoSum(hi, lo);
 
     } else {
 
-        return Double<T>(hi);
+        return XDouble<T>(hi);
     }
 }
 
-template <class T> inline Double<T>
-floor(const Double<T> &x, int fracdigits)
+template <class T> inline XDouble<T>
+floor(const XDouble<T> &x, int fracdigits)
 {
     return x.ldexp10(fracdigits).floor().ldexp10(-fracdigits);
 }
 
-template <class T> inline Double<T>
-fmod(const Double<T> &numer, const Double<T> &denom)
+template <class T> inline XDouble<T>
+fmod(const XDouble<T> &numer, const XDouble<T> &denom)
 {
-    if (denom.iszero()) return Double<T>::nan();
+    if (denom.iszero()) return XDouble<T>::nan();
     if (numer.isfinite() && denom.isinf()) return numer;
 
-    Double<T> tquot = (numer / denom).trunc();
+    XDouble<T> tquot = (numer / denom).trunc();
     return numer - tquot * denom;
 }
 
-template <class T> inline Double<T>
-trunc(const Double<T> &x)
+template <class T> inline XDouble<T>
+trunc(const XDouble<T> &x)
 {
-    return dbl::isnegative(x) ? ceil(x) : floor(x);
+    return xd::isnegative(x) ? ceil(x) : floor(x);
 }
 
-template <class T> inline Double<T>
-trunc(const Double<T> &x, int fracdigits)
+template <class T> inline XDouble<T>
+trunc(const XDouble<T> &x, int fracdigits)
 {
     return x.ldexp10(fracdigits).trunc().ldexp10(-fracdigits);
 }
 
-template <class T> inline Double<T>
-round(const Double<T> &x)
+template <class T> inline XDouble<T>
+round(const XDouble<T> &x)
 {
     if (x.isnegative()) {
         return (x - 0.5).ceil();
@@ -980,14 +1035,14 @@ round(const Double<T> &x)
     }
 }
 
-template <class T> inline Double<T>
-round(const Double<T> &x, int fracdigits)
+template <class T> inline XDouble<T>
+round(const XDouble<T> &x, int fracdigits)
 {
     return x.ldexp10(fracdigits).round().ldexp10(-fracdigits);
 }
 
-template <class T> inline Double<T>
-roundEven(const Double<T> &x)
+template <class T> inline XDouble<T>
+roundEven(const XDouble<T> &x)
 {
     if (x.isnegative()) {
 
@@ -995,11 +1050,11 @@ roundEven(const Double<T> &x)
         auto v2 = v1.ceil();
 
         if (v1 != v2) return v2;
-        return x.fmod(2.0) < -1.0 ? v2 : v2 + Double<T>(1);
+        return x.fmod(2.0) < -1.0 ? v2 : v2 + XDouble<T>(1);
 
     } else {
 
-        auto v1 = x + Double<T>(0.5);
+        auto v1 = x + XDouble<T>(0.5);
         auto v2 = v1.floor();
 
         if (v1 != v2) return v2;
@@ -1007,28 +1062,28 @@ roundEven(const Double<T> &x)
     }
 }
 
-template <class T> inline Double<T>
-roundEven(const Double<T> &x, int fracdigits)
+template <class T> inline XDouble<T>
+roundEven(const XDouble<T> &x, int fracdigits)
 {
     return x.ldexp10(fracdigits).roundEven().ldexp10(-fracdigits);
 }
 
 template <class T> inline long
-lround(const Double<T> &x)
+lround(const XDouble<T> &x)
 {
     return round(x).to_long();
 }
 
 template <class T> inline long long
-llround(const Double<T> &x)
+llround(const XDouble<T> &x)
 {
     return round(x).to_long_double();
 }
 
-template <class T> inline Double<T>
-rint(const Double<T> &x)
+template <class T> inline XDouble<T>
+rint(const XDouble<T> &x)
 {
-    auto result = dbl::nearbyint(x);
+    auto result = xd::nearbyint(x);
 
     // TODO:
     // The rint() functions do the same [as nearbyint], but will raise the
@@ -1038,10 +1093,10 @@ rint(const Double<T> &x)
     return result;
 }
 
-template <class T> inline Double<T>
-rint(const Double<T> &x, int fracdigits)
+template <class T> inline XDouble<T>
+rint(const XDouble<T> &x, int fracdigits)
 {
-    auto result = dbl::nearbyint(x, fracdigits);
+    auto result = xd::nearbyint(x, fracdigits);
 
     // TODO:
     // The rint() functions do the same [as nearbyint], but will raise the
@@ -1052,19 +1107,19 @@ rint(const Double<T> &x, int fracdigits)
 }
 
 template <class T> inline long
-lrint(const Double<T> &x)
+lrint(const XDouble<T> &x)
 {
     return x.rint().to_long();
 }
 
 template <class T> inline long long
-llrint(const Double<T> &x)
+llrint(const XDouble<T> &x)
 {
     return x.rint().to_long_long();
 }
 
-template <class T> inline Double<T>
-nearbyint(const Double<T> &x)
+template <class T> inline XDouble<T>
+nearbyint(const XDouble<T> &x)
 {
     switch (fegetround()) {
 
@@ -1075,8 +1130,8 @@ nearbyint(const Double<T> &x)
     }
 }
 
-template <class T> inline Double<T>
-nearbyint(const Double<T> &x, int fracdigits)
+template <class T> inline XDouble<T>
+nearbyint(const XDouble<T> &x, int fracdigits)
 {
     switch (fegetround()) {
 
@@ -1092,10 +1147,10 @@ nearbyint(const Double<T> &x, int fracdigits)
 // Floating-point manipulation functions
 //
 
-template <class T> inline Double<T>
-copysign(const Double<T> &x, const Double<T> &y)
+template <class T> inline XDouble<T>
+copysign(const XDouble<T> &x, const XDouble<T> &y)
 {
-    return dbl::signbit(y) ? -x : x;
+    return xd::signbit(y) ? -x : x;
 }
 
 
@@ -1103,17 +1158,17 @@ copysign(const Double<T> &x, const Double<T> &y)
 // Minimum, maximum, difference functions
 //
 
-template <class T> inline Double<T>
-fdim(const Double<T> &x, const Double<T> &y)
+template <class T> inline XDouble<T>
+fdim(const XDouble<T> &x, const XDouble<T> &y)
 {
-    if (x.isnan()) return Double<T>::nan();
-    if (y.isnan()) return Double<T>::nan();
+    if (x.isnan()) return XDouble<T>::nan();
+    if (y.isnan()) return XDouble<T>::nan();
 
-    return (x > y) ? x - y : Double<T>();
+    return (x > y) ? x - y : XDouble<T>();
 }
 
-template <class T> inline Double<T>
-fmax(const Double<T> &x, const Double<T> &y)
+template <class T> inline XDouble<T>
+fmax(const XDouble<T> &x, const XDouble<T> &y)
 {
     if (x.isnan()) return y;
     if (y.isnan()) return x;
@@ -1121,8 +1176,8 @@ fmax(const Double<T> &x, const Double<T> &y)
     return x > y ? x : y;
 }
 
-template <class T> inline Double<T>
-fmin(const Double<T> &x,const Double<T> &y)
+template <class T> inline XDouble<T>
+fmin(const XDouble<T> &x,const XDouble<T> &y)
 {
     if (x.isnan()) return y;
     if (y.isnan()) return x;
@@ -1135,20 +1190,20 @@ fmin(const Double<T> &x,const Double<T> &y)
 // Other functions
 //
 
-template <class T> inline Double<T>
-fabs(const Double<T> &x)
+template <class T> inline XDouble<T>
+fabs(const XDouble<T> &x)
 {
-    return dbl::isnegative(x) ? -x : x;
+    return xd::isnegative(x) ? -x : x;
 }
 
-template <class T> inline Double<T>
-abs(const Double<T> &x)
+template <class T> inline XDouble<T>
+abs(const XDouble<T> &x)
 {
     return fabs(x);
 }
 
-template <class T> inline Double<T>
-fma(const Double<T> &x, const Double<T> &y, const Double<T> &z)
+template <class T> inline XDouble<T>
+fma(const XDouble<T> &x, const XDouble<T> &y, const XDouble<T> &z)
 {
     return x * y + z;
 }
@@ -1159,61 +1214,79 @@ fma(const Double<T> &x, const Double<T> &y, const Double<T> &z)
 //
 
 template <class T> inline bool
-isfinite(const Double<T> &x)
+isfinite(const XDouble<T> &x)
 {
     return isfinite(x.h);
 }
 
 template <class T> inline bool
-isinf(const Double<T> &x)
+isinf(const XDouble<T> &x)
 {
     return isinf(x.h);
 }
 
 template <class T> inline bool
-isnan(const Double<T> &x)
+isnan(const XDouble<T> &x)
 {
     return isnan(x.h);
 }
 
 template <class T> inline bool
-isnormal(const Double<T> &x)
+isnormal(const XDouble<T> &x)
 {
     return isnormal(x.h);
 }
 
 template <class T> inline bool
-signbit(const Double<T> &x)
+signbit(const XDouble<T> &x)
 {
-    return x.h != 0.0 || x.l == 0.0 ? dbl::signbit(x.h) : dbl::signbit(x.l);
+    return x.h != 0.0 || x.l == 0.0 ? xd::signbit(x.h) : xd::signbit(x.l);
 }
 
 template <class T> inline bool
-iszero(const Double<T> &x)
+isinteger(const XDouble<T> &x)
+{
+    return x.isfinite() && x.floor() == x;
+}
+
+template <class T> inline bool
+iszero(const XDouble<T> &x)
 {
     return x.h == 0.0 && x.l == 0.0;
 }
 
 template <class T> inline bool
-isone(const Double<T> &x)
+ispluszero(const XDouble<T> &x)
+{
+    return iszero(x) && signbit(x) == 0;
+}
+
+template <class T> inline bool
+isminuszero(const XDouble<T> &x)
+{
+    return iszero(x) && signbit(x) == 1;
+}
+
+template <class T> inline bool
+isone(const XDouble<T> &x)
 {
     return x.h == 1.0 && x.l == 0.0;
 }
 
 template <class T> inline bool
-ispositive(const Double<T> &x)
+ispositive(const XDouble<T> &x)
 {
     return x.h > 0.0;
 }
 
 template <class T> inline bool
-isnegative(const Double<T> &x)
+isnegative(const XDouble<T> &x)
 {
-    return x.h < 0.0;
+    return signbit(x.h);
 }
 
 template <class T>
-std::ostream& operator<<(std::ostream& os, const Double<T>& obj)
+std::ostream& operator<<(std::ostream& os, const XDouble<T>& obj)
 {
     os << "(" << obj.h;
     os << ",";
@@ -1223,31 +1296,31 @@ std::ostream& operator<<(std::ostream& os, const Double<T>& obj)
     return os;
 }
 
-template <class T> inline const Double<T>
-Double<T>::e          ("2.71828182 84590452 35360287 47135266 24977572 47093699 95957496 69676277");
-template <class T> inline const Double<T>
-Double<T>::log2e      ("1.44269504 08889634 07359924 68100189 21374266 45954152 98593413 54494069");
-template <class T> inline const Double<T>
-Double<T>::log10e     ("0.43429448 19032518 27651128 91891660 50822943 97005803 66656611 44537831");
-template <class T> inline const Double<T>
-Double<T>::pi         ("3.14159265 35897932 38462643 38327950 28841971 69399375 10582097 49445923");
-template <class T> inline const Double<T>
-Double<T>::inv_pi     ("0.31830988 61837906 71537767 52674502 87240689 19291480 91289749 53346881");
-template <class T> inline const Double<T>
-Double<T>::inv_sqrtpi ("0.56418958 35477562 86948079 45156077 25858440 50629328 99885684 4085a722");
-template <class T> inline const Double<T>
-Double<T>::ln2        ("0.69314718 05599453 09417232 12145817 65680755 00134360 25525412 06800195");
-template <class T> inline const Double<T>
-Double<T>::ln10       ("2.30258509 29940456 84017991 45468436 42076011 01488628 77297603 33279009");
-template <class T> inline const Double<T>
-Double<T>::sqrt2      ("1.41421356 23730950 48801688 72420969 80785696 71875376 94807317 66797379");
-template <class T> inline const Double<T>
-Double<T>::sqrt3      ("1.73205080 75688772 93527446 34150587 23669428 05253810 38062805 58069794");
-template <class T> inline const Double<T>
-Double<T>::inv_sqrt3  ("0.57735026 91896257 64509148 78050195 74556476 01751270 12687601 86023264");
-template <class T> inline const Double<T>
-Double<T>::egamma     ("0.57721566 49015328 60606512 09008240 24310421 59335939 92359880 57672349");
-template <class T> inline const Double<T>
-Double<T>::phi        ("1.61803398 87498948 48204586 83436563 81177203 09179805 76286213 54486227");
+template <class T> inline const XDouble<T>
+XDouble<T>::e          ("2.71828182 84590452 35360287 47135266 24977572 47093699 95957496 69676277");
+template <class T> inline const XDouble<T>
+XDouble<T>::log2e      ("1.44269504 08889634 07359924 68100189 21374266 45954152 98593413 54494069");
+template <class T> inline const XDouble<T>
+XDouble<T>::log10e     ("0.43429448 19032518 27651128 91891660 50822943 97005803 66656611 44537831");
+template <class T> inline const XDouble<T>
+XDouble<T>::pi         ("3.14159265 35897932 38462643 38327950 28841971 69399375 10582097 49445923");
+template <class T> inline const XDouble<T>
+XDouble<T>::inv_pi     ("0.31830988 61837906 71537767 52674502 87240689 19291480 91289749 53346881");
+template <class T> inline const XDouble<T>
+XDouble<T>::inv_sqrtpi ("0.56418958 35477562 86948079 45156077 25858440 50629328 99885684 4085a722");
+template <class T> inline const XDouble<T>
+XDouble<T>::ln2        ("0.69314718 05599453 09417232 12145817 65680755 00134360 25525412 06800195");
+template <class T> inline const XDouble<T>
+XDouble<T>::ln10       ("2.30258509 29940456 84017991 45468436 42076011 01488628 77297603 33279009");
+template <class T> inline const XDouble<T>
+XDouble<T>::sqrt2      ("1.41421356 23730950 48801688 72420969 80785696 71875376 94807317 66797379");
+template <class T> inline const XDouble<T>
+XDouble<T>::sqrt3      ("1.73205080 75688772 93527446 34150587 23669428 05253810 38062805 58069794");
+template <class T> inline const XDouble<T>
+XDouble<T>::inv_sqrt3  ("0.57735026 91896257 64509148 78050195 74556476 01751270 12687601 86023264");
+template <class T> inline const XDouble<T>
+XDouble<T>::egamma     ("0.57721566 49015328 60606512 09008240 24310421 59335939 92359880 57672349");
+template <class T> inline const XDouble<T>
+XDouble<T>::phi        ("1.61803398 87498948 48204586 83436563 81177203 09179805 76286213 54486227");
 
 }

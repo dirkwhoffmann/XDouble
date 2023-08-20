@@ -102,6 +102,13 @@ TEST_CASE("Exponential and logarithmic functions") {
             double x = rand_double_pos();
             CHECK(doubledouble(x).log().to_float() == (float)std::log(x));
         }
+
+        CHECK(doubledouble(0.0).log() == -doubledouble::inf());
+        CHECK(doubledouble(1.0).log() == 0.0);
+        CHECK(doubledouble(-.5).log().isnan());;
+        CHECK(doubledouble::inf().log() == doubledouble::inf());
+        CHECK((-doubledouble::inf()).log().isnan());
+        CHECK(doubledouble::nan().log().isnan());
     }
 
     SUBCASE("log10") {

@@ -88,6 +88,34 @@ TEST_CASE("Classification functions") {
         CHECK((-doubledouble::inf()).iszero() == false);
     }
 
+    SUBCASE("ispluszero") {
+
+        CHECK(doubledouble(0.0).ispluszero() == true);
+        CHECK(doubledouble(-0.0).ispluszero() == false);
+        CHECK((-doubledouble(0.0)).ispluszero() == false);
+        CHECK(doubledouble(1.0).ispluszero() == false);
+        CHECK(doubledouble(-1.0).ispluszero() == false);
+        CHECK((-doubledouble(1.0)).ispluszero() == false);
+        CHECK(doubledouble::nan().ispluszero() == false);
+        CHECK((-doubledouble::nan()).ispluszero() == false);
+        CHECK(doubledouble::inf().ispluszero() == false);
+        CHECK((-doubledouble::inf()).ispluszero() == false);
+    }
+
+    SUBCASE("isminuszero") {
+
+        CHECK(doubledouble(0.0).isminuszero() == false);
+        CHECK(doubledouble(-0.0).isminuszero() == true);
+        CHECK((-doubledouble(0.0)).isminuszero() == true);
+        CHECK(doubledouble(1.0).isminuszero() == false);
+        CHECK(doubledouble(-1.0).isminuszero() == false);
+        CHECK((-doubledouble(1.0)).isminuszero() == false);
+        CHECK(doubledouble::nan().isminuszero() == false);
+        CHECK((-doubledouble::nan()).isminuszero() == false);
+        CHECK(doubledouble::inf().isminuszero() == false);
+        CHECK((-doubledouble::inf()).isminuszero() == false);
+    }
+
     SUBCASE("isone") {
 
         CHECK(doubledouble(0.0).isone() == false);
@@ -119,13 +147,13 @@ TEST_CASE("Classification functions") {
     SUBCASE("isnegative") {
 
         CHECK(doubledouble(0.0).isnegative() == false);
-        CHECK(doubledouble(-0.0).isnegative() == false);
-        CHECK((-doubledouble(0.0)).isnegative() == false);
+        CHECK(doubledouble(-0.0).isnegative() == true);
+        CHECK((-doubledouble(0.0)).isnegative() == true);
         CHECK(doubledouble(1.0).isnegative() == false);
         CHECK(doubledouble(-1.0).isnegative() == true);
         CHECK((-doubledouble(1.0)).isnegative() == true);
         CHECK(doubledouble::nan().isnegative() == false);
-        CHECK((-doubledouble::nan()).isnegative() == false);
+        CHECK((-doubledouble::nan()).isnegative() == true);
         CHECK(doubledouble::inf().isnegative() == false);
         CHECK((-doubledouble::inf()).isnegative() == true);
     }

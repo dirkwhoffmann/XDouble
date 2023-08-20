@@ -1,8 +1,21 @@
 cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
 
-# project(tests LANGUAGES CXX)
+project(
+  doubledouble
+  VERSION 0.9
+  DESCRIPTION "A lightweight double-double arithmetic library in C++"
+  HOMEPAGE_URL "https://www.dirkwhoffmann.de"
+  LANGUAGES CXX C)
 
-enable_testing()
+# Set the C++ standard
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+set(CMAKE_CXX_EXTENSIONS False)
+
+# Set the optimization level (if not specified on the command line)
+if(NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE Release)
+endif()
 
 add_executable(unittester
 
@@ -18,6 +31,16 @@ add_executable(unittester
     minmax_tests.cpp
     other_tests.cpp
 )
-target_include_directories(unittester PRIVATE ${CMAKE_SOURCE_DIR})
-target_link_libraries(unittester PRIVATE doubledouble)
-add_test(unittest unittester)
+
+# Specify compile options
+target_compile_options(unittester PUBLIC -Wall -Werror -Wno-unknown-pragmas)
+if(MSVC)
+  target_compile_options(unittester PUBLIC /W4)
+elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+endif()
+
+enable_testing()
+
+target_include_directories(unittester PRIVATE ${CMAKE_SOURCE_DIR}/..)
+# target_link_libraries(unittester PRIVATE doubledouble)
+add_test(doubledouble unittester)

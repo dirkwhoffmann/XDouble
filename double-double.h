@@ -89,7 +89,7 @@ using std::isnan;
 using std::isnormal;
 using std::signbit;
 
-template <class T> class Double;
+template <class T> struct Double;
 
 template <class T> Double<T> exp(const Double<T> &op);
 template <class T> Double<T> frexp(const Double<T> &op, int *exp);
@@ -242,7 +242,7 @@ template <class T> struct Double {
         } else if constexpr (std::is_same<T, long double>::value) {
             return std::numeric_limits<long double>::digits/ 2 + 1;
         } else {
-            return T::digits() - 6;
+            return T::digits() - 3;
         }
     }
 
@@ -345,10 +345,10 @@ template <class T> struct Double {
         // Compute integral digits
         for (int i = 0; i < ldigits; i++) {
 
-            l /= Double<T>(10.0);
-            Double<T> digit = l.modf(&l) * Double<T>(10.0);
+            l /= 10.0;
+            Double<T> digit = l.modf(&l) * 10.0;
             result = digit.to_character() + result;
-            if (l.abs() < Double<T>(1.0)) break;
+            if (l.abs() < 1.0) break;
         }
 
         // Create a decimal point if necessary
@@ -357,7 +357,7 @@ template <class T> struct Double {
         // Compute fractional digits
         for (int i = 0; i < rdigits; i++) {
 
-            r *= Double<T>(10.0);
+            r *= 10.0;
             Double<T> digit; r = r.modf(&digit);
             result = result + digit.to_character();
         }
@@ -842,6 +842,7 @@ log2(const Double<T> &op)
     return op.log() * Double<T>::log2e;
 }
 
+
 //
 // Power functions
 //
@@ -876,7 +877,7 @@ sqr(const Double<T> &x)
 template <class T> inline Double<T>
 sqrt(const Double<T> &x)
 {
-    if (x.iszero()) return Double<T>(0.0);
+    if (x.iszero()) return 0.0;
     if (x.isnegative()) return Double<T>::nan();
 
     auto r = Double<T>(1.0 / dbl::sqrt(x.h));
@@ -973,9 +974,9 @@ template <class T> inline Double<T>
 round(const Double<T> &x)
 {
     if (x.isnegative()) {
-        return (x - Double<T>(0.5)).ceil();
+        return (x - 0.5).ceil();
     } else {
-        return (x + Double<T>(0.5)).floor();
+        return (x + 0.5).floor();
     }
 }
 
@@ -990,11 +991,11 @@ roundEven(const Double<T> &x)
 {
     if (x.isnegative()) {
 
-        auto v1 = x - Double<T>(0.5);
+        auto v1 = x - 0.5;
         auto v2 = v1.ceil();
 
         if (v1 != v2) return v2;
-        return x.fmod(2.0) < Double<T>(-1.0) ? v2 : v2 + Double<T>(1);
+        return x.fmod(2.0) < -1.0 ? v2 : v2 + Double<T>(1);
 
     } else {
 
@@ -1002,7 +1003,7 @@ roundEven(const Double<T> &x)
         auto v2 = v1.floor();
 
         if (v1 != v2) return v2;
-        return x.fmod(2.0) < Double<T>(1.0) ? v2 - Double<T>(1.0) : v2;
+        return x.fmod(2.0) < 1.0 ? v2 - 1.0 : v2;
     }
 }
 
@@ -1184,13 +1185,13 @@ isnormal(const Double<T> &x)
 template <class T> inline bool
 signbit(const Double<T> &x)
 {
-    return x.h != T(0.0) || x.l == T(0.0) ? dbl::signbit(x.h) : dbl::signbit(x.l);
+    return x.h != 0.0 || x.l == 0.0 ? dbl::signbit(x.h) : dbl::signbit(x.l);
 }
 
 template <class T> inline bool
 iszero(const Double<T> &x)
 {
-    return x.h == T(0.0) && x.l == T(0.0);
+    return x.h == 0.0 && x.l == 0.0;
 }
 
 template <class T> inline bool

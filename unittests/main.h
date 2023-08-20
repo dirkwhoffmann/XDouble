@@ -1,6 +1,6 @@
 #pragma once
 
-#define DBL_DEBUG
+// #define DBL_DEBUG
 #define NUM_TESTS 10000
 #pragma STDC FENV_ACCESS ON
 

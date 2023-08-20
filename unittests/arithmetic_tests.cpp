@@ -6,8 +6,13 @@ TEST_CASE("Basic arithmetic") {
 
     SUBCASE("Negation") {
 
-        CHECK(-doubledouble(42.0).to_double() == -42.0);
-        CHECK(-doubledouble(-42.0).to_double() == 42.0);
+        CHECK((-doubledouble(0.0)) == doubledouble(0.0));
+        CHECK((-doubledouble(0.0)).signbit() == std::signbit(-double(0.0)));
+        CHECK((-doubledouble(42.0)).to_double() == -42.0);
+        CHECK((-doubledouble(-42.0)).to_double() == 42.0);
+        CHECK((-doubledouble::nan()).isnan());
+        CHECK((-doubledouble::inf()).isinf());
+        CHECK((-doubledouble::inf()).signbit() == 1);
     }
 
     SUBCASE("Addition") {

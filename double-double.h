@@ -301,6 +301,7 @@ template <class T> struct Double {
 
     long double to_long_double() const
     {
+        if (!isfinite()) return (long double)h;
         return static_cast<long double>(h) + static_cast<long double>(l);
     }
 
@@ -372,6 +373,7 @@ template <class T> struct Double {
     bool operator==(const Double<T>& rhs) const
     {
         if (isnan() || rhs.isnan()) return false;
+        if (isinf()) return h == rhs.h;
         return h == rhs.h && l == rhs.l;
     }
     bool operator==(double rhs) const { return *this == Double<T>(rhs); }

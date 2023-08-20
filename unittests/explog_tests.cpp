@@ -6,7 +6,6 @@ TEST_CASE("Exponential and logarithmic functions") {
     
     SUBCASE("exp") {
 
-
         CHECK(doubledouble("0"   ).exp().to_string(30) == "1.000000000000000000000000000000");
         CHECK(doubledouble("0.1" ).exp().to_string(30) == "1.105170918075647624811707826490");
         CHECK(doubledouble("0.5" ).exp().to_string(30) == "1.648721270700128146848650787814");

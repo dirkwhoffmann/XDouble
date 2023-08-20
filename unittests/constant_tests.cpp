@@ -34,5 +34,4 @@ TEST_CASE("Constants") {
         CHECK(doubledouble::egamma.to_string(30)        == "0.577215664901532860606512090082");
         CHECK(doubledouble::phi.to_string(30)           == "1.618033988749894848204586834365");
     }
-
 }

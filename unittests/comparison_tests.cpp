@@ -106,7 +106,7 @@ TEST_CASE("Comparison") {
         for (int i = 0; p[i].x[0]; i++) {
             CHECK ((doubledouble(p[i].x) >= doubledouble(p[i].y)) == p[i].ge);
         }
-
+        
         CHECK ( (doubledouble(0.0)   >= doubledouble(-0.0)));
         CHECK ( (doubledouble(-0.0)  >= doubledouble(0.0)));
         CHECK (!(doubledouble(0.0)   >= doubledouble::nan()));

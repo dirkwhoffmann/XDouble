@@ -13,9 +13,6 @@ TEST_CASE("Power functions") {
                 double b = rand_double();
                 int e = (rand() % 5) - 2;
 
-                if (doubledouble(b).pow(e).to_float() != (float)std::pow(b,e)) {
-                    printf("i = %d b = %f e = %d\n", i, b, e);
-                }
                 CHECK(doubledouble(b).pow(e).to_float() == (float)std::pow(b,e));
             }
         }
@@ -48,6 +45,5 @@ TEST_CASE("Power functions") {
         // 1.6487212707001281468486507878141635716537761007101480115750793116
         doubledouble sqrte = doubledouble::e.sqrt();
         CHECK(sqrte.to_string(30) == "1.648721270700128146848650787814");
-
     }
 }

@@ -6,6 +6,15 @@ TEST_CASE("Power functions") {
 
     SUBCASE("pow") {
 
+        SUBCASE("Integer exponent (special cases)") {
+
+            CHECK(doubledouble(0.0).powd(-2) == doubledouble::inf());
+            CHECK(doubledouble(0.0).powd(-1) == doubledouble::inf());
+            CHECK(doubledouble(0.0).powd(0) == 1.0);
+            CHECK(doubledouble(0.0).powd(1) == 0.0);
+            CHECK(doubledouble(0.0).powd(2) == 0.0);
+        }
+
         SUBCASE("Integer exponent") {
 
             for (int i = 0; i < NUM_TESTS; i++) {
@@ -15,56 +24,192 @@ TEST_CASE("Power functions") {
 
                 CHECK(doubledouble(b).powd(e).to_float() == (float)std::pow(b,e));
             }
-
-            CHECK(doubledouble(0.0).powd(-2) == doubledouble::inf());
-            CHECK(doubledouble(0.0).powd(-1) == doubledouble::inf());
-            CHECK(doubledouble(0.0).powd(0) == 1.0);
-            CHECK(doubledouble(0.0).powd(1) == 0.0);
-            CHECK(doubledouble(0.0).powd(2) == 0.0);
-
-
-
         }
 
-        SUBCASE("Fractional exponent") {
+        SUBCASE("Fractional exponent (special cases)") {
 
-            for (int i = 0; i < NUM_TESTS; i++) {
+            doubledouble base = -doubledouble::inf();
 
-                double b = rand_double_pos();
-                double e = rand_double();
+            CHECK(base.pow(-doubledouble::inf()).ispluszero());
+            CHECK(base.pow(-2.0).ispluszero());
+            CHECK(base.pow(-1.5).ispluszero());
+            CHECK(base.pow(-1.0).isminuszero());
+            CHECK(base.pow(-0.5).ispluszero());
+            CHECK(base.pow(0.0) == 1.0);
+            CHECK(base.pow(0.5).isplusinf());
+            CHECK(base.pow(1.0).isminusinf());
+            CHECK(base.pow(1.5).isplusinf());
+            CHECK(base.pow(2.0).isplusinf());
+            CHECK(base.pow(doubledouble::inf()).isplusinf());
+            CHECK(base.pow(doubledouble::nan()).isnan());
 
-                CHECK(doubledouble(b).pow(doubledouble(e)).to_float() == (float)std::pow(b,e));
-            }
+            base = doubledouble(-2.0);
 
-            CHECK(doubledouble(0.0).pow(-doubledouble::inf()) == doubledouble::inf());
-            CHECK(doubledouble(0.0).pow(-2.0) == doubledouble::inf());
-            CHECK(doubledouble(0.0).pow(-1.5) == doubledouble::inf());
-            CHECK(doubledouble(0.0).pow(-1.0) == doubledouble::inf());
-            CHECK(doubledouble(0.0).pow(-0.5) == doubledouble::inf());
-            CHECK(doubledouble(0.0).pow(0.0) == 1.0);
-            CHECK(doubledouble(0.0).pow(0.5).ispluszero());
-            CHECK(doubledouble(0.0).pow(1.0).ispluszero());
-            CHECK(doubledouble(0.0).pow(1.5).ispluszero());
-            CHECK(doubledouble(0.0).pow(2.0).ispluszero());
-            CHECK(doubledouble(0.0).pow(doubledouble::inf()).ispluszero());
-            CHECK(doubledouble(0.0).pow(doubledouble::nan()).isnan());
+            CHECK(base.pow(-doubledouble::inf()).ispluszero());
+            CHECK(base.pow(-2.0) == 0.25);
+            CHECK(base.pow(-1.5).isnan());
+            CHECK(base.pow(-1.0) == -0.5);
+            CHECK(base.pow(-0.5).isnan());
+            CHECK(base.pow(0.0) == 1.0);
+            CHECK(base.pow(0.5).isnan());
+            CHECK(base.pow(1.0) == -2.0);
+            CHECK(base.pow(1.5).isnan());
+            CHECK(base.pow(2.0) == 4.0);
+            CHECK(base.pow(doubledouble::inf()).isinf());
+            CHECK(base.pow(doubledouble::nan()).isnan());
 
-            CHECK(doubledouble(-0.0).pow(-doubledouble::inf()) == doubledouble::inf());
-            CHECK(doubledouble(-0.0).pow(-2.0) == doubledouble::inf());
-            CHECK(doubledouble(-0.0).pow(-1.5) == doubledouble::inf());
-            CHECK(doubledouble(-0.0).pow(-1.0) == -doubledouble::inf());
-            CHECK(doubledouble(-0.0).pow(-0.5) == doubledouble::inf());
-            CHECK(doubledouble(-0.0).pow(0.0) == 1.0);
-            CHECK(doubledouble(-0.0).pow(0.5).ispluszero());
-            CHECK(doubledouble(-0.0).pow(1.0).isminuszero());
-            CHECK(doubledouble(-0.0).pow(1.5).ispluszero());
-            CHECK(doubledouble(-0.0).pow(2.0).ispluszero());
-            CHECK(doubledouble(-0.0).pow(doubledouble::inf()).ispluszero());
-            CHECK(doubledouble(-0.0).pow(doubledouble::nan()).isnan());
+            base = doubledouble(-1.5);
 
+            CHECK(base.pow(-doubledouble::inf()).ispluszero());
+            CHECK(base.pow(-2.0).to_string(4) == "0.4444");
+            CHECK(base.pow(-1.5).isnan());
+            CHECK(base.pow(-1.0).to_string(4) == "-0.6666");
+            CHECK(base.pow(-0.5).isnan());
+            CHECK(base.pow(0.0) == 1.0);
+            CHECK(base.pow(0.5).isnan());
+            CHECK(base.pow(1.0) == -1.5);
+            CHECK(base.pow(1.5).isnan());
+            CHECK(base.pow(2.0) == 2.25);
+            CHECK(base.pow(doubledouble::inf()).isinf());
+            CHECK(base.pow(doubledouble::nan()).isnan());
 
+            base = doubledouble(-1.0);
 
-            auto base = -0.0;
+            CHECK(base.pow(-doubledouble::inf()) == 1.0);
+            CHECK(base.pow(-2.0) == 1.0);
+            CHECK(base.pow(-1.5).isnan());
+            CHECK(base.pow(-1.0) == -1.0);
+            CHECK(base.pow(-0.5).isnan());
+            CHECK(base.pow(0.0) == 1.0);
+            CHECK(base.pow(0.5).isnan());
+            CHECK(base.pow(1.0) == -1.0);
+            CHECK(base.pow(1.5).isnan());
+            CHECK(base.pow(2.0) == 1.0);
+            CHECK(base.pow(doubledouble::inf()) == 1.0);
+            CHECK(base.pow(doubledouble::nan()).isnan());
+
+            base = doubledouble(-0.5);
+
+            CHECK(base.pow(-doubledouble::inf()).isinf());
+            CHECK(base.pow(-2.0) == 4.0);
+            CHECK(base.pow(-1.5).isnan());
+            CHECK(base.pow(-1.0) == -2.0);
+            CHECK(base.pow(-0.5).isnan());
+            CHECK(base.pow(0.0) == 1.0);
+            CHECK(base.pow(0.5).isnan());
+            CHECK(base.pow(1.0) == -0.5);
+            CHECK(base.pow(1.5).isnan());
+            CHECK(base.pow(2.0) == 0.25);
+            CHECK(base.pow(doubledouble::inf()).ispluszero());
+            CHECK(base.pow(doubledouble::nan()).isnan());
+
+            base = doubledouble(0.0);
+
+            CHECK(base.pow(-doubledouble::inf()) == doubledouble::inf());
+            CHECK(base.pow(-2.0) == doubledouble::inf());
+            CHECK(base.pow(-1.5) == doubledouble::inf());
+            CHECK(base.pow(-1.0) == doubledouble::inf());
+            CHECK(base.pow(-0.5) == doubledouble::inf());
+            CHECK(base.pow(0.0) == 1.0);
+            CHECK(base.pow(0.5).ispluszero());
+            CHECK(base.pow(1.0).ispluszero());
+            CHECK(base.pow(1.5).ispluszero());
+            CHECK(base.pow(2.0).ispluszero());
+            CHECK(base.pow(doubledouble::inf()).ispluszero());
+            CHECK(base.pow(doubledouble::nan()).isnan());
+
+            base = doubledouble(-0.0);
+
+            CHECK(base.pow(-doubledouble::inf()) == doubledouble::inf());
+            CHECK(base.pow(-2.0) == doubledouble::inf());
+            CHECK(base.pow(-1.5) == doubledouble::inf());
+            CHECK(base.pow(-1.0) == -doubledouble::inf());
+            CHECK(base.pow(-0.5) == doubledouble::inf());
+            CHECK(base.pow(0.0) == 1.0);
+            CHECK(base.pow(0.5).ispluszero());
+            CHECK(base.pow(1.0).isminuszero());
+            CHECK(base.pow(1.5).ispluszero());
+            CHECK(base.pow(2.0).ispluszero());
+            CHECK(base.pow(doubledouble::inf()).ispluszero());
+            CHECK(base.pow(doubledouble::nan()).isnan());
+
+            base = doubledouble(0.5);
+
+            CHECK(base.pow(-doubledouble::inf()) == doubledouble::inf());
+            CHECK(base.pow(-2.0) == 4.0);
+            CHECK(base.pow(-1.5).to_string(4) == "2.8284");
+            CHECK(base.pow(-1.0) == 2.0);
+            CHECK(base.pow(-0.5).to_string(4) == "1.4142");
+            CHECK(base.pow(0.0) == 1.0);
+            CHECK(base.pow(0.5).to_string(4) == "0.7071");
+            CHECK(base.pow(1.0) == 0.5);
+            CHECK(base.pow(1.5).to_string(4) == "0.3535");
+            CHECK(base.pow(2.0) == 0.25);
+            CHECK(base.pow(doubledouble::inf()).ispluszero());
+            CHECK(base.pow(doubledouble::nan()).isnan());
+
+            base = doubledouble(1.0);
+
+            CHECK(base.pow(-doubledouble::inf()) == 1.0);
+            CHECK(base.pow(-2.0) == 1.0);
+            CHECK(base.pow(-1.5) == 1.0);
+            CHECK(base.pow(-1.0) == 1.0);
+            CHECK(base.pow(-0.5) == 1.0);
+            CHECK(base.pow(0.0) == 1.0);
+            CHECK(base.pow(0.5) == 1.0);
+            CHECK(base.pow(1.0) == 1.0);
+            CHECK(base.pow(1.5) == 1.0);
+            CHECK(base.pow(2.0) == 1.0);
+            CHECK(base.pow(doubledouble::inf()) == 1.0);
+            CHECK(base.pow(doubledouble::nan()) == 1.0);
+
+            base = doubledouble(1.5);
+
+            CHECK(base.pow(-doubledouble::inf()).ispluszero());
+            CHECK(base.pow(-2.0).to_string(4) == "0.4444");
+            CHECK(base.pow(-1.5).to_string(4) == "0.5443");
+            CHECK(base.pow(-1.0).to_string(4) == "0.6666");
+            CHECK(base.pow(-0.5).to_string(4) == "0.8164");
+            CHECK(base.pow(0.0) == 1.0);
+            CHECK(base.pow(0.5).to_string(4) == "1.2247");
+            CHECK(base.pow(1.0) == 1.5);
+            CHECK(base.pow(1.5).to_string(4) == "1.8371");
+            CHECK(base.pow(2.0) == 2.25);
+            CHECK(base.pow(doubledouble::inf()).isplusinf());
+            CHECK(base.pow(doubledouble::nan()).isnan());
+
+            base = doubledouble(2.0);
+
+            CHECK(base.pow(-doubledouble::inf()).ispluszero());
+            CHECK(base.pow(-2.0).to_string(4) == "0.2500");
+            CHECK(base.pow(-1.5).to_string(4) == "0.3535");
+            CHECK(base.pow(-1.0).to_string(4) == "0.5000");
+            CHECK(base.pow(-0.5).to_string(4) == "0.7071");
+            CHECK(base.pow(0.0).to_string(4) == "1.0000");
+            CHECK(base.pow(0.5).to_string(4) == "1.4142");
+            CHECK(base.pow(1.0).to_string(4) == "2.0000");
+            CHECK(base.pow(1.5).to_string(4) == "2.8284");
+            CHECK(base.pow(2.0).to_string(4) == "4.0000");
+            CHECK(base.pow(doubledouble::inf()).isplusinf());
+            CHECK(base.pow(doubledouble::nan()).isnan());
+
+            base = doubledouble::inf();
+
+            CHECK(base.pow(-doubledouble::inf()).ispluszero());
+            CHECK(base.pow(-2.0).ispluszero());
+            CHECK(base.pow(-1.5).ispluszero());
+            CHECK(base.pow(-1.0).ispluszero());
+            CHECK(base.pow(-0.5).ispluszero());
+            CHECK(base.pow(0.0) == 1.0);
+            CHECK(base.pow(0.5).isinf());
+            CHECK(base.pow(1.0).isinf());
+            CHECK(base.pow(1.5).isinf());
+            CHECK(base.pow(2.0).isinf());
+            CHECK(base.pow(doubledouble::inf()).isinf());
+            CHECK(base.pow(doubledouble::nan()).isnan());
+
+            /*
+            std::cout << std::endl;
             std::cout << "1: = " << std::pow(base, -std::numeric_limits<double>::infinity()) << std::endl;
             std::cout << "2: = " << std::pow(base, -2.0) << std::endl;
             std::cout << "3: = " << std::pow(base, -1.5) << std::endl;
@@ -77,28 +222,18 @@ TEST_CASE("Power functions") {
             std::cout << "A: = " << std::pow(base, 2.0) << std::endl;
             std::cout << "B: = " << std::pow(base, std::numeric_limits<double>::infinity()) << std::endl;
             std::cout << "C: = " << std::pow(base, std::numeric_limits<double>::quiet_NaN()) << std::endl;
+            */
+        }
 
-/*
-            CHECK(doubledouble(1.0).pow(-doubledouble::inf()) == 1.0);
-            CHECK(doubledouble(1.0).pow(-2.0) == 1.0);
-            CHECK(doubledouble(1.0).pow(-1.0) == 1.0);
-            CHECK(doubledouble(1.0).pow(0.0) == 1.0);
-            CHECK(doubledouble(1.0).pow(1.0) == 1.0);
-            CHECK(doubledouble(1.0).pow(2.0) == 1.0);
-            CHECK(doubledouble(1.0).pow(doubledouble::inf()) == 1.0);
-            CHECK(doubledouble(1.0).pow(doubledouble::nan()) == 1.0);
+        SUBCASE("Fractional exponent") {
 
-            CHECK(doubledouble(-doubledouble::inf()).pow(-doubledouble::inf()) == 0.0);
-            CHECK(doubledouble(-doubledouble::inf()).pow(-2.5) == 0.0);
-            CHECK(doubledouble(-doubledouble::inf()).pow(-1.5) == 0.0);
-            CHECK(doubledouble(-doubledouble::inf()).pow(0.0) == 1.0);
-            CHECK(doubledouble(-doubledouble::inf()).pow(1.5) == doubledouble::inf());
-            CHECK(doubledouble(-doubledouble::inf()).pow(2.5) == doubledouble::inf());
-            CHECK(doubledouble(-doubledouble::inf()).pow(doubledouble::inf()) == doubledouble::inf());
-            CHECK(doubledouble(-doubledouble::inf()).pow(doubledouble::nan()) == doubledouble::nan());
+            for (int i = 0; i < NUM_TESTS; i++) {
 
-            CHECK(doubledouble(-2).pow(doubledouble(2)).isnan());
- */
+                double b = rand_double_pos();
+                double e = rand_double();
+
+                CHECK(doubledouble(b).pow(doubledouble(e)).to_float() == (float)std::pow(b,e));
+            }
         }
     }
 

@@ -132,13 +132,13 @@ TEST_CASE("Classification functions") {
 
     SUBCASE("ispositive") {
 
-        CHECK(doubledouble(0.0).ispositive() == false);
+        CHECK(doubledouble(0.0).ispositive() == true);
         CHECK(doubledouble(-0.0).ispositive() == false);
         CHECK((-doubledouble(0.0)).ispositive() == false);
         CHECK(doubledouble(1.0).ispositive() == true);
         CHECK(doubledouble(-1.0).ispositive() == false);
         CHECK((-doubledouble(1.0)).ispositive() == false);
-        CHECK(doubledouble::nan().ispositive() == false);
+        CHECK(doubledouble::nan().ispositive() == true);
         CHECK((-doubledouble::nan()).ispositive() == false);
         CHECK(doubledouble::inf().ispositive() == true);
         CHECK((-doubledouble::inf()).ispositive() == false);

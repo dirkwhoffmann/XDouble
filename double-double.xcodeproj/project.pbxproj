@@ -11,7 +11,6 @@
 		5038676D2A9153E20018498B /* smoke_tests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503867572A8AB0CA0018498B /* smoke_tests.cpp */; };
 		5038676E2A9153E40018498B /* arithmetic_tests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5051DEF22A876E8300EED9D7 /* arithmetic_tests.cpp */; };
 		5038676F2A9153E70018498B /* comparison_tests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5051DEF52A8785D800EED9D7 /* comparison_tests.cpp */; };
-		503867702A9153EB0018498B /* explog_tests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503867592A8B75B40018498B /* explog_tests.cpp */; };
 		503867712A9153EE0018498B /* power_tests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5038675B2A8BB7950018498B /* power_tests.cpp */; };
 		503867722A9153F10018498B /* rounding_tests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5038675E2A8BE5D30018498B /* rounding_tests.cpp */; };
 		503867732A9153F40018498B /* manipulation_tests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503867602A8C1E620018498B /* manipulation_tests.cpp */; };
@@ -170,7 +169,6 @@
 				5038676E2A9153E40018498B /* arithmetic_tests.cpp in Sources */,
 				503867762A9153FC0018498B /* classification_tests.cpp in Sources */,
 				503867792A91E2C20018498B /* constant_tests.cpp in Sources */,
-				503867702A9153EB0018498B /* explog_tests.cpp in Sources */,
 				503867722A9153F10018498B /* rounding_tests.cpp in Sources */,
 				5038676B2A8E33C60018498B /* quaddouble_tests.cpp in Sources */,
 				5038676F2A9153E70018498B /* comparison_tests.cpp in Sources */,

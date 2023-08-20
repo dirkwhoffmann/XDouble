@@ -138,11 +138,17 @@ template <class T> XDouble<T> fma(const XDouble<T> &x, const XDouble<T> &y, cons
 
 template <class T> bool isfinite(const XDouble<T> &x);
 template <class T> bool isinf(const XDouble<T> &x);
+template <class T> bool isplusinf(const XDouble<T> &x);
+template <class T> bool isminusinf(const XDouble<T> &x);
 template <class T> bool isnan(const XDouble<T> &x);
+template <class T> bool isplusnan(const XDouble<T> &x);
+template <class T> bool isminusnan(const XDouble<T> &x);
 template <class T> bool isnormal(const XDouble<T> &x);
 template <class T> bool signbit(const XDouble<T> &x);
 
 template <class T> bool isinteger(const XDouble<T> &x);
+template <class T> bool isoddinteger(const XDouble<T> &x);
+template <class T> bool iseveninteger(const XDouble<T> &x);
 template <class T> bool iszero(const XDouble<T> &x);
 template <class T> bool ispluszero(const XDouble<T> &x);
 template <class T> bool isminuszero(const XDouble<T> &x);
@@ -736,11 +742,17 @@ template <class T> struct XDouble {
 
     bool isfinite() const { return xd::isfinite(*this); }
     bool isinf() const { return xd::isinf(*this); }
+    bool isplusinf() const { return xd::isplusinf(*this); }
+    bool isminusinf() const { return xd::isminusinf(*this); }
     bool isnan() const { return xd::isnan(*this); }
+    bool isplusnan() const { return xd::isplusnan(*this); }
+    bool isminusnan() const { return xd::isminusnan(*this); }
     bool isnormal() const { return xd::isnormal(*this); }
     bool signbit() const { return xd::signbit(*this); }
 
     bool isinteger() const { return xd::isinteger(*this); }
+    bool isoddinteger() const { return xd::isoddinteger(*this); }
+    bool iseveninteger() const { return xd::iseveninteger(*this); }
     bool iszero() const { return xd::iszero(*this); }
     bool ispluszero() const { return xd::ispluszero(*this); }
     bool isminuszero() const { return xd::isminuszero(*this); }
@@ -857,13 +869,6 @@ log2(const XDouble<T> &op)
 template <class T> inline XDouble<T>
 powd(const XDouble<T> &base, int exponent)
 {
-    if (base.iszero()) {
-
-        if (exponent == 0) return 1.0;
-        if (exponent > 0) return 0.0;
-        return XDouble<T>::inf();
-    }
-
     auto result = XDouble<T>(1.0);
     auto b = base;
 
@@ -885,42 +890,114 @@ powd(const XDouble<T> &base, int exponent)
 template <class T> inline XDouble<T>
 pow(const XDouble<T> &base, const XDouble<T> &exponent)
 {
-    if (exponent.isinteger()) {
-
-        return powd(base, (int)exponent);
-    }
-    if (base.isone() || exponent.iszero()) {
-
-        return 1.0;
-    }
-    if (base.isnan() || exponent.isnan()) {
-
-        return XDouble<T>::nan();
+    /* IEEE rules:
+     *
+     * (1)  pow(+0, exp), where exp is a negative odd integer, returns +∞ and raises FE_DIVBYZERO
+     * (2)  pow(-0, exp), where exp is a negative odd integer, returns -∞ and raises FE_DIVBYZERO
+     * (3)  pow(±0, exp), where exp is negative, finite, and is an even integer or a non-integer,
+     *      returns +∞ and raises  FE_DIVBYZERO
+     * (4)  pow(±0, -∞) returns +∞ and may raise FE_DIVBYZERO
+     * (5)  pow(+0, exp), where exp is a positive odd integer, returns +0
+     * (6)  pow(-0, exp), where exp is a positive odd integer, returns -0
+     * (7)  pow(±0, exp), where exp is positive non-integer or a positive even integer, returns +0
+     * (8)  pow(-1, ±∞) returns 1
+     * (9)  pow(+1, exp) returns 1 for any exp, even when exp is NaN
+     * (10) pow(base, ±0) returns 1 for any base, even when base is NaN
+     * (11) pow(base, exp) returns NaN and raises FE_INVALID if base is finite and negative and
+     *      exp is finite and non-integer.
+     * (12) pow(base, -∞) returns +∞ for any |base|<1
+     * (13) pow(base, -∞) returns +0 for any |base|>1
+     * (14) pow(base, +∞) returns +0 for any |base|<1
+     * (15) pow(base, +∞) returns +∞ for any |base|>1
+     * (16) pow(-∞, exp) returns -0 if exp is a negative odd integer
+     * (17) pow(-∞, exp) returns +0 if exp is a negative non-integer or negative even integer
+     * (18) pow(-∞, exp) returns -∞ if exp is a positive odd integer
+     * (19) pow(-∞, exp) returns +∞ if exp is a positive non-integer or positive even integer
+     * (20) pow(+∞, exp) returns +0 for any negative exp
+     * (21) pow(+∞, exp) returns +∞ for any positive exp
+     * (22) except where specified above, if any argument is NaN, NaN is returned
+     */
+    if (base == 1.0 || exponent.iszero()) {
+        return 1.0;                                 // (9) + (10)
     }
     if (base.iszero()) {
 
-        if (exponent.iszero()) return 1.0;
-        if (exponent.ispositive()) return 0.0;
-        return XDouble<T>::inf();
+        if (exponent.isnegative()) {
 
-        /*
-        CHECK(doubledouble(-doubledouble::inf()).pow(-doubledouble::inf()) == 0.0);
-        CHECK(doubledouble(-doubledouble::inf()).pow(-2.0) == 0.0);
-        CHECK(doubledouble(-doubledouble::inf()).pow(-1.0) == 0.0);
-        CHECK(doubledouble(-doubledouble::inf()).pow(0.0) == 1.0); OK
-        CHECK(doubledouble(-doubledouble::inf()).pow(1.0) == doubledouble::inf());
-        CHECK(doubledouble(-doubledouble::inf()).pow(2.0) == doubledouble::inf());
-        CHECK(doubledouble(-doubledouble::inf()).pow(doubledouble::inf()) == doubledouble::inf());
-        CHECK(doubledouble(-doubledouble::inf()).pow(doubledouble::nan()) == doubledouble::nan()); OK
-         */
+            if (base.ispositive() && exponent.isoddinteger()) {
+                return XDouble<T>::inf();           // (1)
+            }
+            if (base.isnegative() && exponent.isoddinteger()) {
+                return -XDouble<T>::inf();          // (2)
+            }
+            if (exponent.isfinite()) {
+                return XDouble<T>::inf();           // (3)
+            }
+            if (exponent.isinf()) {
+                return XDouble<T>::inf();           // (4)
+            }
+        }
+        if (exponent.ispositive()) {
 
+            if (exponent.isoddinteger()) {
+                return base;                        // (5) + (6)
+            }
+            if (exponent.isfinite()) {
+                return 0.0;                         // (7)
+            }
+        }
     }
-    if (base.isinf()) {
+    if (base == -1.0 && exponent.isinf()) {
+        return 1.0;                                 // (8)
+    }
+    if (base.isfinite() && base.isnegative() && exponent.isfinite() && !exponent.isinteger()) {
+        return XDouble<T>::nan();                   // (11)
+    }
+    if (exponent.isminusinf() && base.abs() < 1.0) {
+        return XDouble<T>::inf();                   // (12)
+    }
+    if (exponent.isminusinf() && base.abs() > 1.0) {
+        return 0.0;                                 // (13)
+    }
+    if (exponent.isplusinf() && base.abs() < 1.0) {
+        return 0.0;                                 // (14)
+    }
+    if (exponent.isplusinf() && base.abs() > 1.0) {
+        return XDouble<T>::inf();                   // (15)
+    }
+    if (base.isminusinf()) {
 
-        return exponent.isnegative() ? XDouble<T>(0.0) : XDouble<T>::inf();
+        if (exponent.isnegative() && exponent.isoddinteger()) {
+            return -0.0;                            // (16)
+        }
+        if (exponent.isnegative() && exponent.isfinite()) {
+            return 0.0;                             // (17)
+        }
+        if (exponent.ispositive() && exponent.isoddinteger()) {
+            return -XDouble<T>::inf();              // (18)
+        }
+        if (exponent.ispositive() && exponent.isfinite()) {
+            return XDouble<T>::inf();               // (19)
+        }
+    }
+    if (base.isplusinf()) {
+
+        if (exponent < 0.0) {
+            return 0.0;                             // (20)
+        }
+        if (exponent >= 0.0) {
+            return XDouble<T>::inf();               // (21)
+        }
+    }
+    if (base.isnan() || exponent.isnan()) {
+        return XDouble<T>::nan();                   // (22)
     }
 
-    return (log(base) * exponent).exp();
+    if (isinteger(exponent)) {
+        return powd(base, (int)exponent);
+    } else {
+        return (log(base) * exponent).exp();
+    }
 }
 
 template <class T> inline XDouble<T>
@@ -1226,9 +1303,33 @@ isinf(const XDouble<T> &x)
 }
 
 template <class T> inline bool
+isplusinf(const XDouble<T> &x)
+{
+    return isinf(x) && ispositive(x);
+}
+
+template <class T> inline bool
+isminusinf(const XDouble<T> &x)
+{
+    return isinf(x) && isnegative(x);
+}
+
+template <class T> inline bool
 isnan(const XDouble<T> &x)
 {
     return isnan(x.h);
+}
+
+template <class T> inline bool
+isplusnan(const XDouble<T> &x)
+{
+    return isnan(x) && ispositive(x);
+}
+
+template <class T> inline bool
+isminusnan(const XDouble<T> &x)
+{
+    return isnan(x) && isnegative(x);
 }
 
 template <class T> inline bool
@@ -1247,6 +1348,18 @@ template <class T> inline bool
 isinteger(const XDouble<T> &x)
 {
     return x.isfinite() && x.floor() == x;
+}
+
+template <class T> inline bool
+iseveninteger(const XDouble<T> &x)
+{
+    return x.isinteger() && x.fmod(2.0).abs() < 0.5;
+}
+
+template <class T> inline bool
+isoddinteger(const XDouble<T> &x)
+{
+    return x.isinteger() && x.fmod(2.0).abs() > 0.5;
 }
 
 template <class T> inline bool
@@ -1276,7 +1389,7 @@ isone(const XDouble<T> &x)
 template <class T> inline bool
 ispositive(const XDouble<T> &x)
 {
-    return x.h > 0.0;
+    return !signbit(x.h);
 }
 
 template <class T> inline bool

@@ -2,120 +2,112 @@
 
 TEST_CASE("Quad-double tests") {
 
+    /* This test case verifies that double-double types can be used as the base
+     * type of another double-double type. Theoretically, this should lead to
+     * ever growing accuracies. However, inserting a double-double type into
+     * another double-double type causes precision problems when performing
+     * certain calculations. At the moment, I am not sure where these precision
+     * problems come from and how they can be avoided. Any help on this is
+     * greatly appreciated.
+     */
+
+    // typedef Double<doubledouble> quaddouble;
+    typedef Double<Double<Double<long double>>> quaddouble;
+
     srand(0);
 
-    SUBCASE("Experimental") {
+    SUBCASE("Constructors") {
 
-        std::cout << std::setprecision(75);
-        mpf_set_default_prec (500);
+        quaddouble x1;
+        quaddouble x2(1e-10);
+        quaddouble x3(quaddouble::pi.h);
+        quaddouble x4(quaddouble::pi.h, x2.h);
+        quaddouble x5("3.1415");
+        quaddouble x6("3", "1415");
+        quaddouble x7 = quaddouble::nan();
+        quaddouble x8 = quaddouble::inf();
 
-        doublefloat df(1.0);
-        doubledouble dd(1.0);
-        quaddouble qd(1.0);
-        mpf_class mpf(1.0);
-
-        for (int i = 0; i < 40; i++) {
-
-            if (i == 39) break;
-
-            df += doublefloat(i % 10);
-            dd += doubledouble(i % 10);
-            qd += quaddouble(i % 10);
-            mpf += double(i % 10);
-
-            std::cout << "+= " << i % 10 << ":" << std::endl;
-            std::cout << "mpf : " << std::setprecision(50) << mpf << std::endl;
-            std::cout << "qd  : " << qd.to_mpf() << std::endl;
-            std::cout << "    : " << qd << std::endl;
-            std::cout << std::endl;
-
-            df /= doublefloat(10.0);
-            dd /= doubledouble(10.0);
-            qd /= quaddouble(10.0);
-            mpf /= mpf_class("10.0");
-
-            std::cout << "/= 10.0:" << std::endl;
-            std::cout << "mpf : " << std::setprecision(50) << mpf << std::endl;
-            // std::cout << "df  : " << df.to_mpf() << std::endl;
-            // std::cout << "dd  : " << dd.to_mpf() << std::endl;
-            std::cout << "qd  : " << qd.to_mpf() << std::endl;
-            std::cout << "    : " << qd << std::endl;
-            // std::cout << "    : " << qd << std::endl;
-            std::cout << std::endl;
-        }
-
-
-        std::cout << "BREAK" << std::endl;
-        std::cout << "qd  : " << qd.to_mpf() << std::endl;
-        std::cout << "qdx : " << qd.h.to_mpf() << std::endl;
-        std::cout << "qdy : " << qd.l.to_mpf() << std::endl;
-
-        std::cout << "+= 9:" << std::endl;
-
-        auto x = qd.h;
-        auto y = qd.l;
-        auto rhs = quaddouble(9.0);
-        std::cout << "rhs : " << rhs << std::endl;
-
-        auto sum = quaddouble::twoSum(x, rhs.h);
-        auto sum2 = quaddouble::twoSum(rhs.h, x);
-        // auto sum = quaddouble::quickTwoSum(rhs.x, x);
-        std::cout << "qdx : " << qd.h.to_mpf() << std::endl;
-        std::cout << "sum : " << sum.to_mpf() << std::endl;
-        std::cout << "sum2: " << sum2.to_mpf() << std::endl;
-        std::cout << std::endl;
-
-        // twoSum
-        std::cout << "sum:" << std::endl;
-        auto a1 = x;
-        auto b1 = rhs.h;
-        doubledouble s1 = a1 + b1;
-        doubledouble v1 = s1 - a1;
-        doubledouble e1 = (a1 - (s1 - v1)) + (b1 - v1);
-        std::cout << "a1  : " << a1.to_mpf() << std::endl;
-        std::cout << "    : " << a1 << std::endl;
-        std::cout << "b1  : " << b1.to_mpf() << std::endl;
-        std::cout << "s1  : " << s1.to_mpf() << std::endl;
-        // std::cout << "    :" << s1 << std::endl;
-        std::cout << "v1  : " << v1.to_mpf() << std::endl;
-        // std::cout << "    :" << v1 << std::endl;
-        std::cout << "s1v1: " << (s1 - v1).to_mpf() << std::endl;
-        std::cout << "    : " << (s1 - v1) << std::endl;
-        std::cout << "ab1v1:" << (a1 - (s1 - v1)).to_mpf() << std::endl;
-        std::cout << "b1v1: " << (b1 - v1).to_mpf() << std::endl;
-        std::cout << "e1  : " << e1.to_mpf() << std::endl;
-        std::cout << std::endl;
-
-        // twoSum
-        std::cout << "sum2:" << std::endl;
-        auto a2 = rhs.h;
-        auto b2 = x;
-        doubledouble s2 = a2 + b2;
-        doubledouble v2 = s2 - a2;
-        doubledouble e2 = (a2 - (s2 - v2)) + (b2 - v2);
-        std::cout << "a2  : " << a2.to_mpf() << std::endl;
-        std::cout << "b2  : " << b2.to_mpf() << std::endl;
-        std::cout << "s2  : " << s2.to_mpf() << std::endl;
-        std::cout << "v2  : " << v2.to_mpf() << std::endl;
-        std::cout << "s2v2: " << (s2 - v2).to_mpf() << std::endl;
-        std::cout << "ab2v2:" << (a2 - (s2 - v2)).to_mpf() << std::endl;
-        std::cout << "b2v2: " << (b2 - v2).to_mpf() << std::endl;
-        std::cout << "e2  : " << e2.to_mpf() << std::endl;
-        std::cout << std::endl;
-
-/*
-        df = doublefloat::pi;
-        dd = doubledouble::pi;
-        qd = quaddouble::pi;
-
-        std::cout << "pi df: " << df.to_mpf() << std::endl;
-        std::cout << "   df: " << df.to_string(100) << std::endl;
-        std::cout << "pi dd: " << dd.to_mpf() << std::endl;
-        std::cout << "   dd: " << dd.to_string(100) << std::endl;
-        std::cout << "pi qd: " << qd.to_mpf() << std::endl;
-        std::cout << "   qd: " << qd.to_string(100) << std::endl;
-        std::cout << "pi   : 3.1415926535897932384626433832795028841971693993751058209749445923" << "" << std::endl;
- */
-        CHECK(doubledouble(0.0).isfinite() == std::isfinite(0.0));
+        CHECK(x1.to_string(2) == "0.00");
+        CHECK(x2.to_string(2) == "0.00");
+        CHECK(x3.to_string(2) == "3.14");
+        CHECK(x4.to_string(2) == "3.14");
+        CHECK(x5.to_string(2) == "3.14");
+        CHECK(x6.to_string(2) == "3.14");
+        CHECK(x7.to_string(2) == "nan");
+        CHECK(x8.to_string(2) == "inf");
     }
+
+    SUBCASE("Conversion functions") {
+
+        CHECK((int)quaddouble(3.14) == 3);
+        CHECK((long)quaddouble(3.6) == 3);
+        CHECK((long long)quaddouble(3.6) == 3);
+        CHECK((float)quaddouble(3.5) == 3.5);
+        CHECK((double)quaddouble(3.5) == 3.5);
+        CHECK((long double)quaddouble(3.5) == 3.5);
+        CHECK(quaddouble(3.1415).to_string(4) == "3.1415");
+    }
+
+    SUBCASE("Comparison operators") {
+
+        auto pi = quaddouble::pi;
+        auto e = quaddouble::e;
+
+        CHECK(pi == pi);
+        CHECK(pi != e);
+        CHECK(e < pi);
+        CHECK(e <= pi);
+        CHECK(pi > e);
+        CHECK(pi >= e);
+    }
+
+    SUBCASE("Arithmetic") {
+
+        quaddouble x(3.14);
+
+        CHECK(-x == quaddouble(-3.14));
+        CHECK(x + x == quaddouble(6.28));
+        CHECK(x + x == quaddouble(6.28));
+        CHECK(x - x == quaddouble(0.0));
+        CHECK(x * x > quaddouble(9.0));
+        CHECK(x / x == quaddouble(1.0));
+    }
+
+    SUBCASE("Other functions") {
+
+        quaddouble x(3.14);
+        quaddouble y(2.0);
+        int exp;
+
+        CHECK(x.exp().isfinite());
+        CHECK(x.frexp(&exp).isfinite());
+        CHECK(x.frexp10(&exp).isfinite());
+        CHECK(x.ldexp(2).isfinite());
+        CHECK(x.ldexp10(2).isfinite());
+        CHECK(x.log().isfinite());
+        CHECK(x.log10().isfinite());
+        CHECK(x.modf(&y).isfinite());
+        CHECK(x.exp2().isfinite());
+        CHECK(x.log2().isfinite());
+
+        CHECK(x.pow(2).isfinite());
+        CHECK(x.pow(y).isfinite());
+        CHECK(x.sqr().isfinite());
+        CHECK(x.sqrt().isfinite());
+    }
+
+    SUBCASE("Classification functions") {
+
+        quaddouble x(3.14);
+
+        CHECK(x.isfinite());
+        CHECK(quaddouble::inf().isinf());
+        CHECK(quaddouble::nan().isnan());
+        CHECK(x.isnormal());
+        CHECK(x.signbit() == 0);
+        CHECK(!x.iszero());
+        CHECK(!x.isone());
+        CHECK(!x.isnegative());
+    }
+
 }

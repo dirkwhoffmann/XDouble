@@ -46,6 +46,76 @@ TEST_CASE("Classification functions") {
         CHECK((-doubledouble::inf()).isnan() == std::isnan(-std::numeric_limits<double>::infinity()));
     }
 
+    SUBCASE("isnormal") {
+
+        CHECK(doubledouble(0.0).isnormal() == std::isnormal(0.0));
+        CHECK(doubledouble(-0.0).isnormal() == std::isnormal(-0.0));
+        CHECK((-doubledouble(0.0)).isnormal() == std::isnormal(-0.0));
+        CHECK(doubledouble(42.0).isnormal() == std::isnormal(42.0));
+        CHECK(doubledouble(-42.0).isnormal() == std::isnormal(-42.0));
+        CHECK((-doubledouble(42.0)).isnormal() == std::isnormal(-42.0));
+        CHECK(doubledouble::nan().isnormal() == std::isnormal(std::numeric_limits<double>::quiet_NaN()));
+        CHECK((-doubledouble::nan()).isnormal() == std::isnormal(-std::numeric_limits<double>::quiet_NaN()));
+        CHECK(doubledouble::inf().isnormal() == std::isnormal(std::numeric_limits<double>::infinity()));
+        CHECK((-doubledouble::inf()).isnormal() == std::isnormal(-std::numeric_limits<double>::infinity()));
+    }
+
+    SUBCASE("iszero") {
+
+        CHECK(doubledouble(0.0).iszero() == true);
+        CHECK(doubledouble(-0.0).iszero() == true);
+        CHECK((-doubledouble(0.0)).iszero() == true);
+        CHECK(doubledouble(1.0).iszero() == false);
+        CHECK(doubledouble(-1.0).iszero() == false);
+        CHECK((-doubledouble(1.0)).iszero() == false);
+        CHECK(doubledouble::nan().iszero() == false);
+        CHECK((-doubledouble::nan()).iszero() == false);
+        CHECK(doubledouble::inf().iszero() == false);
+        CHECK((-doubledouble::inf()).iszero() == false);
+    }
+
+    SUBCASE("isone") {
+
+        CHECK(doubledouble(0.0).isone() == false);
+        CHECK(doubledouble(-0.0).isone() == false);
+        CHECK((-doubledouble(0.0)).isone() == false);
+        CHECK(doubledouble(1.0).isone() == true);
+        CHECK(doubledouble(-1.0).isone() == false);
+        CHECK((-doubledouble(1.0)).isone() == false);
+        CHECK(doubledouble::nan().isone() == false);
+        CHECK((-doubledouble::nan()).isone() == false);
+        CHECK(doubledouble::inf().isone() == false);
+        CHECK((-doubledouble::inf()).isone() == false);
+    }
+
+    SUBCASE("ispositive") {
+
+        CHECK(doubledouble(0.0).ispositive() == false);
+        CHECK(doubledouble(-0.0).ispositive() == false);
+        CHECK((-doubledouble(0.0)).ispositive() == false);
+        CHECK(doubledouble(1.0).ispositive() == true);
+        CHECK(doubledouble(-1.0).ispositive() == false);
+        CHECK((-doubledouble(1.0)).ispositive() == false);
+        CHECK(doubledouble::nan().ispositive() == false);
+        CHECK((-doubledouble::nan()).ispositive() == false);
+        CHECK(doubledouble::inf().ispositive() == true);
+        CHECK((-doubledouble::inf()).ispositive() == false);
+    }
+
+    SUBCASE("isnegative") {
+
+        CHECK(doubledouble(0.0).isnegative() == false);
+        CHECK(doubledouble(-0.0).isnegative() == false);
+        CHECK((-doubledouble(0.0)).isnegative() == false);
+        CHECK(doubledouble(1.0).isnegative() == false);
+        CHECK(doubledouble(-1.0).isnegative() == true);
+        CHECK((-doubledouble(1.0)).isnegative() == true);
+        CHECK(doubledouble::nan().isnegative() == false);
+        CHECK((-doubledouble::nan()).isnegative() == false);
+        CHECK(doubledouble::inf().isnegative() == false);
+        CHECK((-doubledouble::inf()).isnegative() == true);
+    }
+
     SUBCASE("signbit") {
 
         CHECK(doubledouble(0.0).signbit() == std::signbit(0.0));

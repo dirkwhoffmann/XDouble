@@ -9,6 +9,10 @@
 
 using namespace dbl;
 
+typedef Double<float> doublefloat;
+typedef Double<double> doubledouble;
+typedef Double<long double> longdoubledouble;
+
 static inline double rand_int()
 {
     return double((rand() % 128) - 64.0);

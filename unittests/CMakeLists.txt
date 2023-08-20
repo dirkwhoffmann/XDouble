@@ -8,6 +8,7 @@ add_executable(unittester
 
     main.cpp
     smoke_tests.cpp
+    constant_tests.cpp
     arithmetic_tests.cpp
     comparison_tests.cpp
     explog_tests.cpp

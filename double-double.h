@@ -1,5 +1,5 @@
 // -----------------------------------------------------------------------------
-// double-double - A lightweight double-double arithmetic library in C++
+// double-double - A lightweight double-double arithmetic library written in C++
 //
 // Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de
 // Published under the terms of the MIT License
@@ -12,7 +12,7 @@
 // -----------------------------------------------------------------------------
 // Double-double arithmetic increases the precision of floating point operations
 // by representing numbers as an unevaluated sum of two floating point numbers
-// with lower precision. This results in a floating point format with almost
+// of lower precision. This results in a floating point format with almost
 // twice the precision of the base format without sacrificing speed too much.
 //
 // This library is a lightweight implementation of double-double arithetics
@@ -20,7 +20,7 @@
 //
 // Highlights:
 //
-//   - Easy to use in your own application (header-only library).
+//   - Header-only library.
 //
 //   - Interchangable base types due to a template-based design.
 //
@@ -41,26 +41,15 @@
 
 #pragma once
 
-#include <cstdio>
-#include <cassert>
-#include <cmath>
 #include <cfenv>
-#include <limits>
-#include <algorithm>
-#include <utility>
 #include <iostream>
 #include <iomanip>
-
-// REMOVE ASAP
-// #include <typeinfo>
-
 #ifdef DBL_DEBUG
 #include "gmpxx.h"
 #endif
 
 namespace dbl {
 
-// Import cmath API into namespace
 using std::exp;
 using std::frexp;
 using std::ldexp;
@@ -100,7 +89,6 @@ using std::isnan;
 using std::isnormal;
 using std::signbit;
 
-// Forward declaration of external API
 template <class T> class Double;
 
 template <class T> Double<T> exp(const Double<T> &op);
@@ -170,39 +158,39 @@ template <class T> struct Double {
     //
 
     Double() noexcept : h(0), l(0) { }
-    Double(T h) noexcept : h(h), l(0) { }
     Double(T h, T l) noexcept : h(h), l(l) { }
+    Double(long double h) noexcept : Double(T(h), T(0)) { }
     Double(const Double<T>& other) noexcept : h(other.h), l(other.l) { }
     Double(Double<T>&& other) noexcept : Double() { swap(*this, other); }
 
     Double(const std::string &s) noexcept : Double()
     {
-        std::string left = s;
-        std::string right = "";
+        std::string ls = s;
+        std::string rs = "";
 
         if (auto pos = s.find("."); pos != std::string::npos) {
 
-            left = s.substr(0, pos);
-            right = s.substr(pos + 1, std::string::npos);
+            ls = s.substr(0, pos);
+            rs = s.substr(pos + 1, std::string::npos);
         }
 
-        *this = Double(left, right);
+        *this = Double(ls, rs);
     }
 
-    Double(const std::string &left, const std::string &right) noexcept : Double()
+    Double(const std::string &ls, const std::string &rs) noexcept : Double()
     {
         Double<T> l, r;
 
         // Check if the number is positive or negative
-        bool neg = left.empty() ? false : left[0] == '-';
+        bool neg = ls.empty() ? false : ls[0] == '-';
 
         // Parse the integral digits
-        for (auto it = left.begin() ; it != left.end(); ++it) {
+        for (auto it = ls.begin() ; it != ls.end(); ++it) {
             if (*it >= '0' && *it <= '9') l = l * Double<T>(10) + Double<T>(*it - '0');
         }
 
         // Parse the fractional digits (in reverse order)
-        for (auto it = right.crbegin() ; it != right.crend(); ++it) {
+        for (auto it = rs.crbegin() ; it != rs.crend(); ++it) {
             if (*it >= '0' && *it <= '9') r = (r + Double<T>(*it - '0')) / Double<T>(10);
         }
 
@@ -249,19 +237,22 @@ public:
         return Double<T>(std::numeric_limits<double>::infinity());
     }
 
-    static int digits();
+    static int digits()
+    {
+        if constexpr (std::is_same<T, float>::value) {
+            return std::numeric_limits<float>::digits/ 2 + 1;
+        } else if constexpr (std::is_same<T, double>::value) {
+            return std::numeric_limits<double>::digits/ 2 + 1;
+        } else if constexpr (std::is_same<T, long double>::value) {
+            return std::numeric_limits<long double>::digits/ 2 + 1;
+        } else {
+            return T::digits() - 6;
+        }
+    }
 
 
     //
-    // Accessors
-    //
-
-    // T getX() const { return x; }
-    // T getY() const { return y; }
-
-
-    //
-    // Basic operators
+    // Assignment operators
     //
 
     Double<T>& operator=(Double<T> rhs)
@@ -275,12 +266,13 @@ public:
     // Cast operators
     //
 
-    operator int() const { return static_cast<int>(to_long_double()); }
-    operator long() const { return static_cast<long>(to_long_double()); }
-    operator long long() const { return static_cast<long long>(to_long_double()); }
-    operator float() const { return static_cast<float>(to_long_double()); }
-    operator double() const { return static_cast<float>(to_long_double()); }
+    operator int() const { return to_int(); }
+    operator long() const { return to_long(); }
+    operator long long() const { return to_long_long(); }
+    operator float() const { return to_float(); }
+    operator double() const { return to_double(); }
     operator long double() const { return to_long_double(); }
+
 
     //
     // Conversion functions
@@ -313,7 +305,6 @@ public:
 
     long double to_long_double() const
     {
-        // printf("long double to_long_double() const\n");
         return static_cast<long double>(h) + static_cast<long double>(l);
     }
 
@@ -322,16 +313,13 @@ public:
     {
         constexpr int precision = 256;
 
-        mpf_class result = 0.0;
-
         if constexpr (std::is_same<T, float>::value) {
-            result = mpf_class(h, precision) + mpf_class(l, precision);
+            return mpf_class(h, precision) + mpf_class(l, precision);
         } else if constexpr (std::is_same<T, double>::value) {
-            result = mpf_class(h, precision) + mpf_class(l, precision);
+            return mpf_class(h, precision) + mpf_class(l, precision);
         } else {
-            result = h.to_mpf() + l.to_mpf();
+            return h.to_mpf() + l.to_mpf();
         }
-        return result;
     }
 #endif
 
@@ -358,14 +346,15 @@ public:
         Double<T> l; Double<T> r = modf(&l);
 
         // Compute integral digits
-        for (int i = 0; i < ldigits && l.abs() >= Double<T>(1.0); i++) {
+        for (int i = 0; i < ldigits; i++) {
 
             l /= Double<T>(10.0);
             Double<T> digit = l.modf(&l) * Double<T>(10.0);
             result = digit.to_character() + result;
+            if (l.abs() < Double<T>(1.0)) break;
         }
 
-        // Create a decimal point of necessary
+        // Create a decimal point if necessary
         if (rdigits) result += '.';
 
         // Compute fractional digits
@@ -389,35 +378,47 @@ public:
         if (isnan() || rhs.isnan()) return false;
         return h == rhs.h && l == rhs.l;
     }
+    bool operator==(double rhs) const { return *this == Double<T>(rhs); }
+    bool operator==(long double rhs) const { return *this == Double<T>(rhs); }
 
     bool operator!=(const Double<T>& rhs) const
     {
         return !(*this == rhs);
     }
+    bool operator!=(double rhs) const { return *this != Double<T>(rhs); }
+    bool operator!=(long double rhs) const { return *this != Double<T>(rhs); }
 
     bool operator<(const Double<T>& rhs) const
     {
         if (isnan() || rhs.isnan()) return false;
         return h < rhs.h || (h == rhs.h && l < rhs.l);
     }
+    bool operator<(double rhs) const { return *this < Double<T>(rhs); }
+    bool operator<(long double rhs) const { return *this < Double<T>(rhs); }
 
     bool operator>(const Double<T>& rhs) const
     {
         if (isnan() || rhs.isnan()) return false;
         return rhs < *this;
     }
+    bool operator>(double rhs) const { return *this > Double<T>(rhs); }
+    bool operator>(long double rhs) const { return *this > Double<T>(rhs); }
 
     bool operator<=(const Double<T>& rhs) const
     {
         if (isnan() || rhs.isnan()) return false;
         return !(*this > rhs);
     }
+    bool operator<=(double rhs) const { return *this <= Double<T>(rhs); }
+    bool operator<=(long double rhs) const { return *this <= Double<T>(rhs); }
 
     bool operator>=(const Double<T>& rhs) const
     {
         if (isnan() || rhs.isnan()) return false;
         return !(*this < rhs);
     }
+    bool operator>=(double rhs) const { return *this >= Double<T>(rhs); }
+    bool operator>=(long double rhs) const { return *this >= Double<T>(rhs); }
 
 
     //
@@ -442,48 +443,11 @@ public:
 
     static Double<T> split(T a) {
 
-        /*
-        int digits;
-
-        if (std::is_same<T, Double<float>>::value) {
-            digits = std::numeric_limits<float>::digits - 6;
-        } else if (std::is_same<T, Double<double>>::value) {
-            digits = std::numeric_limits<double>::digits - 6;
-        } else {
-            digits = std::numeric_limits<T>::digits / 2 + 1;
-        }
-        // printf("digits = %d %f\n", digits, (double)(dbl::ldexp(T(1),digits) + T(1)));
-         */
-
         T t = (dbl::ldexp(T(1), digits()) + T(1)) * a;
         T h = t - (t - a);
         T l = a - h;
 
         return Double<T>(h,l);
-    }
-
-    static void split3(T a, T *s1, T *s2, T *s3) {
-
-        if (std::is_same<T, Double<float>>::value || std::is_same<T, Double<double>>::value) {
-
-            auto s = split(a);
-            *s1 = s.x;
-            *s2 = s.y;
-            *s3 = 0.0;
-            return;
-        }
-
-        T t = (dbl::ldexp(T(1), 18) + T(1)) * a;
-        T h = t - (t - a);
-        *s1 = h;
-
-        T l = a - h;
-        T t2 = (dbl::ldexp(T(1), 18) + T(1)) * l;
-        T h2 = t2 - (t2 - l);
-        *s2 = h2;
-
-        T l2 = l - h2;
-        *s3 = l2;
     }
 
     static Double<T> twoProd(T a, T b) {
@@ -515,7 +479,6 @@ public:
     {
         if (isfinite() && rhs.isfinite()) {
 
-
             auto sum = twoSum(h, rhs.h);
             sum.l += l + rhs.l;
             *this = quickTwoSum(sum.h, sum.l);
@@ -546,7 +509,9 @@ public:
     }
 
     friend Double<T> operator+(double lhs, Double<T> rhs) { return Double<T>(lhs) + rhs; }
+    friend Double<T> operator+(long double lhs, Double<T> rhs) { return Double<T>(lhs) + rhs; }
     friend Double<T> operator+(Double<T> lhs, double rhs) { return lhs + Double<T>(rhs); }
+    friend Double<T> operator+(Double<T> lhs, long double rhs) { return lhs + Double<T>(rhs); }
 
     Double<T> &operator-=(const Double<T> &rhs)
     {
@@ -563,7 +528,9 @@ public:
     }
 
     friend Double<T> operator-(double lhs, Double<T> rhs) { return Double<T>(lhs) - rhs; }
+    friend Double<T> operator-(long double lhs, Double<T> rhs) { return Double<T>(lhs) - rhs; }
     friend Double<T> operator-(Double<T> lhs, double rhs) { return lhs - Double<T>(rhs); }
+    friend Double<T> operator-(Double<T> lhs, long double rhs) { return lhs - Double<T>(rhs); }
 
     Double<T> &operator*=(const Double<T> &rhs)
     {
@@ -594,7 +561,9 @@ public:
     }
 
     friend Double<T> operator*(double lhs, Double<T> rhs) { return Double<T>(lhs) * rhs; }
+    friend Double<T> operator*(long double lhs, Double<T> rhs) { return Double<T>(lhs) * rhs; }
     friend Double<T> operator*(Double<T> lhs, double rhs) { return lhs * Double<T>(rhs); }
+    friend Double<T> operator*(Double<T> lhs, long double rhs) { return lhs * Double<T>(rhs); }
 
     Double<T> &operator/=(const Double<T> &rhs)
     {
@@ -624,16 +593,6 @@ public:
             return *this;
         }
 
-        /*
-        auto r = x / rhs.x;
-
-        auto val = twoProd(r, rhs.x);
-        auto e = (x - val.x - val.y + y - r * rhs.y) / rhs.x;
-
-        *this = quickTwoSum(r, e);
-        return *this;
-        */
-
         Double<T> r = *this;
         T q1 = r.h / rhs.h;
 
@@ -656,7 +615,9 @@ public:
     }
 
     friend Double<T> operator/(double lhs, Double<T> rhs) { return Double<T>(lhs) / rhs; }
+    friend Double<T> operator/(long double lhs, Double<T> rhs) { return Double<T>(lhs) / rhs; }
     friend Double<T> operator/(Double<T> lhs, double rhs) { return lhs / Double<T>(rhs); }
+    friend Double<T> operator/(Double<T> lhs, long double rhs) { return lhs / Double<T>(rhs); }
 
     void operator++()
     {
@@ -964,7 +925,6 @@ template <class T> inline Double<T>
 ceil(const Double<T> &x, int fracdigits)
 {
     return x.ldexp10(fracdigits).ceil().ldexp10(-fracdigits);
-    // return x.ceil(fracdigits);
 }
 
 template <class T> inline Double<T>
@@ -988,7 +948,6 @@ template <class T> inline Double<T>
 floor(const Double<T> &x, int fracdigits)
 {
     return x.ldexp10(fracdigits).floor().ldexp10(-fracdigits);
-    // return x.floor(fracdigits);
 }
 
 template <class T> inline Double<T>
@@ -1249,7 +1208,7 @@ ispositive(const Double<T> &x)
 template <class T> inline bool
 isnegative(const Double<T> &x)
 {
-    return x.h < T(0.0);
+    return x.h < 0.0;
 }
 
 template <class T>
@@ -1289,21 +1248,5 @@ template <class T> inline const Double<T>
 Double<T>::egamma     ("0.57721566 49015328 60606512 09008240 24310421 59335939 92359880 57672349");
 template <class T> inline const Double<T>
 Double<T>::phi        ("1.61803398 87498948 48204586 83436563 81177203 09179805 76286213 54486227");
-
-typedef Double<float> doublefloat;
-typedef Double<double> doubledouble;
-typedef Double<long double> longdoubledouble;
-typedef Double<doublefloat> quadfloat;
-typedef Double<doubledouble> quaddouble;
-
-template<class T> inline int Double<T>::digits() {
-    return T::digits() - 6;
-}
-template<> inline int Double<float>::digits() {
-    return std::numeric_limits<float>::digits/ 2 + 1;
-}
-template<> inline int Double<double>::digits() {
-    return std::numeric_limits<double>::digits/ 2 + 1;
-}
 
 }

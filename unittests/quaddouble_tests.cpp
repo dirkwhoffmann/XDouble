@@ -109,5 +109,4 @@ TEST_CASE("Quad-double tests") {
         CHECK(!x.isone());
         CHECK(!x.isnegative());
     }
-
 }

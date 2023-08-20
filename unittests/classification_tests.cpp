@@ -60,6 +60,20 @@ TEST_CASE("Classification functions") {
         CHECK((-doubledouble::inf()).isnormal() == std::isnormal(-std::numeric_limits<double>::infinity()));
     }
 
+    SUBCASE("signbit") {
+
+        CHECK(doubledouble(0.0).signbit() == std::signbit(0.0));
+        CHECK(doubledouble(-0.0).signbit() == std::signbit(-0.0));
+        CHECK((-doubledouble(0.0)).signbit() == std::signbit(-0.0));
+        CHECK(doubledouble(42.0).signbit() == std::signbit(42.0));
+        CHECK(doubledouble(-42.0).signbit() == std::signbit(-42.0));
+        CHECK((-doubledouble(42.0)).signbit() == std::signbit(-42.0));
+        CHECK(doubledouble::nan().signbit() == std::signbit(std::numeric_limits<double>::quiet_NaN()));
+        CHECK((-doubledouble::nan()).signbit() == std::signbit(-std::numeric_limits<double>::quiet_NaN()));
+        CHECK(doubledouble::inf().signbit() == std::signbit(std::numeric_limits<double>::infinity()));
+        CHECK((-doubledouble::inf()).signbit() == std::signbit(-std::numeric_limits<double>::infinity()));
+    }
+
     SUBCASE("iszero") {
 
         CHECK(doubledouble(0.0).iszero() == true);
@@ -114,19 +128,5 @@ TEST_CASE("Classification functions") {
         CHECK((-doubledouble::nan()).isnegative() == false);
         CHECK(doubledouble::inf().isnegative() == false);
         CHECK((-doubledouble::inf()).isnegative() == true);
-    }
-
-    SUBCASE("signbit") {
-
-        CHECK(doubledouble(0.0).signbit() == std::signbit(0.0));
-        CHECK(doubledouble(-0.0).signbit() == std::signbit(-0.0));
-        CHECK((-doubledouble(0.0)).signbit() == std::signbit(-0.0));
-        CHECK(doubledouble(42.0).signbit() == std::signbit(42.0));
-        CHECK(doubledouble(-42.0).signbit() == std::signbit(-42.0));
-        CHECK((-doubledouble(42.0)).signbit() == std::signbit(-42.0));
-        CHECK(doubledouble::nan().signbit() == std::signbit(std::numeric_limits<double>::quiet_NaN()));
-        CHECK((-doubledouble::nan()).signbit() == std::signbit(-std::numeric_limits<double>::quiet_NaN()));
-        CHECK(doubledouble::inf().signbit() == std::signbit(std::numeric_limits<double>::infinity()));
-        CHECK((-doubledouble::inf()).signbit() == std::signbit(-std::numeric_limits<double>::infinity()));
     }
 }

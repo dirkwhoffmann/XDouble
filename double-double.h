@@ -198,8 +198,6 @@ template <class T> struct Double {
         *this = neg ? -(l + r) : (l + r);
     }
 
-private:
-
     friend void swap(Double<T>& first, Double<T>& second) noexcept
     {
         std::swap(first.h, second.h);
@@ -210,8 +208,6 @@ private:
     //
     // Constants
     //
-
-public:
 
     static const Double<T> e;
     static const Double<T> log2e;
@@ -727,7 +723,6 @@ public:
 
     Double<T> fabs() const { return dbl::fabs(*this); }
     Double<T> abs() const { return dbl::abs(*this); }
-    Double<T> fma() const { return dbl::fma(*this); }
 
 
     //
@@ -1108,6 +1103,9 @@ copysign(const Double<T> &x, const Double<T> &y)
 template <class T> inline Double<T>
 fdim(const Double<T> &x, const Double<T> &y)
 {
+    if (x.isnan()) return Double<T>::nan();
+    if (y.isnan()) return Double<T>::nan();
+
     return (x > y) ? x - y : Double<T>();
 }
 

@@ -61,6 +61,12 @@ TEST_CASE("Rounding and remainder functions") {
         CHECK((-pi).ceil(3).to_float() == (float)-3.141);
         CHECK((-pi).ceil(4).to_float() == (float)-3.1415);
         CHECK((-pi).ceil(5).to_float() == (float)-3.14159);
+
+        CHECK(doubledouble::nan().ceil().isnan() == std::isnan(std::ceil(std::numeric_limits<double>::quiet_NaN())));
+        CHECK(doubledouble::inf().ceil().isinf() == std::isinf(std::ceil(std::numeric_limits<double>::infinity())));
+        CHECK((-doubledouble::inf()).ceil().isinf() == std::isinf(std::ceil(-std::numeric_limits<double>::infinity())));
+        CHECK(doubledouble::inf().ceil().signbit() == std::signbit(std::ceil(std::numeric_limits<double>::infinity())));
+        CHECK((-doubledouble::inf()).ceil().signbit() == std::signbit(std::ceil(-std::numeric_limits<double>::infinity())));
     }
 
     SUBCASE("floor") {
@@ -119,6 +125,12 @@ TEST_CASE("Rounding and remainder functions") {
         CHECK((-pi).floor(3).to_float() == (float)-3.142);
         CHECK((-pi).floor(4).to_float() == (float)-3.1416);
         CHECK((-pi).floor(5).to_float() == (float)-3.1416);
+
+        CHECK(doubledouble::nan().floor().isnan() == std::isnan(std::floor(std::numeric_limits<double>::quiet_NaN())));
+        CHECK(doubledouble::inf().floor().isinf() == std::isinf(std::floor(std::numeric_limits<double>::infinity())));
+        CHECK((-doubledouble::inf()).floor().isinf() == std::isinf(std::floor(-std::numeric_limits<double>::infinity())));
+        CHECK(doubledouble::inf().floor().signbit() == std::signbit(std::floor(std::numeric_limits<double>::infinity())));
+        CHECK((-doubledouble::inf()).floor().signbit() == std::signbit(std::floor(-std::numeric_limits<double>::infinity())));
     }
 
     SUBCASE("fmod") {
@@ -155,6 +167,8 @@ TEST_CASE("Rounding and remainder functions") {
             CHECK(doubledouble(4.1).fmod(doubledouble::inf()) == doubledouble(4.1));
             CHECK(doubledouble::inf().fmod(2.0).isnan());
             CHECK(doubledouble::inf().fmod(doubledouble::inf()).isnan());
+
+
         }
     }
 
@@ -214,6 +228,12 @@ TEST_CASE("Rounding and remainder functions") {
         CHECK((-pi).trunc(3).to_float() == (float)-3.141);
         CHECK((-pi).trunc(4).to_float() == (float)-3.1415);
         CHECK((-pi).trunc(5).to_float() == (float)-3.14159);
+
+        CHECK(doubledouble::nan().trunc().isnan() == std::isnan(std::trunc(std::numeric_limits<double>::quiet_NaN())));
+        CHECK(doubledouble::inf().trunc().isinf() == std::isinf(std::trunc(std::numeric_limits<double>::infinity())));
+        CHECK((-doubledouble::inf()).trunc().isinf() == std::isinf(std::trunc(-std::numeric_limits<double>::infinity())));
+        CHECK(doubledouble::inf().trunc().signbit() == std::signbit(std::trunc(std::numeric_limits<double>::infinity())));
+        CHECK((-doubledouble::inf()).trunc().signbit() == std::signbit(std::trunc(-std::numeric_limits<double>::infinity())));
     }
 
     SUBCASE("round") {
@@ -272,6 +292,12 @@ TEST_CASE("Rounding and remainder functions") {
         CHECK((-pi).round(3).to_float() == (float)-3.142);
         CHECK((-pi).round(4).to_float() == (float)-3.1416);
         CHECK((-pi).round(5).to_float() == (float)-3.14159);
+
+        CHECK(doubledouble::nan().round().isnan() == std::isnan(std::round(std::numeric_limits<double>::quiet_NaN())));
+        CHECK(doubledouble::inf().round().isinf() == std::isinf(std::round(std::numeric_limits<double>::infinity())));
+        CHECK((-doubledouble::inf()).round().isinf() == std::isinf(std::round(-std::numeric_limits<double>::infinity())));
+        CHECK(doubledouble::inf().round().signbit() == std::signbit(std::round(std::numeric_limits<double>::infinity())));
+        CHECK((-doubledouble::inf()).round().signbit() == std::signbit(std::round(-std::numeric_limits<double>::infinity())));
     }
 
     SUBCASE("roundEven") {
@@ -316,6 +342,12 @@ TEST_CASE("Rounding and remainder functions") {
             fesetround(FE_UPWARD);
             CHECK((float)doubledouble(p[i].v).roundEven() == p[i].up);
         }
+
+        CHECK(doubledouble::nan().roundEven().isnan() == true);
+        CHECK(doubledouble::inf().roundEven().isinf() == true);
+        CHECK((-doubledouble::inf()).roundEven().isinf() == true);
+        CHECK(doubledouble::inf().roundEven().signbit() == 0);
+        CHECK((-doubledouble::inf()).roundEven().signbit() == 1);
     }
 
     SUBCASE("lround") {

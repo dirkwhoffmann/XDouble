@@ -13,10 +13,10 @@ TEST_CASE("Floating-point manipulation functions") {
         CHECK(pi.copysign(y) == -pi);
         CHECK((-pi).copysign(x) == -pi);
         CHECK((-pi).copysign(y) == pi);
-    }
 
-    SUBCASE("nan") {
-
-        CHECK(doubledouble::nan().isnan());
+        CHECK(doubledouble::inf().copysign(x) == doubledouble::inf());
+        CHECK(doubledouble::inf().copysign(y) == -doubledouble::inf());
+        CHECK(doubledouble::nan().copysign(x).isnan());
+        CHECK(doubledouble::nan().copysign(y).isnan());
     }
 }

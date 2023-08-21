@@ -47,7 +47,7 @@
 		5038676A2A8E33C60018498B /* quaddouble_tests.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = quaddouble_tests.cpp; sourceTree = "<group>"; };
 		5038676C2A8FAF0A0018498B /* double-double.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "double-double.entitlements"; sourceTree = "<group>"; };
 		503867772A91E2C20018498B /* constant_tests.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = constant_tests.cpp; sourceTree = "<group>"; };
-		5051DEE42A876C4800EED9D7 /* double-double */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "double-double"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5051DEE42A876C4800EED9D7 /* xdouble */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = xdouble; sourceTree = BUILT_PRODUCTS_DIR; };
 		5051DEE72A876C4800EED9D7 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		5051DEEF2A876D1D00EED9D7 /* xdouble.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = xdouble.h; sourceTree = "<group>"; };
 		5051DEF22A876E8300EED9D7 /* arithmetic_tests.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = arithmetic_tests.cpp; sourceTree = "<group>"; };
@@ -86,7 +86,7 @@
 		5051DEE52A876C4800EED9D7 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				5051DEE42A876C4800EED9D7 /* double-double */,
+				5051DEE42A876C4800EED9D7 /* xdouble */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -117,9 +117,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		5051DEE32A876C4800EED9D7 /* double-double */ = {
+		5051DEE32A876C4800EED9D7 /* xdouble */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 5051DEEB2A876C4800EED9D7 /* Build configuration list for PBXNativeTarget "double-double" */;
+			buildConfigurationList = 5051DEEB2A876C4800EED9D7 /* Build configuration list for PBXNativeTarget "xdouble" */;
 			buildPhases = (
 				5051DEE02A876C4800EED9D7 /* Sources */,
 				5051DEE12A876C4800EED9D7 /* Frameworks */,
@@ -129,9 +129,9 @@
 			);
 			dependencies = (
 			);
-			name = "double-double";
+			name = xdouble;
 			productName = "double-double";
-			productReference = 5051DEE42A876C4800EED9D7 /* double-double */;
+			productReference = 5051DEE42A876C4800EED9D7 /* xdouble */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
@@ -148,7 +148,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 5051DEDF2A876C4800EED9D7 /* Build configuration list for PBXProject "double-double" */;
+			buildConfigurationList = 5051DEDF2A876C4800EED9D7 /* Build configuration list for PBXProject "xdouble" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -161,7 +161,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				5051DEE32A876C4800EED9D7 /* double-double */,
+				5051DEE32A876C4800EED9D7 /* xdouble */,
 			);
 		};
 /* End PBXProject section */
@@ -336,7 +336,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		5051DEDF2A876C4800EED9D7 /* Build configuration list for PBXProject "double-double" */ = {
+		5051DEDF2A876C4800EED9D7 /* Build configuration list for PBXProject "xdouble" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				5051DEE92A876C4800EED9D7 /* Debug */,
@@ -345,7 +345,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		5051DEEB2A876C4800EED9D7 /* Build configuration list for PBXNativeTarget "double-double" */ = {
+		5051DEEB2A876C4800EED9D7 /* Build configuration list for PBXNativeTarget "xdouble" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				5051DEEC2A876C4800EED9D7 /* Debug */,

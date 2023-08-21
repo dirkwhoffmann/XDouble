@@ -15,3 +15,4 @@ set(CMAKE_CXX_EXTENSIONS False)
 add_subdirectory(unittests)
 
 add_executable(example1 example1.cpp)
+add_executable(example2 example2.cpp)

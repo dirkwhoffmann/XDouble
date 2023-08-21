@@ -5,9 +5,9 @@
 #pragma STDC FENV_ACCESS ON
 
 #include "doctest.h"
-#include "double-double.h"
+#include "xdouble.h"
 
-using namespace xd;
+using namespace xdb;
 
 typedef XDouble<float> doublefloat;
 typedef XDouble<double> doubledouble;

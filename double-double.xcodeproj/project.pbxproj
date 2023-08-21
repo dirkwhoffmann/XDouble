@@ -49,13 +49,14 @@
 		503867772A91E2C20018498B /* constant_tests.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = constant_tests.cpp; sourceTree = "<group>"; };
 		5051DEE42A876C4800EED9D7 /* double-double */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "double-double"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5051DEE72A876C4800EED9D7 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
-		5051DEEF2A876D1D00EED9D7 /* double-double.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "double-double.h"; sourceTree = "<group>"; };
+		5051DEEF2A876D1D00EED9D7 /* xdouble.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = xdouble.h; sourceTree = "<group>"; };
 		5051DEF22A876E8300EED9D7 /* arithmetic_tests.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = arithmetic_tests.cpp; sourceTree = "<group>"; };
 		5051DEF32A87738C00EED9D7 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		5051DEF42A877BD400EED9D7 /* doctest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = doctest.h; sourceTree = "<group>"; };
 		5051DEF52A8785D800EED9D7 /* comparison_tests.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = comparison_tests.cpp; sourceTree = "<group>"; };
 		5094ED4E2A9373BF000D0BB9 /* example1.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = example1.cpp; sourceTree = "<group>"; };
 		5094ED4F2A9377A1000D0BB9 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		5094ED502A937AD9000D0BB9 /* example2.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = example2.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,8 +75,9 @@
 			children = (
 				5094ED4F2A9377A1000D0BB9 /* CMakeLists.txt */,
 				5038676C2A8FAF0A0018498B /* double-double.entitlements */,
-				5051DEEF2A876D1D00EED9D7 /* double-double.h */,
+				5051DEEF2A876D1D00EED9D7 /* xdouble.h */,
 				5094ED4E2A9373BF000D0BB9 /* example1.cpp */,
+				5094ED502A937AD9000D0BB9 /* example2.cpp */,
 				5051DEE62A876C4800EED9D7 /* unittests */,
 				5051DEE52A876C4800EED9D7 /* Products */,
 			);

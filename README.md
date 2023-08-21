@@ -50,7 +50,7 @@ Output:
 
 ## APIs
 
-The new `DoubleX` types are intended to replace the existing floating point types `float`, `double` and `long double`. However, they differ from the standard types in being real objects. So if `x` is one of the new `DoubleX` types, you can write a statement such as `x.sqrt()`, which is not possible with the standard types.
+The new `DoubleX` types are intended to be usable similar to the standard types `float`, `double` and `long double`. However, they differ from the standard types in being real objects. So if `x` is one of the new `DoubleX` types, you can write a statement such as `x.sqrt()`, which is not possible with the standard types.
 
 To simplify the substitution of standard types, the DoubleX library also provides a non-OOP API that is mostly compatible with the standard math library. Therefore, it is also possible to write `sqrt(x)` instead of `x.sqrt()`. 
 

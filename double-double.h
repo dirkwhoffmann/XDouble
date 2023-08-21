@@ -232,15 +232,14 @@ template <class T> struct XDouble {
     static const XDouble<T> egamma;
     static const XDouble<T> phi;
 
-    static XDouble<T> nan()
-    {
-        return XDouble<T>(std::numeric_limits<double>::quiet_NaN());
-    }
+    static XDouble<T> nan() { return XDouble<T>(std::numeric_limits<double>::quiet_NaN()); }
+    static XDouble<T> posnan() { return nan(); }
+    static XDouble<T> negnan() { return -nan(); }
 
-    static XDouble<T> inf()
-    {
-        return XDouble<T>(std::numeric_limits<double>::infinity());
-    }
+    static XDouble<T> inf() { return XDouble<T>(std::numeric_limits<double>::infinity()); }
+    static XDouble<T> posinf() { return inf(); }
+    static XDouble<T> neginf() { return -inf(); }
+
 
     static int digits()
     {
@@ -769,6 +768,8 @@ template <class T> struct XDouble {
 template <class T> inline XDouble<T>
 exp(const XDouble<T> &op)
 {
+    if (op.isinf()) return op.isposinf() ? op : XDouble<T>(0.0);
+
     auto n = xd::round(op.h);
     auto w = op - XDouble<T>(n);
 
@@ -803,6 +804,8 @@ frexp(const XDouble<T> &op, int *exp)
 template <class T> inline XDouble<T>
 frexp10(const XDouble<T> &op, int *exp)
 {
+    if (!op.isfinite()) { *exp = 0; return op; }
+
     *exp = op.iszero() ? 0 : 1 + (op.fabs().log10().floor().to_int());
     return op * XDouble<T>(10).pow(-(*exp));
 }
@@ -872,7 +875,7 @@ powd(const XDouble<T> &base, int exponent)
     auto result = XDouble<T>(1.0);
     auto b = base;
 
-    for (int i = xd::abs(exponent); i; i >>= 1) {
+    for (unsigned i = xd::abs(exponent); i; i >>= 1) {
 
         if (i & 1) result *= b;
         b *= b;

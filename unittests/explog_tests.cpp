@@ -11,7 +11,11 @@ TEST_CASE("Exponential and logarithmic functions") {
         CHECK(doubledouble("0.5" ).exp().to_string(30) == "1.648721270700128146848650787814");
         CHECK(doubledouble("-0.1").exp().to_string(30) == "0.904837418035959573164249059446");
         CHECK(doubledouble("-0.5").exp().to_string(30) == "0.606530659712633423603799534991");
-         
+
+        CHECK(doubledouble::nan().exp().isposnan());
+        CHECK(doubledouble::posinf().exp().isposinf());
+        CHECK(doubledouble::neginf().exp().iszero());
+
         for (int i = 0; i < NUM_TESTS; i++) {
 
             double x = rand_double();
@@ -21,13 +25,21 @@ TEST_CASE("Exponential and logarithmic functions") {
 
     SUBCASE("frexp") {
 
+        int e1, e2;
+
         for (int i = 0; i < NUM_TESTS; i++) {
 
-            int e1, e2;
             double x = rand_double();
             CHECK(doubledouble(x).frexp(&e1).to_float() == (float)std::frexp(x, &e2));
             CHECK(e1 == e2);
         }
+
+        CHECK(doubledouble::nan().frexp(&e1).isnan());
+        CHECK(e1 == 0);
+        CHECK(doubledouble::posinf().frexp(&e1).isposinf());
+        CHECK(e1 == 0);
+        CHECK(doubledouble::neginf().frexp(&e1).isneginf());
+        CHECK(e1 == 0);
     }
 
     SUBCASE("frexp10") {
@@ -71,6 +83,16 @@ TEST_CASE("Exponential and logarithmic functions") {
         CHECK(e == -3);
         CHECK(doubledouble(-0.0000).frexp10(&e).to_float() == (float)-0);
         CHECK(e == 0);
+
+        e = 42;
+        CHECK(doubledouble::nan().frexp10(&e).isnan());
+        CHECK(e == 0);
+        e = 42;
+        CHECK(doubledouble::posinf().frexp10(&e).isposinf());
+        CHECK(e == 0);
+        e = 42;
+        CHECK(doubledouble::neginf().frexp10(&e).isneginf());
+        CHECK(e == 0);
     }
 
     SUBCASE("ldexp") {
@@ -81,6 +103,10 @@ TEST_CASE("Exponential and logarithmic functions") {
             double x = rand_double();
             CHECK(doubledouble(x).ldexp(e).to_float() == (float)std::ldexp(x, e));
         }
+
+        CHECK(doubledouble::nan().ldexp(2).isnan());
+        CHECK(doubledouble::posinf().ldexp(2).isposinf());
+        CHECK(doubledouble::neginf().ldexp(2).isneginf());
     }
 
     SUBCASE("ldexp10") {
@@ -93,6 +119,10 @@ TEST_CASE("Exponential and logarithmic functions") {
         CHECK(pi.ldexp10(3).to_float() == (float)3141.5);
         CHECK(pi.ldexp10(4).to_float() == (float)31415);
         CHECK(pi.ldexp10(5).to_float() == (float)314150);
+
+        CHECK(doubledouble::nan().ldexp10(2).isnan());
+        CHECK(doubledouble::posinf().ldexp10(2).isposinf());
+        CHECK(doubledouble::neginf().ldexp10(2).isneginf());
     }
 
     SUBCASE("log") {
@@ -105,7 +135,7 @@ TEST_CASE("Exponential and logarithmic functions") {
 
         CHECK(doubledouble(0.0).log() == -doubledouble::inf());
         CHECK(doubledouble(1.0).log() == 0.0);
-        CHECK(doubledouble(-.5).log().isnan());;
+        CHECK(doubledouble(-.5).log().isnan());
         CHECK(doubledouble::inf().log() == doubledouble::inf());
         CHECK((-doubledouble::inf()).log().isnan());
         CHECK(doubledouble::nan().log().isnan());
@@ -129,5 +159,12 @@ TEST_CASE("Exponential and logarithmic functions") {
             CHECK(doubledouble(x).modf(&i1).to_float() == (float)std::modf(x, &i2));
             CHECK((float)i1 == (float)i2);
         }
+
+        CHECK(doubledouble(0.0).log() == -doubledouble::inf());
+        CHECK(doubledouble(1.0).log() == 0.0);
+        CHECK(doubledouble(-.5).log().isnan());
+        CHECK(doubledouble::inf().log() == doubledouble::inf());
+        CHECK((-doubledouble::inf()).log().isnan());
+        CHECK(doubledouble::nan().log().isnan());
     }
 }

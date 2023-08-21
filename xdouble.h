@@ -44,6 +44,7 @@
 #include <cfenv>
 #include <iostream>
 #include <iomanip>
+#include <cmath>
 #ifdef DBL_DEBUG
 #include "gmpxx.h"
 #endif

@@ -67,6 +67,11 @@ TEST_CASE("Basic smoke tests") {
         CHECK(doubledouble::inf().to_long_double() == std::numeric_limits<long double>::infinity());
         CHECK((-doubledouble::inf()).to_long_double() == -std::numeric_limits<long double>::infinity());
         CHECK(std::isnan(doubledouble::nan().to_long_double()));
+
+        CHECK(std::signbit(doubledouble(0.0).to_double()) == 0);
+        CHECK(std::signbit(doubledouble(-0.0).to_double()) == 1);
+        CHECK(std::signbit(doubledouble(0.0).to_long_double()) == 0);
+        CHECK(std::signbit(doubledouble(-0.0).to_long_double()) == 1);
     }
 
     SUBCASE("Converting to textual representations") {

@@ -121,10 +121,10 @@ TEST_CASE("Power functions") {
             base = doubledouble(-0.0);
 
             CHECK(base.pow(-doubledouble::inf()) == doubledouble::inf());
-            CHECK(base.pow(-2.0) == doubledouble::inf());
-            CHECK(base.pow(-1.5) == doubledouble::inf());
-            CHECK(base.pow(-1.0) == -doubledouble::inf());
-            CHECK(base.pow(-0.5) == doubledouble::inf());
+            CHECK(base.pow(-2.0) == doubledouble::posinf());
+            CHECK(base.pow(-1.5) == doubledouble::posinf());
+            CHECK(base.pow(-1.0) == doubledouble::neginf());
+            CHECK(base.pow(-0.5) == doubledouble::posinf());
             CHECK(base.pow(0.0) == 1.0);
             CHECK(base.pow(0.5).isposzero());
             CHECK(base.pow(1.0).isnegzero());

@@ -7,70 +7,90 @@ TEST_CASE("Basic smoke tests") {
 
         doubledouble x = 2.25;
 
+        COMPARE(doubledouble().to_double(), 0.0);
+        COMPARE(doubledouble(0.0).to_double(), 0.0);
+        COMPARE(doubledouble(-0.0).to_double(), -0.0);
         COMPARE(doubledouble(0.5).to_double(), 0.5);
         COMPARE(doubledouble(0.5,0.125).to_double(), 0.625);
         COMPARE(doubledouble(x).to_double(), 2.25);
         COMPARE(doubledouble("3.5").to_double(), 3.5);
         COMPARE(doubledouble("-3.5").to_double(), -3.5);
-        COMPARE(doubledouble(posinf), doubledouble::posinf());
-        COMPARE(doubledouble(neginf), doubledouble::neginf());
-        COMPARE(doubledouble(std::numeric_limits<double>::quiet_NaN()), posnan);
+        COMPARE(doubledouble(posinf).to_double(), posinf);
+        COMPARE(doubledouble(neginf).to_double(), neginf);
+        COMPARE(doubledouble(posnan).to_double(), posnan);
+        COMPARE(doubledouble(negnan).to_double(), negnan);
     }
 
     SUBCASE("Conversion functions") {
 
+        COMPARE(doubledouble().to_int(), 0);
+        COMPARE(doubledouble(0.0).to_int(), 0);
+        COMPARE(doubledouble(-0.0).to_int(), 0);
         COMPARE(doubledouble(0.5).to_int(), 0);
         COMPARE(doubledouble(3.14).to_int(), 3);
         COMPARE(doubledouble(-3.14).to_int(), -3);
         COMPARE(doubledouble::posinf().to_int(), INT_MAX);
         COMPARE(doubledouble::neginf().to_int(), INT_MIN);
-        COMPARE(doubledouble::nan().to_int(), 0);
+        COMPARE(doubledouble::posnan().to_int(), 0);
+        COMPARE(doubledouble::negnan().to_int(), 0);
 
+        COMPARE(doubledouble().to_long(), 0);
+        COMPARE(doubledouble(0.0).to_long(), 0);
+        COMPARE(doubledouble(-0.0).to_long(), 0);
         COMPARE(doubledouble(0.5).to_long(), 0);
         COMPARE(doubledouble(3.14).to_long(), 3);
         COMPARE(doubledouble(-3.14).to_long(), -3);
         COMPARE(doubledouble::posinf().to_long(), LONG_MAX);
         COMPARE(doubledouble::neginf().to_long(), LONG_MIN);
-        COMPARE(doubledouble::nan().to_long(), 0);
+        COMPARE(doubledouble::posnan().to_long(), 0);
+        COMPARE(doubledouble::negnan().to_long(), 0);
 
+        COMPARE(doubledouble().to_long_long(), 0);
+        COMPARE(doubledouble(0.0).to_long_long(), 0);
+        COMPARE(doubledouble(-0.0).to_long_long(), 0);
         COMPARE(doubledouble(0.5).to_long_long(), 0);
         COMPARE(doubledouble(3.14).to_long_long(), 3);
         COMPARE(doubledouble(-3.14).to_long_long(), -3);
         COMPARE(doubledouble::posinf().to_long_long(), LLONG_MAX);
         COMPARE(doubledouble::neginf().to_long_long(), LLONG_MIN);
-        COMPARE(doubledouble::nan().to_long_long(), 0);
+        COMPARE(doubledouble::posnan().to_long_long(), 0);
+        COMPARE(doubledouble::negnan().to_long_long(), 0);
 
+        COMPARE(doubledouble().to_float(), 0.0f);
+        COMPARE(doubledouble(0.0).to_float(), 0.0f);
+        COMPARE(doubledouble(-0.0).to_float(), -0.0f);
         COMPARE(doubledouble(0).to_float(), 0.0f);
         COMPARE(doubledouble(0.5).to_float(), 0.5f);
         COMPARE(doubledouble(-0.5).to_float(), -0.5);
         COMPARE(doubledouble(0.5,0.125).to_float(), 0.625f);
         COMPARE(doubledouble(-0.5,-0.125).to_float(), -0.625);
-        COMPARE(doubledouble::posinf().to_float(), std::numeric_limits<float>::infinity());
-        COMPARE(doubledouble::neginf().to_float(), -std::numeric_limits<float>::infinity());
-        COMPARE(doubledouble::nan().to_float(), posnan);
+        COMPARE(doubledouble::posinf().to_float(), (float)posinf);
+        COMPARE(doubledouble::neginf().to_float(), (float)neginf);
+        COMPARE(doubledouble::posnan().to_float(), posnan);
+        COMPARE(doubledouble::negnan().to_float(), negnan);
 
-        COMPARE(doubledouble(0).to_double(), 0.0);
+        COMPARE(doubledouble().to_double(), 0.0);
+        COMPARE(doubledouble(0.0).to_double(), 0.0);
+        COMPARE(doubledouble(-0.0).to_double(), -0.0);
         COMPARE(doubledouble(0.5).to_double(), 0.5);
         COMPARE(doubledouble(-0.5).to_double(), -0.5);
         COMPARE(doubledouble(0.5,0.125).to_double(), 0.625);
         COMPARE(doubledouble(-0.5,-0.125).to_double(), -0.625);
-        COMPARE(doubledouble::posinf().to_double(), std::numeric_limits<double>::infinity());
-        COMPARE(doubledouble::neginf().to_double(), -std::numeric_limits<double>::infinity());
+        COMPARE(doubledouble::posinf().to_double(), (double)posinf);
+        COMPARE(doubledouble::neginf().to_double(), (double)neginf);
         COMPARE(doubledouble::nan().to_double(), posnan);
 
+        COMPARE(doubledouble().to_long_double(), 0.0L);
+        COMPARE(doubledouble(0.0).to_long_double(), 0.0L);
+        COMPARE(doubledouble(-0.0).to_long_double(), -0.0L);
         COMPARE(doubledouble(0).to_long_double(), 0.0L);
         COMPARE(doubledouble(0.5).to_long_double(), 0.5L);
         COMPARE(doubledouble(-0.5).to_long_double(), -0.5L);
         COMPARE(doubledouble(0.5,0.125).to_long_double(), 0.625L);
         COMPARE(doubledouble(-0.5,-0.125).to_long_double(), -0.625L);
-        COMPARE(doubledouble::posinf().to_long_double(), std::numeric_limits<long double>::infinity());
-        COMPARE(doubledouble::neginf().to_long_double(), -std::numeric_limits<long double>::infinity());
+        COMPARE(doubledouble::posinf().to_long_double(), (long double)posinf);
+        COMPARE(doubledouble::neginf().to_long_double(), (long double)neginf);
         COMPARE(doubledouble::nan().to_long_double(), posnan);
-
-        COMPARE(std::signbit(doubledouble(0.0).to_double()), 0);
-        COMPARE(std::signbit(doubledouble(-0.0).to_double()), 1);
-        COMPARE(std::signbit(doubledouble(0.0).to_long_double()), 0);
-        COMPARE(std::signbit(doubledouble(-0.0).to_long_double()), 1);
     }
 
     SUBCASE("Converting to textual representations") {
@@ -106,18 +126,18 @@ TEST_CASE("Basic smoke tests") {
 
     SUBCASE("Constants") {
 
-        CHECK(doubledouble::e.to_float() == (float)std::numbers::e);
-        CHECK(doubledouble::log2e.to_float() == (float)std::numbers::log2e);
-        CHECK(doubledouble::log10e.to_float() == (float)std::numbers::log10e);
-        CHECK(doubledouble::pi.to_float() == (float)std::numbers::pi);
-        CHECK(doubledouble::inv_pi.to_float() == (float)std::numbers::inv_pi);
-        CHECK(doubledouble::inv_sqrtpi.to_float() == (float)std::numbers::inv_sqrtpi);
-        CHECK(doubledouble::ln2.to_float() == (float)std::numbers::ln2);
-        CHECK(doubledouble::ln10.to_float() == (float)std::numbers::ln10);
-        CHECK(doubledouble::sqrt2.to_float() == (float)std::numbers::sqrt2);
-        CHECK(doubledouble::sqrt3.to_float() == (float)std::numbers::sqrt3);
-        CHECK(doubledouble::inv_sqrt3.to_float() == (float)std::numbers::inv_sqrt3);
-        CHECK(doubledouble::egamma.to_float() == (float)std::numbers::egamma);
-        CHECK(doubledouble::phi.to_float() == (float)std::numbers::phi);
+        COMPARE(doubledouble::e.to_float(), (float)std::numbers::e);
+        COMPARE(doubledouble::log2e.to_float(), (float)std::numbers::log2e);
+        COMPARE(doubledouble::log10e.to_float(), (float)std::numbers::log10e);
+        COMPARE(doubledouble::pi.to_float(), (float)std::numbers::pi);
+        COMPARE(doubledouble::inv_pi.to_float(), (float)std::numbers::inv_pi);
+        COMPARE(doubledouble::inv_sqrtpi.to_float(), (float)std::numbers::inv_sqrtpi);
+        COMPARE(doubledouble::ln2.to_float(), (float)std::numbers::ln2);
+        COMPARE(doubledouble::ln10.to_float(), (float)std::numbers::ln10);
+        COMPARE(doubledouble::sqrt2.to_float(), (float)std::numbers::sqrt2);
+        COMPARE(doubledouble::sqrt3.to_float(), (float)std::numbers::sqrt3);
+        COMPARE(doubledouble::inv_sqrt3.to_float(), (float)std::numbers::inv_sqrt3);
+        COMPARE(doubledouble::egamma.to_float(), (float)std::numbers::egamma);
+        COMPARE(doubledouble::phi.to_float(), (float)std::numbers::phi);
     }
 }

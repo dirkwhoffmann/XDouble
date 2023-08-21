@@ -7,71 +7,70 @@ TEST_CASE("Basic smoke tests") {
 
         doubledouble x = 2.25;
 
-        CHECK(doubledouble().to_double() == 0.0);
-        CHECK(doubledouble(0.5).to_double() == 0.5);
-        CHECK(doubledouble(0.5,0.125).to_double() == 0.625);
-        CHECK(doubledouble(x).to_double() == 2.25);
-        CHECK(doubledouble("3.5").to_double() == 3.5);
-        CHECK(doubledouble("-3.5").to_double() == -3.5);
-        CHECK(doubledouble(std::numeric_limits<double>::infinity()) == doubledouble::inf());
-        CHECK(doubledouble(-std::numeric_limits<double>::infinity()) == -doubledouble::inf());
-        CHECK(doubledouble(std::numeric_limits<double>::quiet_NaN()).isnan());
+        COMPARE(doubledouble(0.5).to_double(), 0.5);
+        COMPARE(doubledouble(0.5,0.125).to_double(), 0.625);
+        COMPARE(doubledouble(x).to_double(), 2.25);
+        COMPARE(doubledouble("3.5").to_double(), 3.5);
+        COMPARE(doubledouble("-3.5").to_double(), -3.5);
+        COMPARE(doubledouble(posinf), doubledouble::posinf());
+        COMPARE(doubledouble(neginf), doubledouble::neginf());
+        COMPARE(doubledouble(std::numeric_limits<double>::quiet_NaN()), posnan);
     }
 
     SUBCASE("Conversion functions") {
 
-        CHECK(doubledouble(0.5).to_int() == 0);
-        CHECK(doubledouble(3.14).to_int() == 3);
-        CHECK(doubledouble(-3.14).to_int() == -3);
-        CHECK(doubledouble::inf().to_int() == INT_MAX);
-        CHECK((-doubledouble::inf()).to_int() == INT_MIN);
-        CHECK(doubledouble::nan().to_int() == 0);
+        COMPARE(doubledouble(0.5).to_int(), 0);
+        COMPARE(doubledouble(3.14).to_int(), 3);
+        COMPARE(doubledouble(-3.14).to_int(), -3);
+        COMPARE(doubledouble::posinf().to_int(), INT_MAX);
+        COMPARE(doubledouble::neginf().to_int(), INT_MIN);
+        COMPARE(doubledouble::nan().to_int(), 0);
 
-        CHECK(doubledouble(0.5).to_long() == 0);
-        CHECK(doubledouble(3.14).to_long() == 3);
-        CHECK(doubledouble(-3.14).to_long() == -3);
-        CHECK(doubledouble::inf().to_long() == LONG_MAX);
-        CHECK((-doubledouble::inf()).to_long() == LONG_MIN);
-        CHECK(doubledouble::nan().to_long() == 0);
+        COMPARE(doubledouble(0.5).to_long(), 0);
+        COMPARE(doubledouble(3.14).to_long(), 3);
+        COMPARE(doubledouble(-3.14).to_long(), -3);
+        COMPARE(doubledouble::posinf().to_long(), LONG_MAX);
+        COMPARE(doubledouble::neginf().to_long(), LONG_MIN);
+        COMPARE(doubledouble::nan().to_long(), 0);
 
-        CHECK(doubledouble(0.5).to_long_long() == 0);
-        CHECK(doubledouble(3.14).to_long_long() == 3);
-        CHECK(doubledouble(-3.14).to_long_long() == -3);
-        CHECK(doubledouble::inf().to_long_long() == LLONG_MAX);
-        CHECK((-doubledouble::inf()).to_long_long() == LLONG_MIN);
-        CHECK(doubledouble::nan().to_long_long() == 0);
+        COMPARE(doubledouble(0.5).to_long_long(), 0);
+        COMPARE(doubledouble(3.14).to_long_long(), 3);
+        COMPARE(doubledouble(-3.14).to_long_long(), -3);
+        COMPARE(doubledouble::posinf().to_long_long(), LLONG_MAX);
+        COMPARE(doubledouble::neginf().to_long_long(), LLONG_MIN);
+        COMPARE(doubledouble::nan().to_long_long(), 0);
 
-        CHECK(doubledouble(0).to_float() == 0.0f);
-        CHECK(doubledouble(0.5).to_float() == 0.5f);
-        CHECK(doubledouble(-0.5).to_float() == -0.5);
-        CHECK(doubledouble(0.5,0.125).to_float() == 0.625f);
-        CHECK(doubledouble(-0.5,-0.125).to_float() == -0.625);
-        CHECK(doubledouble::inf().to_float() == std::numeric_limits<float>::infinity());
-        CHECK((-doubledouble::inf()).to_float() == -std::numeric_limits<float>::infinity());
-        CHECK(std::isnan(doubledouble::nan().to_float()));
+        COMPARE(doubledouble(0).to_float(), 0.0f);
+        COMPARE(doubledouble(0.5).to_float(), 0.5f);
+        COMPARE(doubledouble(-0.5).to_float(), -0.5);
+        COMPARE(doubledouble(0.5,0.125).to_float(), 0.625f);
+        COMPARE(doubledouble(-0.5,-0.125).to_float(), -0.625);
+        COMPARE(doubledouble::posinf().to_float(), std::numeric_limits<float>::infinity());
+        COMPARE(doubledouble::neginf().to_float(), -std::numeric_limits<float>::infinity());
+        COMPARE(doubledouble::nan().to_float(), posnan);
 
-        CHECK(doubledouble(0).to_double() == 0.0);
-        CHECK(doubledouble(0.5).to_double() == 0.5);
-        CHECK(doubledouble(-0.5).to_double() == -0.5);
-        CHECK(doubledouble(0.5,0.125).to_double() == 0.625);
-        CHECK(doubledouble(-0.5,-0.125).to_double() == -0.625);
-        CHECK(doubledouble::inf().to_double() == std::numeric_limits<double>::infinity());
-        CHECK((-doubledouble::inf()).to_double() == -std::numeric_limits<double>::infinity());
-        CHECK(std::isnan(doubledouble::nan().to_double()));
+        COMPARE(doubledouble(0).to_double(), 0.0);
+        COMPARE(doubledouble(0.5).to_double(), 0.5);
+        COMPARE(doubledouble(-0.5).to_double(), -0.5);
+        COMPARE(doubledouble(0.5,0.125).to_double(), 0.625);
+        COMPARE(doubledouble(-0.5,-0.125).to_double(), -0.625);
+        COMPARE(doubledouble::posinf().to_double(), std::numeric_limits<double>::infinity());
+        COMPARE(doubledouble::neginf().to_double(), -std::numeric_limits<double>::infinity());
+        COMPARE(doubledouble::nan().to_double(), posnan);
 
-        CHECK(doubledouble(0).to_long_double() == 0.0L);
-        CHECK(doubledouble(0.5).to_long_double() == 0.5L);
-        CHECK(doubledouble(-0.5).to_long_double() == -0.5L);
-        CHECK(doubledouble(0.5,0.125).to_long_double() == 0.625L);
-        CHECK(doubledouble(-0.5,-0.125).to_long_double() == -0.625L);
-        CHECK(doubledouble::inf().to_long_double() == std::numeric_limits<long double>::infinity());
-        CHECK((-doubledouble::inf()).to_long_double() == -std::numeric_limits<long double>::infinity());
-        CHECK(std::isnan(doubledouble::nan().to_long_double()));
+        COMPARE(doubledouble(0).to_long_double(), 0.0L);
+        COMPARE(doubledouble(0.5).to_long_double(), 0.5L);
+        COMPARE(doubledouble(-0.5).to_long_double(), -0.5L);
+        COMPARE(doubledouble(0.5,0.125).to_long_double(), 0.625L);
+        COMPARE(doubledouble(-0.5,-0.125).to_long_double(), -0.625L);
+        COMPARE(doubledouble::posinf().to_long_double(), std::numeric_limits<long double>::infinity());
+        COMPARE(doubledouble::neginf().to_long_double(), -std::numeric_limits<long double>::infinity());
+        COMPARE(doubledouble::nan().to_long_double(), posnan);
 
-        CHECK(std::signbit(doubledouble(0.0).to_double()) == 0);
-        CHECK(std::signbit(doubledouble(-0.0).to_double()) == 1);
-        CHECK(std::signbit(doubledouble(0.0).to_long_double()) == 0);
-        CHECK(std::signbit(doubledouble(-0.0).to_long_double()) == 1);
+        COMPARE(std::signbit(doubledouble(0.0).to_double()), 0);
+        COMPARE(std::signbit(doubledouble(-0.0).to_double()), 1);
+        COMPARE(std::signbit(doubledouble(0.0).to_long_double()), 0);
+        COMPARE(std::signbit(doubledouble(-0.0).to_long_double()), 1);
     }
 
     SUBCASE("Converting to textual representations") {

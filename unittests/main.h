@@ -13,27 +13,18 @@ typedef XDouble<float> doublefloat;
 typedef XDouble<double> doubledouble;
 typedef XDouble<long double> longdoubledouble;
 
-static inline double rand_int()
-{
-    return double((rand() % 128) - 64.0);
+extern double posnan;
+extern double negnan;
+extern double posinf;
+extern double neginf;
+
+#define COMPARE(x,y) { \
+CHECK(signbit(x) == signbit(y)); \
+if (isnan(x)) { CHECK(isnan(y)); } else { CHECK(x == y); } \
 }
 
-static inline double rand_int_pos()
-{
-    return double((rand() % 128) + 1);
-}
-
-static inline double rand_frac()
-{
-    double r = rand_int(); return r == 0.0 ? 0.0 : 1.0 / r;
-}
-
-static inline double rand_double()
-{
-    return rand_int() + rand_frac();
-}
-
-static inline double rand_double_pos()
-{
-    return rand_int_pos() + rand_frac();
-}
+double rand_int();
+double rand_int_pos();
+double rand_frac();
+double rand_double();
+double rand_double_pos();

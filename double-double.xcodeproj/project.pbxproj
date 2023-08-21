@@ -19,6 +19,7 @@
 		503867762A9153FC0018498B /* classification_tests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503867662A8CD80F0018498B /* classification_tests.cpp */; };
 		503867792A91E2C20018498B /* constant_tests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503867772A91E2C20018498B /* constant_tests.cpp */; };
 		5051DEE82A876C4800EED9D7 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5051DEE72A876C4800EED9D7 /* main.cpp */; };
+		5094ED4D2A9333AC000D0BB9 /* explog_tests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503867592A8B75B40018498B /* explog_tests.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -166,6 +167,7 @@
 			files = (
 				503867732A9153F40018498B /* manipulation_tests.cpp in Sources */,
 				5051DEE82A876C4800EED9D7 /* main.cpp in Sources */,
+				5094ED4D2A9333AC000D0BB9 /* explog_tests.cpp in Sources */,
 				5038676E2A9153E40018498B /* arithmetic_tests.cpp in Sources */,
 				503867762A9153FC0018498B /* classification_tests.cpp in Sources */,
 				503867792A91E2C20018498B /* constant_tests.cpp in Sources */,

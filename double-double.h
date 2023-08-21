@@ -138,11 +138,11 @@ template <class T> XDouble<T> fma(const XDouble<T> &x, const XDouble<T> &y, cons
 
 template <class T> bool isfinite(const XDouble<T> &x);
 template <class T> bool isinf(const XDouble<T> &x);
-template <class T> bool isplusinf(const XDouble<T> &x);
+template <class T> bool isposinf(const XDouble<T> &x);
 template <class T> bool isminusinf(const XDouble<T> &x);
 template <class T> bool isnan(const XDouble<T> &x);
-template <class T> bool isplusnan(const XDouble<T> &x);
-template <class T> bool isminusnan(const XDouble<T> &x);
+template <class T> bool isposnan(const XDouble<T> &x);
+template <class T> bool isnegnan(const XDouble<T> &x);
 template <class T> bool isnormal(const XDouble<T> &x);
 template <class T> bool signbit(const XDouble<T> &x);
 
@@ -150,8 +150,8 @@ template <class T> bool isinteger(const XDouble<T> &x);
 template <class T> bool isoddinteger(const XDouble<T> &x);
 template <class T> bool iseveninteger(const XDouble<T> &x);
 template <class T> bool iszero(const XDouble<T> &x);
-template <class T> bool ispluszero(const XDouble<T> &x);
-template <class T> bool isminuszero(const XDouble<T> &x);
+template <class T> bool isposzero(const XDouble<T> &x);
+template <class T> bool isminzero(const XDouble<T> &x);
 template <class T> bool isone(const XDouble<T> &x);
 template <class T> bool ispositive(const XDouble<T> &x);
 template <class T> bool isnegative(const XDouble<T> &x);
@@ -742,11 +742,11 @@ template <class T> struct XDouble {
 
     bool isfinite() const { return xd::isfinite(*this); }
     bool isinf() const { return xd::isinf(*this); }
-    bool isplusinf() const { return xd::isplusinf(*this); }
-    bool isminusinf() const { return xd::isminusinf(*this); }
+    bool isposinf() const { return xd::isposinf(*this); }
+    bool isneginf() const { return xd::isminusinf(*this); }
     bool isnan() const { return xd::isnan(*this); }
-    bool isplusnan() const { return xd::isplusnan(*this); }
-    bool isminusnan() const { return xd::isminusnan(*this); }
+    bool isposnan() const { return xd::isposnan(*this); }
+    bool isnegnan() const { return xd::isnegnan(*this); }
     bool isnormal() const { return xd::isnormal(*this); }
     bool signbit() const { return xd::signbit(*this); }
 
@@ -754,8 +754,8 @@ template <class T> struct XDouble {
     bool isoddinteger() const { return xd::isoddinteger(*this); }
     bool iseveninteger() const { return xd::iseveninteger(*this); }
     bool iszero() const { return xd::iszero(*this); }
-    bool ispluszero() const { return xd::ispluszero(*this); }
-    bool isminuszero() const { return xd::isminuszero(*this); }
+    bool isposzero() const { return xd::isposzero(*this); }
+    bool isnegzero() const { return xd::isminzero(*this); }
     bool isone() const { return xd::isone(*this); }
     bool ispositive() const { return xd::ispositive(*this); }
     bool isnegative() const { return xd::isnegative(*this); }
@@ -953,19 +953,19 @@ pow(const XDouble<T> &base, const XDouble<T> &exponent)
     if (base.isfinite() && base.isnegative() && exponent.isfinite() && !exponent.isinteger()) {
         return XDouble<T>::nan();                   // (11)
     }
-    if (exponent.isminusinf() && base.abs() < 1.0) {
+    if (exponent.isneginf() && base.abs() < 1.0) {
         return XDouble<T>::inf();                   // (12)
     }
-    if (exponent.isminusinf() && base.abs() > 1.0) {
+    if (exponent.isneginf() && base.abs() > 1.0) {
         return 0.0;                                 // (13)
     }
-    if (exponent.isplusinf() && base.abs() < 1.0) {
+    if (exponent.isposinf() && base.abs() < 1.0) {
         return 0.0;                                 // (14)
     }
-    if (exponent.isplusinf() && base.abs() > 1.0) {
+    if (exponent.isposinf() && base.abs() > 1.0) {
         return XDouble<T>::inf();                   // (15)
     }
-    if (base.isminusinf()) {
+    if (base.isneginf()) {
 
         if (exponent.isnegative() && exponent.isoddinteger()) {
             return -0.0;                            // (16)
@@ -980,7 +980,7 @@ pow(const XDouble<T> &base, const XDouble<T> &exponent)
             return XDouble<T>::inf();               // (19)
         }
     }
-    if (base.isplusinf()) {
+    if (base.isposinf()) {
 
         if (exponent < 0.0) {
             return 0.0;                             // (20)
@@ -1303,7 +1303,7 @@ isinf(const XDouble<T> &x)
 }
 
 template <class T> inline bool
-isplusinf(const XDouble<T> &x)
+isposinf(const XDouble<T> &x)
 {
     return isinf(x) && ispositive(x);
 }
@@ -1321,13 +1321,13 @@ isnan(const XDouble<T> &x)
 }
 
 template <class T> inline bool
-isplusnan(const XDouble<T> &x)
+isposnan(const XDouble<T> &x)
 {
     return isnan(x) && ispositive(x);
 }
 
 template <class T> inline bool
-isminusnan(const XDouble<T> &x)
+isnegnan(const XDouble<T> &x)
 {
     return isnan(x) && isnegative(x);
 }
@@ -1369,13 +1369,13 @@ iszero(const XDouble<T> &x)
 }
 
 template <class T> inline bool
-ispluszero(const XDouble<T> &x)
+isposzero(const XDouble<T> &x)
 {
     return iszero(x) && signbit(x) == 0;
 }
 
 template <class T> inline bool
-isminuszero(const XDouble<T> &x)
+isminzero(const XDouble<T> &x)
 {
     return iszero(x) && signbit(x) == 1;
 }

@@ -30,22 +30,22 @@ TEST_CASE("Power functions") {
 
             doubledouble base = -doubledouble::inf();
 
-            CHECK(base.pow(-doubledouble::inf()).ispluszero());
-            CHECK(base.pow(-2.0).ispluszero());
-            CHECK(base.pow(-1.5).ispluszero());
-            CHECK(base.pow(-1.0).isminuszero());
-            CHECK(base.pow(-0.5).ispluszero());
+            CHECK(base.pow(-doubledouble::inf()).isposzero());
+            CHECK(base.pow(-2.0).isposzero());
+            CHECK(base.pow(-1.5).isposzero());
+            CHECK(base.pow(-1.0).isnegzero());
+            CHECK(base.pow(-0.5).isposzero());
             CHECK(base.pow(0.0) == 1.0);
-            CHECK(base.pow(0.5).isplusinf());
-            CHECK(base.pow(1.0).isminusinf());
-            CHECK(base.pow(1.5).isplusinf());
-            CHECK(base.pow(2.0).isplusinf());
-            CHECK(base.pow(doubledouble::inf()).isplusinf());
+            CHECK(base.pow(0.5).isposinf());
+            CHECK(base.pow(1.0).isneginf());
+            CHECK(base.pow(1.5).isposinf());
+            CHECK(base.pow(2.0).isposinf());
+            CHECK(base.pow(doubledouble::inf()).isposinf());
             CHECK(base.pow(doubledouble::nan()).isnan());
 
             base = doubledouble(-2.0);
 
-            CHECK(base.pow(-doubledouble::inf()).ispluszero());
+            CHECK(base.pow(-doubledouble::inf()).isposzero());
             CHECK(base.pow(-2.0) == 0.25);
             CHECK(base.pow(-1.5).isnan());
             CHECK(base.pow(-1.0) == -0.5);
@@ -60,7 +60,7 @@ TEST_CASE("Power functions") {
 
             base = doubledouble(-1.5);
 
-            CHECK(base.pow(-doubledouble::inf()).ispluszero());
+            CHECK(base.pow(-doubledouble::inf()).isposzero());
             CHECK(base.pow(-2.0).to_string(4) == "0.4444");
             CHECK(base.pow(-1.5).isnan());
             CHECK(base.pow(-1.0).to_string(4) == "-0.6666");
@@ -100,7 +100,7 @@ TEST_CASE("Power functions") {
             CHECK(base.pow(1.0) == -0.5);
             CHECK(base.pow(1.5).isnan());
             CHECK(base.pow(2.0) == 0.25);
-            CHECK(base.pow(doubledouble::inf()).ispluszero());
+            CHECK(base.pow(doubledouble::inf()).isposzero());
             CHECK(base.pow(doubledouble::nan()).isnan());
 
             base = doubledouble(0.0);
@@ -111,11 +111,11 @@ TEST_CASE("Power functions") {
             CHECK(base.pow(-1.0) == doubledouble::inf());
             CHECK(base.pow(-0.5) == doubledouble::inf());
             CHECK(base.pow(0.0) == 1.0);
-            CHECK(base.pow(0.5).ispluszero());
-            CHECK(base.pow(1.0).ispluszero());
-            CHECK(base.pow(1.5).ispluszero());
-            CHECK(base.pow(2.0).ispluszero());
-            CHECK(base.pow(doubledouble::inf()).ispluszero());
+            CHECK(base.pow(0.5).isposzero());
+            CHECK(base.pow(1.0).isposzero());
+            CHECK(base.pow(1.5).isposzero());
+            CHECK(base.pow(2.0).isposzero());
+            CHECK(base.pow(doubledouble::inf()).isposzero());
             CHECK(base.pow(doubledouble::nan()).isnan());
 
             base = doubledouble(-0.0);
@@ -126,11 +126,11 @@ TEST_CASE("Power functions") {
             CHECK(base.pow(-1.0) == -doubledouble::inf());
             CHECK(base.pow(-0.5) == doubledouble::inf());
             CHECK(base.pow(0.0) == 1.0);
-            CHECK(base.pow(0.5).ispluszero());
-            CHECK(base.pow(1.0).isminuszero());
-            CHECK(base.pow(1.5).ispluszero());
-            CHECK(base.pow(2.0).ispluszero());
-            CHECK(base.pow(doubledouble::inf()).ispluszero());
+            CHECK(base.pow(0.5).isposzero());
+            CHECK(base.pow(1.0).isnegzero());
+            CHECK(base.pow(1.5).isposzero());
+            CHECK(base.pow(2.0).isposzero());
+            CHECK(base.pow(doubledouble::inf()).isposzero());
             CHECK(base.pow(doubledouble::nan()).isnan());
 
             base = doubledouble(0.5);
@@ -145,7 +145,7 @@ TEST_CASE("Power functions") {
             CHECK(base.pow(1.0) == 0.5);
             CHECK(base.pow(1.5).to_string(4) == "0.3535");
             CHECK(base.pow(2.0) == 0.25);
-            CHECK(base.pow(doubledouble::inf()).ispluszero());
+            CHECK(base.pow(doubledouble::inf()).isposzero());
             CHECK(base.pow(doubledouble::nan()).isnan());
 
             base = doubledouble(1.0);
@@ -165,7 +165,7 @@ TEST_CASE("Power functions") {
 
             base = doubledouble(1.5);
 
-            CHECK(base.pow(-doubledouble::inf()).ispluszero());
+            CHECK(base.pow(-doubledouble::inf()).isposzero());
             CHECK(base.pow(-2.0).to_string(4) == "0.4444");
             CHECK(base.pow(-1.5).to_string(4) == "0.5443");
             CHECK(base.pow(-1.0).to_string(4) == "0.6666");
@@ -175,12 +175,12 @@ TEST_CASE("Power functions") {
             CHECK(base.pow(1.0) == 1.5);
             CHECK(base.pow(1.5).to_string(4) == "1.8371");
             CHECK(base.pow(2.0) == 2.25);
-            CHECK(base.pow(doubledouble::inf()).isplusinf());
+            CHECK(base.pow(doubledouble::inf()).isposinf());
             CHECK(base.pow(doubledouble::nan()).isnan());
 
             base = doubledouble(2.0);
 
-            CHECK(base.pow(-doubledouble::inf()).ispluszero());
+            CHECK(base.pow(-doubledouble::inf()).isposzero());
             CHECK(base.pow(-2.0).to_string(4) == "0.2500");
             CHECK(base.pow(-1.5).to_string(4) == "0.3535");
             CHECK(base.pow(-1.0).to_string(4) == "0.5000");
@@ -190,16 +190,16 @@ TEST_CASE("Power functions") {
             CHECK(base.pow(1.0).to_string(4) == "2.0000");
             CHECK(base.pow(1.5).to_string(4) == "2.8284");
             CHECK(base.pow(2.0).to_string(4) == "4.0000");
-            CHECK(base.pow(doubledouble::inf()).isplusinf());
+            CHECK(base.pow(doubledouble::inf()).isposinf());
             CHECK(base.pow(doubledouble::nan()).isnan());
 
             base = doubledouble::inf();
 
-            CHECK(base.pow(-doubledouble::inf()).ispluszero());
-            CHECK(base.pow(-2.0).ispluszero());
-            CHECK(base.pow(-1.5).ispluszero());
-            CHECK(base.pow(-1.0).ispluszero());
-            CHECK(base.pow(-0.5).ispluszero());
+            CHECK(base.pow(-doubledouble::inf()).isposzero());
+            CHECK(base.pow(-2.0).isposzero());
+            CHECK(base.pow(-1.5).isposzero());
+            CHECK(base.pow(-1.0).isposzero());
+            CHECK(base.pow(-0.5).isposzero());
             CHECK(base.pow(0.0) == 1.0);
             CHECK(base.pow(0.5).isinf());
             CHECK(base.pow(1.0).isinf());

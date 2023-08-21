@@ -32,6 +32,34 @@ TEST_CASE("Classification functions") {
         CHECK((-doubledouble::inf()).isinf() == std::isinf(-std::numeric_limits<double>::infinity()));
     }
 
+    SUBCASE("isposinf") {
+
+        CHECK(doubledouble(0.0).isposinf() == false);
+        CHECK(doubledouble(-0.0).isposinf() == false);
+        CHECK((-doubledouble(0.0)).isposinf() == false);
+        CHECK(doubledouble(42.0).isposinf() == false);
+        CHECK(doubledouble(-42.0).isposinf() == false);
+        CHECK((-doubledouble(42.0)).isposinf() == false);
+        CHECK(doubledouble::nan().isposinf() == false);
+        CHECK((-doubledouble::nan()).isposinf() == false);
+        CHECK(doubledouble::inf().isposinf() == true);
+        CHECK((-doubledouble::inf()).isposinf() == false);
+    }
+
+    SUBCASE("isneginf") {
+
+        CHECK(doubledouble(0.0).isneginf() == false);
+        CHECK(doubledouble(-0.0).isneginf() == false);
+        CHECK((-doubledouble(0.0)).isneginf() == false);
+        CHECK(doubledouble(42.0).isneginf() == false);
+        CHECK(doubledouble(-42.0).isneginf() == false);
+        CHECK((-doubledouble(42.0)).isneginf() == false);
+        CHECK(doubledouble::nan().isneginf() == false);
+        CHECK((-doubledouble::nan()).isneginf() == false);
+        CHECK(doubledouble::inf().isneginf() == false);
+        CHECK((-doubledouble::inf()).isneginf() == true);
+    }
+
     SUBCASE("isnan") {
 
         CHECK(doubledouble(0.0).isnan() == std::isnan(0.0));
@@ -88,32 +116,32 @@ TEST_CASE("Classification functions") {
         CHECK((-doubledouble::inf()).iszero() == false);
     }
 
-    SUBCASE("ispluszero") {
+    SUBCASE("isposzero") {
 
-        CHECK(doubledouble(0.0).ispluszero() == true);
-        CHECK(doubledouble(-0.0).ispluszero() == false);
-        CHECK((-doubledouble(0.0)).ispluszero() == false);
-        CHECK(doubledouble(1.0).ispluszero() == false);
-        CHECK(doubledouble(-1.0).ispluszero() == false);
-        CHECK((-doubledouble(1.0)).ispluszero() == false);
-        CHECK(doubledouble::nan().ispluszero() == false);
-        CHECK((-doubledouble::nan()).ispluszero() == false);
-        CHECK(doubledouble::inf().ispluszero() == false);
-        CHECK((-doubledouble::inf()).ispluszero() == false);
+        CHECK(doubledouble(0.0).isposzero() == true);
+        CHECK(doubledouble(-0.0).isposzero() == false);
+        CHECK((-doubledouble(0.0)).isposzero() == false);
+        CHECK(doubledouble(1.0).isposzero() == false);
+        CHECK(doubledouble(-1.0).isposzero() == false);
+        CHECK((-doubledouble(1.0)).isposzero() == false);
+        CHECK(doubledouble::nan().isposzero() == false);
+        CHECK((-doubledouble::nan()).isposzero() == false);
+        CHECK(doubledouble::inf().isposzero() == false);
+        CHECK((-doubledouble::inf()).isposzero() == false);
     }
 
-    SUBCASE("isminuszero") {
+    SUBCASE("isnegzero") {
 
-        CHECK(doubledouble(0.0).isminuszero() == false);
-        CHECK(doubledouble(-0.0).isminuszero() == true);
-        CHECK((-doubledouble(0.0)).isminuszero() == true);
-        CHECK(doubledouble(1.0).isminuszero() == false);
-        CHECK(doubledouble(-1.0).isminuszero() == false);
-        CHECK((-doubledouble(1.0)).isminuszero() == false);
-        CHECK(doubledouble::nan().isminuszero() == false);
-        CHECK((-doubledouble::nan()).isminuszero() == false);
-        CHECK(doubledouble::inf().isminuszero() == false);
-        CHECK((-doubledouble::inf()).isminuszero() == false);
+        CHECK(doubledouble(0.0).isnegzero() == false);
+        CHECK(doubledouble(-0.0).isnegzero() == true);
+        CHECK((-doubledouble(0.0)).isnegzero() == true);
+        CHECK(doubledouble(1.0).isnegzero() == false);
+        CHECK(doubledouble(-1.0).isnegzero() == false);
+        CHECK((-doubledouble(1.0)).isnegzero() == false);
+        CHECK(doubledouble::nan().isnegzero() == false);
+        CHECK((-doubledouble::nan()).isnegzero() == false);
+        CHECK(doubledouble::inf().isnegzero() == false);
+        CHECK((-doubledouble::inf()).isnegzero() == false);
     }
 
     SUBCASE("isone") {

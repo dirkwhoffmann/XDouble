@@ -17,6 +17,12 @@ TEST_CASE("Floating-point manipulation functions") {
         CHECK(doubledouble::inf().copysign(x) == doubledouble::inf());
         CHECK(doubledouble::inf().copysign(y) == -doubledouble::inf());
         CHECK(doubledouble::nan().copysign(x).isnan());
+        CHECK(doubledouble::nan().copysign(x).isposnan());
+        CHECK(doubledouble::nan().copysign(x).signbit() == 0);
         CHECK(doubledouble::nan().copysign(y).isnan());
+        CHECK(doubledouble::nan().copysign(y).isnegnan());
+        CHECK(doubledouble::nan().copysign(y).signbit() == 1);
+        CHECK(doubledouble::nan().copysign(doubledouble::nan()).isposnan());
+        CHECK(doubledouble::nan().copysign(-doubledouble::nan()).isnegnan());
     }
 }

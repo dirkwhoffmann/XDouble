@@ -503,6 +503,11 @@ template <class T> struct XDouble {
             sum.l += l + rhs.l;
             *this = quickTwoSum(sum.h, sum.l);
 
+        } else {
+
+            *this = XDouble<T>(h + rhs.h);
+        }
+        /*
         } else if (isnan() || rhs.isnan()) {
 
             *this = nan();
@@ -515,7 +520,7 @@ template <class T> struct XDouble {
 
             *this = rhs;
         }
-
+        */
         return *this;
     }
 

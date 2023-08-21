@@ -6,13 +6,11 @@ TEST_CASE("Basic arithmetic") {
 
     SUBCASE("Negation") {
 
-        CHECK((-doubledouble(0.0)) == doubledouble(0.0));
-        CHECK((-doubledouble(0.0)).signbit() == std::signbit(-double(0.0)));
-        CHECK((-doubledouble(42.0)).to_double() == -42.0);
-        CHECK((-doubledouble(-42.0)).to_double() == 42.0);
-        CHECK((-doubledouble::nan()).isnan());
-        CHECK((-doubledouble::inf()).isinf());
-        CHECK((-doubledouble::inf()).signbit() == 1);
+        COMPARE((-doubledouble(0.0)), -0.0);
+        COMPARE((-doubledouble(42.0)).to_double(), -42.0);
+        COMPARE((-doubledouble(-42.0)).to_double(), 42.0);
+        COMPARE((-doubledouble::nan()), negnan);
+        COMPARE((-doubledouble::inf()), neginf);
     }
 
     SUBCASE("Addition") {
@@ -22,59 +20,43 @@ TEST_CASE("Basic arithmetic") {
             for (int i = 0; i < NUM_TESTS; i++) {
 
                 auto x = rand_double(), y = rand_double();
-                CHECK((doubledouble(x) + doubledouble(y)).to_float() == float(x + y));
+                COMPARE((doubledouble(x) + doubledouble(y)).to_float(), float(x + y));
             }
         }
 
         SUBCASE("Special cases") {
 
-            CHECK((doubledouble(123.0) + doubledouble(123.0)).isfinite());
-            CHECK((doubledouble(123.0) + doubledouble(-123.0)).isfinite());
-            CHECK((doubledouble(123.0) + doubledouble::nan()).isnan());
-            CHECK((doubledouble(123.0) + doubledouble::inf()).isinf());
-            CHECK((doubledouble(123.0) + -doubledouble::inf()).isinf());
+            COMPARE(doubledouble(123.0) + doubledouble(123.0), 246.0);
+            COMPARE(doubledouble(123.0) + doubledouble(-123.0), 0.0);
+            COMPARE(doubledouble(123.0) + doubledouble::posnan(), posnan);
+            COMPARE(doubledouble(123.0) + doubledouble::negnan(), negnan);
+            COMPARE(doubledouble(123.0) + doubledouble::posinf(), posinf);
+            COMPARE(doubledouble(123.0) + doubledouble::neginf(), neginf);
 
-            CHECK((doubledouble(-123.0) + doubledouble(123.0)).isfinite());
-            CHECK((doubledouble(-123.0) + doubledouble(-123.0)).isfinite());
-            CHECK((doubledouble(-123.0) + doubledouble::nan()).isnan());
-            CHECK((doubledouble(-123.0) + doubledouble::inf()).isinf());
-            CHECK((doubledouble(-123.0) + -doubledouble::inf()).isinf());
+            COMPARE(doubledouble(-123.0) + doubledouble(123.0), 0.0);
+            COMPARE(doubledouble(-123.0) + doubledouble(-123.0), -246.0);
+            COMPARE(doubledouble(-123.0) + doubledouble::posnan(), posnan);
+            COMPARE(doubledouble(-123.0) + doubledouble::negnan(), negnan);
+            COMPARE(doubledouble(-123.0) + doubledouble::posinf(), posinf);
+            COMPARE(doubledouble(-123.0) + doubledouble::neginf(), neginf);
 
-            CHECK((doubledouble::nan() + doubledouble(123.0)).isnan());
-            CHECK((doubledouble::nan() + doubledouble(-123.0)).isnan());
-            CHECK((doubledouble::nan() + doubledouble::nan()).isnan());
-            CHECK((doubledouble::nan() + doubledouble::inf()).isnan());
-            CHECK((doubledouble::nan() + -doubledouble::inf()).isnan());
+            COMPARE(doubledouble::nan() + doubledouble(123.0), posnan);
+            COMPARE(doubledouble::nan() + doubledouble(-123.0), posnan);
+            COMPARE(doubledouble::nan() + doubledouble::nan(), posnan);
+            COMPARE(doubledouble::nan() + doubledouble::posinf(), posnan);
+            COMPARE(doubledouble::nan() + doubledouble::neginf(), posnan);
 
-            CHECK((doubledouble::inf() + doubledouble(123.0)).isinf());
-            CHECK((doubledouble::inf() + doubledouble(-123.0)).isinf());
-            CHECK((doubledouble::inf() + doubledouble::nan()).isnan());
-            CHECK((doubledouble::inf() + doubledouble::inf()).isinf());
-            CHECK((doubledouble::inf() + -doubledouble::inf()).isnan());
+            COMPARE(doubledouble::posinf() + doubledouble(123.0), posinf);
+            COMPARE(doubledouble::posinf() + doubledouble(-123.0), posinf);
+            COMPARE(doubledouble::posinf() + doubledouble::nan(), posnan);
+            COMPARE(doubledouble::posinf() + doubledouble::posinf(), posinf);
+            COMPARE(doubledouble::posinf() + doubledouble::neginf(), posnan);
 
-            CHECK((-doubledouble::inf() + doubledouble(123.0)).isinf());
-            CHECK((-doubledouble::inf() + doubledouble(-123.0)).isinf());
-            CHECK((-doubledouble::inf() + doubledouble::nan()).isnan());
-            CHECK((-doubledouble::inf() + doubledouble::inf()).isnan());
-            CHECK((-doubledouble::inf() + -doubledouble::inf()).isinf());
-
-            CHECK((doubledouble(123.0) + doubledouble(123.0)).signbit() == 0);
-            CHECK((doubledouble(123.0) + doubledouble(-123.0)).signbit() == 0);
-            CHECK((doubledouble(123.0) + doubledouble::inf()).signbit() == 0);
-            CHECK((doubledouble(123.0) + -doubledouble::inf()).signbit() == 1);
-
-            CHECK((doubledouble(-123.0) + doubledouble(123.0)).signbit() == 0);
-            CHECK((doubledouble(-123.0) + doubledouble(-123.0)).signbit() == 1);
-            CHECK((doubledouble(-123.0) + doubledouble::inf()).signbit() == 0);
-            CHECK((doubledouble(-123.0) + -doubledouble::inf()).signbit() == 1);
-
-            CHECK((doubledouble::inf() + doubledouble(123.0)).signbit() == 0);
-            CHECK((doubledouble::inf() + doubledouble(-123.0)).signbit() == 0);
-            CHECK((doubledouble::inf() + doubledouble::inf()).signbit() == 0);
-
-            CHECK((-doubledouble::inf() + doubledouble(123.0)).signbit() == 1);
-            CHECK((-doubledouble::inf() + doubledouble(-123.0)).signbit() == 1);
-            CHECK((-doubledouble::inf() + -doubledouble::inf()).signbit() == 1);
+            COMPARE(doubledouble::neginf() + doubledouble(123.0), neginf);
+            COMPARE(doubledouble::neginf() + doubledouble(-123.0), neginf);
+            COMPARE(doubledouble::neginf() + doubledouble::nan(), posnan);
+            COMPARE(doubledouble::neginf() + doubledouble::posinf(), posnan);
+            COMPARE(doubledouble::neginf() + doubledouble::neginf(), neginf);
         }
     }
 

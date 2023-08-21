@@ -123,21 +123,4 @@ TEST_CASE("Basic smoke tests") {
         CHECK(doubledouble::inf().to_string(0) == "inf");
         CHECK((-doubledouble::inf()).to_string(0) == "-inf");
     }
-
-    SUBCASE("Constants") {
-
-        COMPARE(doubledouble::e.to_float(), (float)std::numbers::e);
-        COMPARE(doubledouble::log2e.to_float(), (float)std::numbers::log2e);
-        COMPARE(doubledouble::log10e.to_float(), (float)std::numbers::log10e);
-        COMPARE(doubledouble::pi.to_float(), (float)std::numbers::pi);
-        COMPARE(doubledouble::inv_pi.to_float(), (float)std::numbers::inv_pi);
-        COMPARE(doubledouble::inv_sqrtpi.to_float(), (float)std::numbers::inv_sqrtpi);
-        COMPARE(doubledouble::ln2.to_float(), (float)std::numbers::ln2);
-        COMPARE(doubledouble::ln10.to_float(), (float)std::numbers::ln10);
-        COMPARE(doubledouble::sqrt2.to_float(), (float)std::numbers::sqrt2);
-        COMPARE(doubledouble::sqrt3.to_float(), (float)std::numbers::sqrt3);
-        COMPARE(doubledouble::inv_sqrt3.to_float(), (float)std::numbers::inv_sqrt3);
-        COMPARE(doubledouble::egamma.to_float(), (float)std::numbers::egamma);
-        COMPARE(doubledouble::phi.to_float(), (float)std::numbers::phi);
-    }
 }

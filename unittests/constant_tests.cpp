@@ -17,6 +17,20 @@ TEST_CASE("Constants") {
         CHECK(doublefloat::inv_sqrt3.to_string(14)      == "0.57735026918962");
         CHECK(doublefloat::egamma.to_string(14)         == "0.57721566490153");
         CHECK(doublefloat::phi.to_string(14)            == "1.61803398874989");
+
+        COMPARE(doubledouble::e.to_float(),             (float)std::numbers::e);
+        COMPARE(doubledouble::log2e.to_float(),         (float)std::numbers::log2e);
+        COMPARE(doubledouble::log10e.to_float(),        (float)std::numbers::log10e);
+        COMPARE(doubledouble::pi.to_float(),            (float)std::numbers::pi);
+        COMPARE(doubledouble::inv_pi.to_float(),        (float)std::numbers::inv_pi);
+        COMPARE(doubledouble::inv_sqrtpi.to_float(),    (float)std::numbers::inv_sqrtpi);
+        COMPARE(doubledouble::ln2.to_float(),           (float)std::numbers::ln2);
+        COMPARE(doubledouble::ln10.to_float(),          (float)std::numbers::ln10);
+        COMPARE(doubledouble::sqrt2.to_float(),         (float)std::numbers::sqrt2);
+        COMPARE(doubledouble::sqrt3.to_float(),         (float)std::numbers::sqrt3);
+        COMPARE(doubledouble::inv_sqrt3.to_float(),     (float)std::numbers::inv_sqrt3);
+        COMPARE(doubledouble::egamma.to_float(),        (float)std::numbers::egamma);
+        COMPARE(doubledouble::phi.to_float(),           (float)std::numbers::phi);
     }
 
     SUBCASE("double") {
@@ -33,5 +47,19 @@ TEST_CASE("Constants") {
         CHECK(doubledouble::inv_sqrt3.to_string(30)     == "0.577350269189625764509148780501");
         CHECK(doubledouble::egamma.to_string(30)        == "0.577215664901532860606512090082");
         CHECK(doubledouble::phi.to_string(30)           == "1.618033988749894848204586834365");
+
+        COMPARE(doubledouble::e.to_double(),            (double)std::numbers::e);
+        COMPARE(doubledouble::log2e.to_double(),        (double)std::numbers::log2e);
+        COMPARE(doubledouble::log10e.to_double(),       (double)std::numbers::log10e);
+        COMPARE(doubledouble::pi.to_double(),           (double)std::numbers::pi);
+        COMPARE(doubledouble::inv_pi.to_double(),       (double)std::numbers::inv_pi);
+        COMPARE(doubledouble::inv_sqrtpi.to_double(),   (double)std::numbers::inv_sqrtpi);
+        COMPARE(doubledouble::ln2.to_double(),          (double)std::numbers::ln2);
+        COMPARE(doubledouble::ln10.to_double(),         (double)std::numbers::ln10);
+        COMPARE(doubledouble::sqrt2.to_double(),        (double)std::numbers::sqrt2);
+        COMPARE(doubledouble::sqrt3.to_double(),        (double)std::numbers::sqrt3);
+        COMPARE(doubledouble::inv_sqrt3.to_double(),    (double)std::numbers::inv_sqrt3);
+        COMPARE(doubledouble::egamma.to_double(),       (double)std::numbers::egamma);
+        COMPARE(doubledouble::phi.to_double(),          (double)std::numbers::phi);
     }
 }

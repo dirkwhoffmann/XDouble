@@ -54,6 +54,8 @@
 		5051DEF32A87738C00EED9D7 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		5051DEF42A877BD400EED9D7 /* doctest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = doctest.h; sourceTree = "<group>"; };
 		5051DEF52A8785D800EED9D7 /* comparison_tests.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = comparison_tests.cpp; sourceTree = "<group>"; };
+		5094ED4E2A9373BF000D0BB9 /* example1.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = example1.cpp; sourceTree = "<group>"; };
+		5094ED4F2A9377A1000D0BB9 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,8 +72,10 @@
 		5051DEDB2A876C4800EED9D7 = {
 			isa = PBXGroup;
 			children = (
+				5094ED4F2A9377A1000D0BB9 /* CMakeLists.txt */,
 				5038676C2A8FAF0A0018498B /* double-double.entitlements */,
 				5051DEEF2A876D1D00EED9D7 /* double-double.h */,
+				5094ED4E2A9373BF000D0BB9 /* example1.cpp */,
 				5051DEE62A876C4800EED9D7 /* unittests */,
 				5051DEE52A876C4800EED9D7 /* Products */,
 			);

@@ -1,17 +1,5 @@
 cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
 
-#project(
-#  xdouble
-#  VERSION 0.9
-#  DESCRIPTION "A header-only double-double arithmetic library written in C++"
-#  HOMEPAGE_URL "https://www.dirkwhoffmann.de"
-#  LANGUAGES CXX C)
-
-# Set the optimization level (if not specified on the command line)
-if(NOT CMAKE_BUILD_TYPE)
-  set(CMAKE_BUILD_TYPE Release)
-endif()
-
 add_executable(unittester
 
     main.cpp
@@ -29,6 +17,8 @@ add_executable(unittester
     quaddouble_tests.cpp
 )
 
+target_include_directories(unittester PRIVATE ${CMAKE_SOURCE_DIR})
+
 # Specify compile options
 target_compile_options(unittester PUBLIC -Wall -Werror -Wno-unknown-pragmas)
 if(MSVC)
@@ -38,6 +28,5 @@ endif()
 
 enable_testing()
 
-target_include_directories(unittester PRIVATE ${CMAKE_SOURCE_DIR})
 add_test(xdouble example1)
 add_test(xdouble unittester)

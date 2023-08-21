@@ -286,17 +286,29 @@ template <class T> struct XDouble {
 
     int to_int() const
     {
-        return static_cast<int>(to_long_double());
+        if (isfinite()) return static_cast<int>(to_long_double());
+        if (isposinf()) return std::numeric_limits<int>::max();
+        if (isneginf()) return std::numeric_limits<int>::lowest();
+
+        return 0;
     }
 
     long to_long() const
     {
-        return static_cast<long>(to_long_double());
+        if (isfinite()) return static_cast<long>(to_long_double());
+        if (isposinf()) return std::numeric_limits<long>::max();
+        if (isneginf()) return std::numeric_limits<long>::lowest();
+
+        return 0;
     }
 
     long long to_long_long() const
     {
-        return static_cast<long long>(to_long_double());
+        if (isfinite()) return static_cast<long long>(to_long_double());
+        if (isposinf()) return std::numeric_limits<long long>::max();
+        if (isneginf()) return std::numeric_limits<long long>::lowest();
+
+        return 0;
     }
 
     float to_float() const

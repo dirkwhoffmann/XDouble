@@ -244,13 +244,13 @@ TEST_CASE("Basic arithmetic") {
 
         SUBCASE("Division by zero") {
 
-            COMPARE (doubledouble(42.0) / 0.0, posinf);
-            COMPARE (doubledouble(-42.0) / 0.0, neginf);
-            COMPARE (doubledouble(0.0) / 0.0, posnan);
-            COMPARE (doubledouble::posnan() / 0.0, posnan);
-            COMPARE (doubledouble::negnan() / 0.0, negnan);
-            COMPARE (doubledouble::posinf() / 0.0, posinf);
-            COMPARE (doubledouble::neginf() / 0.0, neginf);
+            COMPARE (doubledouble(42.0) / 0.0, 42.0 / 0.0);
+            COMPARE (doubledouble(-42.0) / 0.0, -42.0 / 0.0);
+            COMPARE (doubledouble(0.0) / 0.0, 0.0 / 0.0);
+            COMPARE (doubledouble::posnan() / 0.0, posnan / 0.0);
+            COMPARE (doubledouble::negnan() / 0.0, negnan / 0.0);
+            COMPARE (doubledouble::posinf() / 0.0, posinf / 0.0);
+            COMPARE (doubledouble::neginf() / 0.0, neginf / 0.0);
         }
     }
 

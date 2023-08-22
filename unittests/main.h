@@ -23,6 +23,11 @@ CHECK(signbit(x) == signbit(y)); \
 if (isnan(x)) { CHECK(isnan(y)); } else { CHECK(x == y); } \
 }
 
+void clearFlags();
+fexcept_t getFlags();
+
+std::pair<fexcept_t, fexcept_t> execute(std::function<void()> f, std::function<void()> g);
+
 double rand_int();
 double rand_int_pos();
 double rand_frac();

@@ -9,14 +9,13 @@ TEST_CASE("Other functions") {
         for (int i = 0; i < NUM_TESTS; i++) {
 
             auto x = rand_double();
-            CHECK((doubledouble(x).fabs()).to_float() == float(std::fabs(x)));
+            COMPARE ((doubledouble(x).fabs()).to_float(), float(std::fabs(x)));
         }
 
-        CHECK(doubledouble::nan().fabs().isnan());
-        CHECK(doubledouble::inf().fabs().isinf());
-        CHECK((-doubledouble::inf()).fabs().isinf());
-        CHECK(doubledouble::inf().fabs().signbit() == 0);
-        CHECK((-doubledouble::inf()).fabs().signbit() == 0);
+        COMPARE (doubledouble::posnan().fabs(), std::fabs(posnan));
+        COMPARE (doubledouble::negnan().fabs(), std::fabs(negnan));
+        COMPARE (doubledouble::posinf().fabs(), std::fabs(posinf));
+        COMPARE (doubledouble::neginf().fabs(), std::fabs(neginf));
     }
 
     SUBCASE("abs") {
@@ -24,13 +23,12 @@ TEST_CASE("Other functions") {
         for (int i = 0; i < NUM_TESTS; i++) {
 
             auto x = rand_double();
-            CHECK((doubledouble(x).abs()).to_float() == float(std::abs(x)));
+            COMPARE ((doubledouble(x).abs()).to_float(), float(std::abs(x)));
         }
 
-        CHECK(doubledouble::nan().abs().isnan());
-        CHECK(doubledouble::inf().abs().isinf());
-        CHECK((-doubledouble::inf()).abs().isinf());
-        CHECK(doubledouble::inf().abs().signbit() == 0);
-        CHECK((-doubledouble::inf()).abs().signbit() == 0);
+        COMPARE (doubledouble::posnan().abs(), std::abs(posnan));
+        COMPARE (doubledouble::negnan().abs(), std::abs(negnan));
+        COMPARE (doubledouble::posinf().abs(), std::abs(posinf));
+        COMPARE (doubledouble::neginf().abs(), std::abs(neginf));
     }
 }

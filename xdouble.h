@@ -1176,10 +1176,17 @@ copysign(const XDouble<T> &x, const XDouble<T> &y)
 template <class T> inline XDouble<T>
 fdim(const XDouble<T> &x, const XDouble<T> &y)
 {
+    if (x.isfinite() && y.isfinite()) {
+        return (x > y) ? x - y : XDouble<T>();
+    }
+
+    return xdb::fdim(x.h, y.h);
+    /*
     if (x.isnan()) return XDouble<T>::nan();
     if (y.isnan()) return XDouble<T>::nan();
 
     return (x > y) ? x - y : XDouble<T>();
+    */
 }
 
 template <class T> inline XDouble<T>

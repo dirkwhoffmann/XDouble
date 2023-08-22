@@ -9,13 +9,13 @@ TEST_CASE("Minimum, maximum, difference functions") {
             double x = rand_double();
             double y = rand_double();
 
-            CHECK(doubledouble(x).fdim(y).to_float() == (float)std::fdim(x, y));
+            COMPARE (doubledouble(x).fdim(y).to_float(), (float)std::fdim(x, y));
         }
 
-        CHECK(doubledouble::inf().fdim(2.0) == std::fdim(std::numeric_limits<double>::infinity(), 2.0));
-        CHECK((-doubledouble::inf()).fdim(2.0) == std::fdim(-std::numeric_limits<double>::infinity(), 2.0));
-        CHECK(doubledouble(2.0).fdim(doubledouble::nan()).isnan());
-        CHECK(doubledouble::nan().fdim(2.0).isnan());
+        COMPARE (doubledouble::posinf().fdim(2.0), std::fdim(posinf, 2.0));
+        COMPARE (doubledouble::neginf().fdim(2.0), std::fdim(neginf, 2.0));
+        COMPARE (doubledouble::posnan().fdim(2.0), std::fdim(posnan, 2.0));
+        COMPARE (doubledouble::negnan().fdim(2.0), std::fdim(negnan, 2.0));
     }
 
     SUBCASE("fmax") {
@@ -25,13 +25,13 @@ TEST_CASE("Minimum, maximum, difference functions") {
             double x = rand_double();
             double y = rand_double();
 
-            CHECK(doubledouble(x).fmax(y).to_float() == (float)std::fmax(x, y));
+            COMPARE (doubledouble(x).fmax(y).to_float(), (float)std::fmax(x, y));
         }
 
-        CHECK(doubledouble::inf().fmax(2.0) == std::fmax(std::numeric_limits<double>::infinity(), 2.0));
-        CHECK((-doubledouble::inf()).fmax(2.0) == std::fmax(-std::numeric_limits<double>::infinity(), 2.0));
-        CHECK(doubledouble(2.0).fmax(doubledouble::nan()) == 2.0);
-        CHECK(doubledouble::nan().fmax(2.0) == 2.0);
+        COMPARE (doubledouble::posinf().fmax(2.0), std::fmax(posinf, 2.0));
+        COMPARE (doubledouble::neginf().fmax(2.0), std::fmax(neginf, 2.0));
+        COMPARE (doubledouble::posnan().fmax(2.0), std::fmax(posnan, 2.0));
+        COMPARE (doubledouble::negnan().fmax(2.0), std::fmax(negnan, 2.0));
     }
 
     SUBCASE("fmin") {
@@ -41,12 +41,12 @@ TEST_CASE("Minimum, maximum, difference functions") {
             double x = rand_double();
             double y = rand_double();
 
-            CHECK(doubledouble(x).fmin(y).to_float() == (float)std::fmin(x, y));
+            COMPARE (doubledouble(x).fmin(y).to_float(), (float)std::fmin(x, y));
         }
 
-        CHECK(doubledouble::inf().fmin(2.0) == std::fmin(std::numeric_limits<double>::infinity(), 2.0));
-        CHECK((-doubledouble::inf()).fmin(2.0) == std::fmin(-std::numeric_limits<double>::infinity(), 2.0));
-        CHECK(doubledouble(2.0).fmin(doubledouble::nan()) == 2.0);
-        CHECK(doubledouble::nan().fmin(2.0) == 2.0);
+        COMPARE (doubledouble::posinf().fmin(2.0), std::fmin(posinf, 2.0));
+        COMPARE (doubledouble::neginf().fmin(2.0), std::fmin(neginf, 2.0));
+        COMPARE (doubledouble::posnan().fmin(2.0), std::fmin(posnan, 2.0));
+        COMPARE (doubledouble::negnan().fmin(2.0), std::fmin(negnan, 2.0));
     }
 }

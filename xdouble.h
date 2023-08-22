@@ -507,20 +507,7 @@ template <class T> struct XDouble {
 
             *this = XDouble<T>(h + rhs.h);
         }
-        /*
-        } else if (isnan() || rhs.isnan()) {
 
-            *this = nan();
-
-        } else if (isinf() && rhs.isinf()) {
-
-            if (signbit() ^ rhs.signbit()) *this = nan();
-
-        } else if (rhs.isinf()) {
-
-            *this = rhs;
-        }
-        */
         return *this;
     }
 
@@ -565,13 +552,9 @@ template <class T> struct XDouble {
             val.l += h * rhs.l + l * rhs.h;
             *this = quickTwoSum(val.h, val.l);
 
-        } else if (isnan() || rhs.isnan()) {
-
-            *this = nan();
-
         } else {
 
-            *this = (signbit() ^ rhs.signbit()) ? -inf() : inf();
+            *this = XDouble<T>(h * rhs.h);
         }
 
         return *this;
@@ -592,6 +575,26 @@ template <class T> struct XDouble {
 
     XDouble<T> &operator/=(const XDouble<T> &rhs)
     {
+        if (isfinite() && rhs.isfinite() && !rhs.iszero()) {
+
+            XDouble<T> r = *this;
+            T q1 = r.h / rhs.h;
+
+            r -= XDouble<T>(q1) * rhs;
+            T q2 = r.h / rhs.h;
+
+            r -= XDouble<T>(q2) * rhs;
+            T q3 = r.h / rhs.h;
+
+            *this = XDouble<T>(q1) + XDouble<T>(q2) + XDouble<T>(q3);
+
+        } else {
+
+            *this = XDouble<T>(h / rhs.h);
+        }
+
+        return *this;
+        /*
         if (rhs.iszero()) {
 
             *this = (iszero() || isnan()) ? nan() : signbit() ? -inf() : inf();
@@ -629,6 +632,7 @@ template <class T> struct XDouble {
 
         *this = XDouble<T>(q1) + XDouble<T>(q2) + XDouble<T>(q3);
         return *this;
+         */
     }
 
     XDouble<T> operator/(const XDouble<T> &rhs) const

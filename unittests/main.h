@@ -6,6 +6,7 @@
 
 #include "doctest.h"
 #include "xdouble.h"
+#include <functional>
 
 using namespace xdb;
 

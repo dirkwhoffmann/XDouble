@@ -46,6 +46,7 @@
 #include <iomanip>
 #include <cmath>
 #include <climits>
+#include <string>
 #ifdef DBL_DEBUG
 #include "gmpxx.h"
 #endif

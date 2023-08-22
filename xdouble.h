@@ -287,28 +287,25 @@ template <class T> struct XDouble {
     int to_int() const
     {
         if (isfinite()) return static_cast<int>(to_long_double());
-        if (isposinf()) return std::numeric_limits<int>::max();
-        if (isneginf()) return std::numeric_limits<int>::lowest();
-
-        return 0;
+        return (int)h;
     }
 
     long to_long() const
     {
         if (isfinite()) return static_cast<long>(to_long_double());
-        if (isposinf()) return std::numeric_limits<long>::max();
-        if (isneginf()) return std::numeric_limits<long>::lowest();
-
-        return 0;
+        return (long)h;
     }
 
     long long to_long_long() const
     {
         if (isfinite()) return static_cast<long long>(to_long_double());
+        return (long long)h;
+        /*
         if (isposinf()) return std::numeric_limits<long long>::max();
         if (isneginf()) return std::numeric_limits<long long>::lowest();
 
         return 0;
+        */
     }
 
     float to_float() const
@@ -1015,11 +1012,20 @@ floor(const XDouble<T> &x, int fracdigits)
 template <class T> inline XDouble<T>
 fmod(const XDouble<T> &numer, const XDouble<T> &denom)
 {
-    if (denom.iszero()) return XDouble<T>::nan();
-    if (numer.isfinite() && denom.isinf()) return numer;
+    if (numer.isfinite()) {
 
-    XDouble<T> tquot = (numer / denom).trunc();
-    return numer - tquot * denom;
+        if (denom.isfinite() && !denom.iszero()) {
+
+            XDouble<T> tquot = (numer / denom).trunc();
+            return numer - tquot * denom;
+        }
+        if (denom.isinf()) {
+
+            return numer;
+        }
+    }
+
+    return XDouble<T>(std::fmod(numer.h, denom.h));
 }
 
 template <class T> inline XDouble<T>
@@ -1053,21 +1059,21 @@ round(const XDouble<T> &x, int fracdigits)
 template <class T> inline XDouble<T>
 roundEven(const XDouble<T> &x)
 {
+    auto m = x.fmod(2.0);
+
     if (x.isnegative()) {
 
-        auto v1 = x - 0.5;
-        auto v2 = v1.ceil();
-
-        if (v1 != v2) return v2;
-        return x.fmod(2.0) < -1.0 ? v2 : v2 + XDouble<T>(1);
+        if (m >= -0.5) return x.ceil();
+        if (m >  -1.0) return x.floor();
+        if (m >  -1.5) return x.ceil();
+        return x.floor();
 
     } else {
 
-        auto v1 = x + XDouble<T>(0.5);
-        auto v2 = v1.floor();
-
-        if (v1 != v2) return v2;
-        return x.fmod(2.0) < 1.0 ? v2 - 1.0 : v2;
+        if (m <= 0.5) return x.floor();
+        if (m <  1.0) return x.ceil();
+        if (m <  1.5) return x.floor();
+        return x.ceil();
     }
 }
 

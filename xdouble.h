@@ -359,7 +359,7 @@ template <class T> struct XDouble {
         if (isinf()) return signbit() ? "-inf" : "inf";
 
         // Split number into its integral (l) and fractional (r) part
-        XDouble<T> l; XDouble<T> r = modf(&l);
+        XDouble<T> l; XDouble<T> r = abs().modf(&l);
 
         // Compute integral digits
         for (int i = 0; i < ldigits; i++) {
@@ -1165,7 +1165,7 @@ nearbyint(const XDouble<T> &x, int fracdigits)
 template <class T> inline XDouble<T>
 copysign(const XDouble<T> &x, const XDouble<T> &y)
 {
-    return xdb::signbit(y) ? -x : x;
+    return xdb::signbit(x) == xdb::signbit(y) ? x : -x;
 }
 
 

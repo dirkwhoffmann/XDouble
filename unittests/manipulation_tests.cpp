@@ -9,20 +9,18 @@ TEST_CASE("Floating-point manipulation functions") {
         doubledouble x = 1.0;
         doubledouble y = -1.0;
 
-        CHECK(pi.copysign(x) == pi);
-        CHECK(pi.copysign(y) == -pi);
-        CHECK((-pi).copysign(x) == -pi);
-        CHECK((-pi).copysign(y) == pi);
+        COMPARE (pi.copysign(x), pi);
+        COMPARE ((-pi).copysign(x), pi);
+        COMPARE (pi.copysign(y), -pi);
+        COMPARE ((-pi).copysign(y), -pi);
 
-        CHECK(doubledouble::inf().copysign(x) == doubledouble::inf());
-        CHECK(doubledouble::inf().copysign(y) == -doubledouble::inf());
-        CHECK(doubledouble::nan().copysign(x).isnan());
-        CHECK(doubledouble::nan().copysign(x).isposnan());
-        CHECK(doubledouble::nan().copysign(x).signbit() == 0);
-        CHECK(doubledouble::nan().copysign(y).isnan());
-        CHECK(doubledouble::nan().copysign(y).isnegnan());
-        CHECK(doubledouble::nan().copysign(y).signbit() == 1);
-        CHECK(doubledouble::nan().copysign(doubledouble::nan()).isposnan());
-        CHECK(doubledouble::nan().copysign(-doubledouble::nan()).isnegnan());
+        COMPARE (doubledouble::posinf().copysign(x), posinf);
+        COMPARE (doubledouble::posinf().copysign(y), neginf);
+        COMPARE (doubledouble::neginf().copysign(x), posinf);
+        COMPARE (doubledouble::neginf().copysign(y), neginf);
+        COMPARE (doubledouble::posnan().copysign(x), posnan);
+        COMPARE (doubledouble::posnan().copysign(y), negnan);
+        COMPARE (doubledouble::negnan().copysign(x), posnan);
+        COMPARE (doubledouble::negnan().copysign(y), negnan);
     }
 }

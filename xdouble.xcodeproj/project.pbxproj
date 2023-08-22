@@ -45,7 +45,7 @@
 		503867642A8CD2940018498B /* other_tests.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = other_tests.cpp; sourceTree = "<group>"; };
 		503867662A8CD80F0018498B /* classification_tests.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = classification_tests.cpp; sourceTree = "<group>"; };
 		5038676A2A8E33C60018498B /* quaddouble_tests.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = quaddouble_tests.cpp; sourceTree = "<group>"; };
-		5038676C2A8FAF0A0018498B /* double-double.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "double-double.entitlements"; sourceTree = "<group>"; };
+		5038676C2A8FAF0A0018498B /* xdouble.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = xdouble.entitlements; sourceTree = "<group>"; };
 		503867772A91E2C20018498B /* constant_tests.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = constant_tests.cpp; sourceTree = "<group>"; };
 		5051DEE42A876C4800EED9D7 /* xdouble */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = xdouble; sourceTree = BUILT_PRODUCTS_DIR; };
 		5051DEE72A876C4800EED9D7 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
@@ -74,7 +74,7 @@
 			isa = PBXGroup;
 			children = (
 				5094ED4F2A9377A1000D0BB9 /* CMakeLists.txt */,
-				5038676C2A8FAF0A0018498B /* double-double.entitlements */,
+				5038676C2A8FAF0A0018498B /* xdouble.entitlements */,
 				5051DEEF2A876D1D00EED9D7 /* xdouble.h */,
 				5094ED4E2A9373BF000D0BB9 /* example1.cpp */,
 				5094ED502A937AD9000D0BB9 /* example2.cpp */,
@@ -302,7 +302,7 @@
 		5051DEEC2A876C4800EED9D7 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "double-double.entitlements";
+				CODE_SIGN_ENTITLEMENTS = xdouble.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 3NG65ZLYW7;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -319,7 +319,7 @@
 		5051DEED2A876C4800EED9D7 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "double-double.entitlements";
+				CODE_SIGN_ENTITLEMENTS = xdouble.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 3NG65ZLYW7;
 				ENABLE_HARDENED_RUNTIME = YES;

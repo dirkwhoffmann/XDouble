@@ -133,13 +133,13 @@ TEST_CASE("Exponential and logarithmic functions") {
             COMPARE (doubledouble(x).log().to_float(), (float)std::log(x));
         }
 
-        COMPARE (doubledouble(0.0).log(), -doubledouble::inf());
-        COMPARE (doubledouble(1.0).log(), 0.0);
-        COMPARE (doubledouble(-.5).log(), posnan);
-        COMPARE (doubledouble::posinf().log(), doubledouble::inf());
-        COMPARE (doubledouble::neginf().log(), posnan);
-        COMPARE (doubledouble::posnan().log(), posnan);
-        COMPARE (doubledouble::negnan().log(), posnan);
+        COMPARE (doubledouble(0.0).log(), std::log(0.0));
+        COMPARE (doubledouble(1.0).log(), std::log(1.0));
+        COMPARE (doubledouble(-.5).log(), std::log(-.5));
+        COMPARE (doubledouble::posinf().log(), std::log(posinf));
+        COMPARE (doubledouble::neginf().log(), std::log(neginf));
+        COMPARE (doubledouble::posnan().log(), std::log(posnan));
+        COMPARE (doubledouble::negnan().log(), std::log(negnan));
     }
 
     SUBCASE("log10") {
@@ -153,20 +153,18 @@ TEST_CASE("Exponential and logarithmic functions") {
 
     SUBCASE("modf") {
 
+        doubledouble i1; double i2;
+
         for (int i = 0; i < NUM_TESTS; i++) {
 
             double x = rand_double_pos();
-            doubledouble i1; double i2;
             COMPARE (doubledouble(x).modf(&i1).to_float(), (float)std::modf(x, &i2));
             COMPARE ((float)i1, (float)i2);
         }
 
-        COMPARE (doubledouble(0.0).log(), neginf);
-        COMPARE (doubledouble(1.0).log(), 0.0);
-        COMPARE (doubledouble(-.5).log(), posnan);
-        COMPARE (doubledouble::posinf().log(), posinf);
-        COMPARE (doubledouble::neginf().log(), posnan);
-        COMPARE (doubledouble::posnan().log(), posnan);
-        COMPARE (doubledouble::negnan().log(), posnan);
+        COMPARE (doubledouble::posinf().modf(&i1).to_float(), std::modf(posinf, &i2));
+        COMPARE (doubledouble::neginf().modf(&i1).to_float(), std::modf(neginf, &i2));
+        COMPARE (doubledouble::posnan().modf(&i1).to_float(), std::modf(posnan, &i2));
+        COMPARE (doubledouble::negnan().modf(&i1).to_float(), std::modf(negnan, &i2));
     }
 }

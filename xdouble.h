@@ -436,6 +436,7 @@ template <class T> struct XDouble {
         T s = a + b;
         T v = s - a;
         T e = (a - (s - v)) + (b - v);
+
         return XDouble<T>(s,e);
     }
 
@@ -491,8 +492,7 @@ template <class T> struct XDouble {
 
     XDouble<T> operator+(const XDouble<T> &rhs) const
     {
-        XDouble<T> result;
-        result = *this;
+        XDouble<T> result(*this);
         result += rhs;
 
         return result;
@@ -511,7 +511,7 @@ template <class T> struct XDouble {
 
     XDouble<T> operator-(const XDouble<T> &rhs) const
     {
-        auto result = *this;
+        XDouble<T> result(*this);
         result -= rhs;
 
         return result;
@@ -540,7 +540,7 @@ template <class T> struct XDouble {
 
     XDouble<T> operator*(const XDouble<T> &rhs) const
     {
-        auto result = *this;
+        XDouble<T> result(*this);
         result *= rhs;
 
         return result;
@@ -572,50 +572,11 @@ template <class T> struct XDouble {
         }
 
         return *this;
-        /*
-        if (rhs.iszero()) {
-
-            *this = (iszero() || isnan()) ? nan() : signbit() ? -inf() : inf();
-            return *this;
-        }
-        if (isnan() || rhs.isnan()) {
-
-            *this = nan();
-            return *this;
-        }
-        if (isinf() && rhs.isinf()) {
-
-            *this = nan();
-            return *this;
-        }
-        if (isinf()) {
-
-            *this = signbit() ^ rhs.signbit() ? -inf() : inf();
-            return *this;
-        }
-        if (rhs.isinf()) {
-
-            *this = signbit() ^ rhs.signbit() ? -XDouble<T>() : XDouble<T>();
-            return *this;
-        }
-
-        XDouble<T> r = *this;
-        T q1 = r.h / rhs.h;
-
-        r -= XDouble<T>(q1) * rhs;
-        T q2 = r.h / rhs.h;
-
-        r -= XDouble<T>(q2) * rhs;
-        T q3 = r.h / rhs.h;
-
-        *this = XDouble<T>(q1) + XDouble<T>(q2) + XDouble<T>(q3);
-        return *this;
-         */
     }
 
     XDouble<T> operator/(const XDouble<T> &rhs) const
     {
-        auto result = *this;
+        XDouble<T> result(*this);
         result /= rhs;
 
         return result;
@@ -626,25 +587,10 @@ template <class T> struct XDouble {
     friend XDouble<T> operator/(XDouble<T> lhs, double rhs) { return lhs / XDouble<T>(rhs); }
     friend XDouble<T> operator/(XDouble<T> lhs, long double rhs) { return lhs / XDouble<T>(rhs); }
 
-    void operator++()
-    {
-        *this += 1.0;
-    }
-
-    void operator++(int)
-    {
-        *this += 1.0;
-    }
-
-    void operator--()
-    {
-        *this -= 1.0;
-    }
-
-    void operator--(int)
-    {
-        *this -= 1.0;
-    }
+    void operator++() { *this += 1.0; }
+    void operator++(int) { *this += 1.0; }
+    void operator--() { *this -= 1.0; }
+    void operator--(int) { *this -= 1.0; }
 
 
     //
@@ -818,7 +764,7 @@ to_string(const XDouble<T> &x, int ldigits, int rdigits)
 template <class T> inline XDouble<T>
 exp(const XDouble<T> &op)
 {
-    if (op.isinf()) return op.isposinf() ? op : XDouble<T>(0.0);
+    if (!op.isfinite()) return XDouble<T>(xdb::exp(op.h));
 
     auto n = xdb::round(op.h);
     auto w = op - XDouble<T>(n);
@@ -845,6 +791,8 @@ exp(const XDouble<T> &op)
 template <class T> inline XDouble<T>
 frexp(const XDouble<T> &op, int *exp)
 {
+    if (!op.isfinite()) return XDouble<T>(xdb::frexp(op.h, exp));
+
     auto r = xdb::frexp(op.h, exp);
     auto e = xdb::ldexp(op.l, -(*exp));
 
@@ -854,7 +802,7 @@ frexp(const XDouble<T> &op, int *exp)
 template <class T> inline XDouble<T>
 frexp10(const XDouble<T> &op, int *exp)
 {
-    if (!op.isfinite()) { *exp = 0; return op; }
+    if (!op.isfinite()) return XDouble<T>(xdb::frexp(op.h, exp));
 
     *exp = op.iszero() ? 0 : 1 + (op.fabs().log10().floor().to_int());
     return op * XDouble<T>(10).pow(-(*exp));
@@ -863,21 +811,23 @@ frexp10(const XDouble<T> &op, int *exp)
 template <class T> inline XDouble<T>
 ldexp(const XDouble<T> &op, int exp)
 {
+    if (!op.isfinite()) return XDouble<T>(xdb::ldexp(op.h, exp));
+
     return XDouble<T>(xdb::ldexp(op.h, exp), xdb::ldexp(op.l, exp));
 }
 
 template <class T> inline XDouble<T>
 ldexp10(const XDouble<T> &op, int exp)
 {
+    if (!op.isfinite()) return XDouble<T>(xdb::ldexp(op.h, exp));
+
     return op * XDouble<T>(10).pow(exp);
 }
 
 template <class T> inline XDouble<T>
 log(const XDouble<T> &op)
 {
-    if (op.isnegative()) return XDouble<T>::nan();
-    if (op.iszero()) return -XDouble<T>::inf();
-    if (op.isinf()) return XDouble<T>::inf();
+    if (!op.isfinite() || op.isnegative() || op.iszero()) return XDouble<T>(xdb::log(op.h));
 
     auto r = XDouble<T>(xdb::log(op.h));
     auto u = r.exp();
@@ -889,6 +839,8 @@ log(const XDouble<T> &op)
 template <class T> inline XDouble<T>
 log10(const XDouble<T> &op)
 {
+    if (!op.isfinite() || op.isnegative() || op.iszero()) return XDouble<T>(xdb::log10(op.h));
+
     return op.log() / XDouble<T>::ln10;
 }
 

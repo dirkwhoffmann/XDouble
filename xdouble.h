@@ -505,7 +505,14 @@ template <class T> struct XDouble {
 
     XDouble<T> &operator-=(const XDouble<T> &rhs)
     {
-        *this += -rhs;
+        if (isfinite() && rhs.isfinite()) {
+
+            *this += -rhs;
+
+        } else {
+
+            *this = XDouble<T>(h - rhs.h);
+        }
         return *this;
     }
 
@@ -857,12 +864,16 @@ modf(const XDouble<T> &op, XDouble<T> *iptr)
 template <class T> inline XDouble<T>
 exp2(const XDouble<T> &op)
 {
+    if (!op.isfinite()) return XDouble<T>(xdb::exp2(op.h));
+
     return (op * XDouble<T>::ln2).exp();
 }
 
 template <class T> inline XDouble<T>
 log2(const XDouble<T> &op)
 {
+    if (!op.isfinite() || op.isnegative() || op.iszero()) return XDouble<T>(xdb::log2(op.h));
+
     return op.log() * XDouble<T>::log2e;
 }
 
@@ -895,7 +906,7 @@ powd(const XDouble<T> &base, int exponent)
 template <class T> inline XDouble<T>
 pow(const XDouble<T> &base, const XDouble<T> &exponent)
 {
-    // Check for the standard case
+    // Standard case
     if (base.isfinite() && !base.iszero() && !base.abs().isone()) {
         if (exponent.isfinite() && !exponent.iszero()) {
 
@@ -907,7 +918,7 @@ pow(const XDouble<T> &base, const XDouble<T> &exponent)
         }
     }
 
-    // Handle special cases
+    // Special cases
     return XDouble<T>(std::pow((double)base, (double)exponent));
 }
 
@@ -920,8 +931,7 @@ sqr(const XDouble<T> &x)
 template <class T> inline XDouble<T>
 sqrt(const XDouble<T> &x)
 {
-    if (x.iszero()) return 0.0;
-    if (x.isnegative()) return XDouble<T>::nan();
+    if (x.iszero() || x.isnegative()) return XDouble<T>(xdb::sqrt(x.h));
 
     auto r = XDouble<T>(1.0 / xdb::sqrt(x.h));
     auto h = x * 0.5;
@@ -1262,7 +1272,7 @@ isnormal(const XDouble<T> &x)
 template <class T> inline bool
 signbit(const XDouble<T> &x)
 {
-    return x.h != 0.0 || x.l == 0.0 ? xdb::signbit(x.h) : xdb::signbit(x.l);
+    return x.h == 0.0 && x.l != 0.0 ? xdb::signbit(x.l) : xdb::signbit(x.h);
 }
 
 template <class T> inline bool

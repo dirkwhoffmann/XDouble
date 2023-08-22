@@ -29,8 +29,8 @@ TEST_CASE("Basic smoke tests") {
         COMPARE (doubledouble(0.5).to_int(), 0);
         COMPARE (doubledouble(3.14).to_int(), 3);
         COMPARE (doubledouble(-3.14).to_int(), -3);
-        COMPARE (doubledouble::posinf().to_int(), INT_MAX);
-        COMPARE (doubledouble::neginf().to_int(), INT_MIN);
+        COMPARE (doubledouble::posinf().to_int(), (int)posinf);
+        COMPARE (doubledouble::neginf().to_int(), (int)neginf);
         COMPARE (doubledouble::posnan().to_int(), 0);
         COMPARE (doubledouble::negnan().to_int(), 0);
 
@@ -40,8 +40,8 @@ TEST_CASE("Basic smoke tests") {
         COMPARE (doubledouble(0.5).to_long(), 0);
         COMPARE (doubledouble(3.14).to_long(), 3);
         COMPARE (doubledouble(-3.14).to_long(), -3);
-        COMPARE (doubledouble::posinf().to_long(), LONG_MAX);
-        COMPARE (doubledouble::neginf().to_long(), LONG_MIN);
+        COMPARE (doubledouble::posinf().to_long(), (long)posinf);
+        COMPARE (doubledouble::neginf().to_long(), (long)neginf);
         COMPARE (doubledouble::posnan().to_long(), 0);
         COMPARE (doubledouble::negnan().to_long(), 0);
 
@@ -51,8 +51,8 @@ TEST_CASE("Basic smoke tests") {
         COMPARE (doubledouble(0.5).to_long_long(), 0);
         COMPARE (doubledouble(3.14).to_long_long(), 3);
         COMPARE (doubledouble(-3.14).to_long_long(), -3);
-        COMPARE (doubledouble::posinf().to_long_long(), LLONG_MAX);
-        COMPARE (doubledouble::neginf().to_long_long(), LLONG_MIN);
+        COMPARE (doubledouble::posinf().to_long_long(), (long long)posinf);
+        COMPARE (doubledouble::neginf().to_long_long(), (long long)neginf);
         COMPARE (doubledouble::posnan().to_long_long(), 0);
         COMPARE (doubledouble::negnan().to_long_long(), 0);
 

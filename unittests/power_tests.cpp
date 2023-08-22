@@ -47,16 +47,16 @@ TEST_CASE("Power functions") {
 
             COMPARE (base.pow(doubledouble::neginf()), 0.0);
             COMPARE (base.pow(-2.0), 0.25);
-            COMPARE (base.pow(-1.5), posnan);
+            COMPARE (base.pow(-1.5), std::pow(-2.0, -1.5));
             COMPARE (base.pow(-1.0), -0.5);
-            COMPARE (base.pow(-0.5), posnan);
+            COMPARE (base.pow(-0.5), std::pow(-2.0, -0.5));
             COMPARE (base.pow(0.0), 1.0);
-            COMPARE (base.pow(0.5), posnan);
+            COMPARE (base.pow(0.5), std::pow(-2.0, 0.5));
             COMPARE (base.pow(1.0), -2.0);
-            COMPARE (base.pow(1.5), posnan);
+            COMPARE (base.pow(1.5), std::pow(-2.0, 1.5));
             COMPARE (base.pow(2.0), 4.0);
-            COMPARE (base.pow(doubledouble::posinf()), posinf);
-            COMPARE (base.pow(doubledouble::posnan()), posnan);
+            COMPARE (base.pow(doubledouble::posinf()), std::pow(-2.0, posinf));
+            COMPARE (base.pow(doubledouble::posnan()), std::pow(-2.0, posnan));
 
             base = doubledouble(-1.5);
 

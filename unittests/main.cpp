@@ -4,9 +4,9 @@
 #include <exception>
 
 double posnan = std::numeric_limits<double>::quiet_NaN();
-double negnan = -std::numeric_limits<double>::quiet_NaN();
+double negnan = std::copysign(std::numeric_limits<double>::quiet_NaN(), -1.0);
 double posinf = std::numeric_limits<double>::infinity();
-double neginf = -std::numeric_limits<double>::infinity();
+double neginf = std::copysign(std::numeric_limits<double>::infinity(), -1.0);
 
 void clearFlags()
 {

@@ -91,6 +91,8 @@ using std::isnan;
 using std::isnormal;
 using std::signbit;
 
+using std::to_string;
+
 template <class T> struct XDouble;
 
 template <class T> XDouble<T> exp(const XDouble<T> &op);
@@ -158,11 +160,17 @@ template <class T> bool isone(const XDouble<T> &x);
 template <class T> bool ispositive(const XDouble<T> &x);
 template <class T> bool isnegative(const XDouble<T> &x);
 
+template <class T> std::string to_string(const XDouble<T> &x);
+template <class T> std::string to_string(const XDouble<T> &x, int rdigits);
+template <class T> std::string to_string(const XDouble<T> &x, int ldigits, int rdigits);
+
 template <class T> struct XDouble {
 
-    constexpr static bool useFma = false;
+    constexpr static bool useFma = true;
 
+    // High and low parts of the represented value
     T h, l;
+
 
     //
     // Constructors
@@ -300,12 +308,6 @@ template <class T> struct XDouble {
     {
         if (isfinite()) return static_cast<long long>(to_long_double());
         return (long long)h;
-        /*
-        if (isposinf()) return std::numeric_limits<long long>::max();
-        if (isneginf()) return std::numeric_limits<long long>::lowest();
-
-        return 0;
-        */
     }
 
     float to_float() const
@@ -345,44 +347,9 @@ template <class T> struct XDouble {
         return digit >= '0' && digit <= '9' ? char(digit) : '?';
     }
 
-    std::string to_string(int digits) const
-    {
-        return to_string(128, digits);
-    }
-
-    std::string to_string(int ldigits, int rdigits) const
-    {
-        std::string result;
-
-        // Catch NaN and infinity
-        if (isnan()) return "nan";
-        if (isinf()) return signbit() ? "-inf" : "inf";
-
-        // Split number into its integral (l) and fractional (r) part
-        XDouble<T> l; XDouble<T> r = abs().modf(&l);
-
-        // Compute integral digits
-        for (int i = 0; i < ldigits; i++) {
-
-            l /= 10.0;
-            XDouble<T> digit = l.modf(&l) * 10.0;
-            result = digit.to_character() + result;
-            if (l.abs() < 1.0) break;
-        }
-
-        // Create a decimal point if necessary
-        if (rdigits) result += '.';
-
-        // Compute fractional digits
-        for (int i = 0; i < rdigits; i++) {
-
-            r *= 10.0;
-            XDouble<T> digit; r = r.modf(&digit);
-            result = result + digit.to_character();
-        }
-
-        return (isnegative() ? "-" : "") + result;
-    }
+    std::string to_string() const { return xdb::to_string(*this); }
+    std::string to_string(int rdigits) const { return xdb::to_string(*this, rdigits); }
+    std::string to_string(int ldigits, int rdigits) const { return xdb::to_string(*this, ldigits, rdigits); }
 
 
     //
@@ -391,9 +358,11 @@ template <class T> struct XDouble {
 
     bool operator==(const XDouble<T>& rhs) const
     {
-        if (isnan() || rhs.isnan()) return false;
-        if (isinf()) return h == rhs.h;
-        return h == rhs.h && l == rhs.l;
+        if (isfinite() && rhs.isfinite()) {
+            return l == rhs.l && h == rhs.h;
+        } else {
+            return h == rhs.h;
+        }
     }
     bool operator==(double rhs) const { return *this == XDouble<T>(rhs); }
     bool operator==(long double rhs) const { return *this == XDouble<T>(rhs); }
@@ -407,32 +376,44 @@ template <class T> struct XDouble {
 
     bool operator<(const XDouble<T>& rhs) const
     {
-        if (isnan() || rhs.isnan()) return false;
-        return h < rhs.h || (h == rhs.h && l < rhs.l);
+        if (isfinite() && rhs.isfinite()) {
+            return h < rhs.h || (h == rhs.h && l < rhs.l);
+        } else {
+            return h < rhs.h;
+        }
     }
     bool operator<(double rhs) const { return *this < XDouble<T>(rhs); }
     bool operator<(long double rhs) const { return *this < XDouble<T>(rhs); }
 
     bool operator>(const XDouble<T>& rhs) const
     {
-        if (isnan() || rhs.isnan()) return false;
-        return rhs < *this;
+        if (isfinite() && rhs.isfinite()) {
+            return h > rhs.h || (h == rhs.h && l > rhs.l);
+        } else {
+            return h > rhs.h;
+        }
     }
     bool operator>(double rhs) const { return *this > XDouble<T>(rhs); }
     bool operator>(long double rhs) const { return *this > XDouble<T>(rhs); }
 
     bool operator<=(const XDouble<T>& rhs) const
     {
-        if (isnan() || rhs.isnan()) return false;
-        return !(*this > rhs);
+        if (isfinite() && rhs.isfinite()) {
+            return !(*this > rhs);
+        } else {
+            return h <= rhs.h;
+        }
     }
     bool operator<=(double rhs) const { return *this <= XDouble<T>(rhs); }
     bool operator<=(long double rhs) const { return *this <= XDouble<T>(rhs); }
 
     bool operator>=(const XDouble<T>& rhs) const
     {
-        if (isnan() || rhs.isnan()) return false;
-        return !(*this < rhs);
+        if (isfinite() && rhs.isfinite()) {
+            return !(*this < rhs);
+        } else {
+            return h >= rhs.h;
+        }
     }
     bool operator>=(double rhs) const { return *this >= XDouble<T>(rhs); }
     bool operator>=(long double rhs) const { return *this >= XDouble<T>(rhs); }
@@ -779,6 +760,55 @@ template <class T> struct XDouble {
     bool ispositive() const { return xdb::ispositive(*this); }
     bool isnegative() const { return xdb::isnegative(*this); }
 };
+
+
+//
+// Conversion functions
+//
+
+template <class T> inline std::string
+to_string(const XDouble<T> &x) {
+    return to_string(x, 128, 8);
+}
+
+template <class T> inline std::string
+to_string(const XDouble<T> &x, int rdigits) {
+    return to_string(x, 128, rdigits);
+}
+
+template <class T> inline std::string
+to_string(const XDouble<T> &x, int ldigits, int rdigits)
+{
+    std::string result;
+
+    // Catch NaN and infinity
+    if (!x.isfinite()) return xdb::to_string(x.h);
+
+    // Split number into its integral (l) and fractional (r) part
+    XDouble<T> l; XDouble<T> r = x.abs().modf(&l);
+
+    // Compute integral digits
+    for (int i = 0; i < ldigits; i++) {
+
+        l /= 10.0;
+        XDouble<T> digit = l.modf(&l) * 10.0;
+        result = digit.to_character() + result;
+        if (l.abs() < 1.0) break;
+    }
+
+    // Create a decimal point if necessary
+    if (rdigits) result += '.';
+
+    // Compute fractional digits
+    for (int i = 0; i < rdigits; i++) {
+
+        r *= 10.0;
+        XDouble<T> digit; r = r.modf(&digit);
+        result = result + digit.to_character();
+    }
+
+    return (x.isnegative() ? "-" : "") + result;
+}
 
 
 //
@@ -1181,12 +1211,6 @@ fdim(const XDouble<T> &x, const XDouble<T> &y)
     }
 
     return xdb::fdim(x.h, y.h);
-    /*
-    if (x.isnan()) return XDouble<T>::nan();
-    if (y.isnan()) return XDouble<T>::nan();
-
-    return (x > y) ? x - y : XDouble<T>();
-    */
 }
 
 template <class T> inline XDouble<T>

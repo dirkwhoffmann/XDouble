@@ -23,38 +23,38 @@ TEST_CASE("Basic smoke tests") {
 
     SUBCASE("Conversion functions") {
 
-        COMPARE (doubledouble().to_int(), 0);
-        COMPARE (doubledouble(0.0).to_int(), 0);
-        COMPARE (doubledouble(-0.0).to_int(), 0);
-        COMPARE (doubledouble(0.5).to_int(), 0);
-        COMPARE (doubledouble(3.14).to_int(), 3);
-        COMPARE (doubledouble(-3.14).to_int(), -3);
-        COMPARE (doubledouble::posinf().to_int(), (int)posinf);
-        COMPARE (doubledouble::neginf().to_int(), (int)neginf);
-        COMPARE (doubledouble::posnan().to_int(), 0);
-        COMPARE (doubledouble::negnan().to_int(), 0);
+        CHECK (doubledouble().to_int() == 0);
+        CHECK (doubledouble(0.0).to_int() == 0);
+        CHECK (doubledouble(-0.0).to_int() == 0);
+        CHECK (doubledouble(0.5).to_int() == 0);
+        CHECK (doubledouble(3.14).to_int() == 3);
+        CHECK (doubledouble(-3.14).to_int() == -3);
+        CHECK (doubledouble::posinf().to_int() == (int)posinf);
+        CHECK (doubledouble::neginf().to_int() == (int)neginf);
+        CHECK (doubledouble::posnan().to_int() == (int)posnan);
+        CHECK (doubledouble::negnan().to_int() == (int)negnan);
 
-        COMPARE (doubledouble().to_long(), 0);
-        COMPARE (doubledouble(0.0).to_long(), 0);
-        COMPARE (doubledouble(-0.0).to_long(), 0);
-        COMPARE (doubledouble(0.5).to_long(), 0);
-        COMPARE (doubledouble(3.14).to_long(), 3);
-        COMPARE (doubledouble(-3.14).to_long(), -3);
-        COMPARE (doubledouble::posinf().to_long(), (long)posinf);
-        COMPARE (doubledouble::neginf().to_long(), (long)neginf);
-        COMPARE (doubledouble::posnan().to_long(), 0);
-        COMPARE (doubledouble::negnan().to_long(), 0);
+        CHECK (doubledouble().to_long() == 0);
+        CHECK (doubledouble(0.0).to_long() == 0);
+        CHECK (doubledouble(-0.0).to_long() == 0);
+        CHECK (doubledouble(0.5).to_long() == 0);
+        CHECK (doubledouble(3.14).to_long() == 3);
+        CHECK (doubledouble(-3.14).to_long() == -3);
+        CHECK (doubledouble::posinf().to_long() == (long)posinf);
+        CHECK (doubledouble::neginf().to_long() == (long)neginf);
+        CHECK (doubledouble::posnan().to_long() == (long)posnan);
+        CHECK (doubledouble::negnan().to_long() == (long)negnan);
 
-        COMPARE (doubledouble().to_long_long(), 0);
-        COMPARE (doubledouble(0.0).to_long_long(), 0);
-        COMPARE (doubledouble(-0.0).to_long_long(), 0);
-        COMPARE (doubledouble(0.5).to_long_long(), 0);
-        COMPARE (doubledouble(3.14).to_long_long(), 3);
-        COMPARE (doubledouble(-3.14).to_long_long(), -3);
-        COMPARE (doubledouble::posinf().to_long_long(), (long long)posinf);
-        COMPARE (doubledouble::neginf().to_long_long(), (long long)neginf);
-        COMPARE (doubledouble::posnan().to_long_long(), 0);
-        COMPARE (doubledouble::negnan().to_long_long(), 0);
+        CHECK (doubledouble().to_long_long() == 0);
+        CHECK (doubledouble(0.0).to_long_long() == 0);
+        CHECK (doubledouble(-0.0).to_long_long() == 0);
+        CHECK (doubledouble(0.5).to_long_long() == 0);
+        CHECK (doubledouble(3.14).to_long_long() == 3);
+        CHECK (doubledouble(-3.14).to_long_long() == -3);
+        CHECK (doubledouble::posinf().to_long_long() == (long long)posinf);
+        CHECK (doubledouble::neginf().to_long_long() == (long long)neginf);
+        CHECK (doubledouble::posnan().to_long_long() == (long long)posnan);
+        CHECK (doubledouble::negnan().to_long_long() == (long long)negnan);
 
         COMPARE (doubledouble().to_float(), 0.0f);
         COMPARE (doubledouble(0.0).to_float(), 0.0f);
@@ -119,9 +119,9 @@ TEST_CASE("Basic smoke tests") {
         me = doubledouble("-2.71828182845904523536028747135266");
         CHECK(me.to_string(32) == "-2.71828182845904523536028747135266");
 
-        CHECK(doubledouble::posnan().to_string(0) == "nan");
-        CHECK(doubledouble::negnan().to_string(0) == "nan");
-        CHECK(doubledouble::posinf().to_string(0) == "inf");
-        CHECK(doubledouble::neginf().to_string(0) == "-inf");
+        CHECK(doubledouble::posnan().to_string(0) == std::to_string(posnan));
+        CHECK(doubledouble::negnan().to_string(0) == std::to_string(negnan));
+        CHECK(doubledouble::posinf().to_string(0) == std::to_string(posinf));
+        CHECK(doubledouble::neginf().to_string(0) == std::to_string(neginf));
     }
 }

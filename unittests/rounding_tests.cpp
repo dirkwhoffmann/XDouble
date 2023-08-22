@@ -444,10 +444,10 @@ TEST_CASE("Rounding and remainder functions") {
             CHECK(doubledouble(x).lrint() == std::lrint(x));
         }
 
-        CHECK(doubledouble::posnan().lrint() == 0);
-        CHECK(doubledouble::negnan().lrint() == 0);
-        CHECK(doubledouble::posinf().lrint() == std::numeric_limits<long>::max());
-        CHECK(doubledouble::neginf().lrint() == std::numeric_limits<long>::lowest());
+        CHECK(doubledouble::posnan().lrint() == std::lrint(posnan));
+        CHECK(doubledouble::negnan().lrint() == std::lrint(negnan));
+        CHECK(doubledouble::posinf().lrint() == std::lrint(posinf));
+        CHECK(doubledouble::neginf().lrint() == std::lrint(neginf));
     }
 
     SUBCASE("llrint") {
@@ -458,10 +458,10 @@ TEST_CASE("Rounding and remainder functions") {
             CHECK(doubledouble(x).llrint() == std::llrint(x));
         }
 
-        CHECK(doubledouble::posnan().llrint() == 0);
-        CHECK(doubledouble::negnan().llrint() == 0);
-        CHECK(doubledouble::posinf().llrint() == std::numeric_limits<long long>::max());
-        CHECK(doubledouble::neginf().llrint() == std::numeric_limits<long long>::lowest());
+        CHECK(doubledouble::posnan().llrint() == std::llrint(posnan));
+        CHECK(doubledouble::negnan().llrint() == std::llrint(negnan));
+        CHECK(doubledouble::posinf().llrint() == std::llrint(posinf));
+        CHECK(doubledouble::neginf().llrint() == std::llrint(neginf));
     }
 
     SUBCASE("nearbyint") {

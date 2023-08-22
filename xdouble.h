@@ -427,18 +427,18 @@ template <class T> struct XDouble {
     static XDouble<T> quickTwoSum(T a, T b) {
 
         T s = a + b;
-        T e = b - (s - a);
+        T err = b - (s - a);
 
-        return XDouble<T>(s,e);
+        return XDouble<T>(s, err);
     }
 
     static XDouble<T> twoSum(T a, T b) {
 
         T s = a + b;
         T v = s - a;
-        T e = (a - (s - v)) + (b - v);
+        T err = (a - (s - v)) + (b - v);
 
-        return XDouble<T>(s,e);
+        return XDouble<T>(s, err);
     }
 
     static XDouble<T> split(T a) {
@@ -447,7 +447,7 @@ template <class T> struct XDouble {
         T h = t - (t - a);
         T l = a - h;
 
-        return XDouble<T>(h,l);
+        return XDouble<T>(h, l);
     }
 
     static XDouble<T> twoProd(T a, T b) {
@@ -455,18 +455,18 @@ template <class T> struct XDouble {
         if constexpr (useFma) {
 
             auto p =  a * b;
-            auto e = xdb::fma(a, b, -p);
+            auto err = xdb::fma(a, b, -p);
 
-            return XDouble<T>(p,e);
+            return XDouble<T>(p, err);
 
         } else {
 
             auto p =  a * b;
             auto aa = split(a);
             auto bb = split(b);
-            auto e = ((aa.h * bb.h - p) + aa.h * bb.l + aa.l * bb.h) + aa.l * bb.l;
+            auto err = ((aa.h * bb.h - p) + aa.h * bb.l + aa.l * bb.h) + aa.l * bb.l;
 
-            return XDouble<T>(p,e);
+            return XDouble<T>(p, err);
         }
     }
 
@@ -1158,7 +1158,15 @@ nearbyint(const XDouble<T> &x, int fracdigits)
 template <class T> inline XDouble<T>
 copysign(const XDouble<T> &x, const XDouble<T> &y)
 {
+    if (xdb::signbit(x) == xdb::signbit(y)) return x;
+
+    auto h = copysign(x.h, signbit(x.h) ? 1.0 : -1.0);
+    auto l = copysign(x.l, signbit(x.l) ? 1.0 : -1.0);
+
+    return XDouble<T>(h, l);
+    /*
     return xdb::signbit(x) == xdb::signbit(y) ? x : -x;
+    */
 }
 
 

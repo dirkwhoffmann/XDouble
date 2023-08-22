@@ -62,13 +62,13 @@ TEST_CASE("Power functions") {
 
             COMPARE (base.pow(doubledouble::neginf()), 0.0);
             CHECK   (base.pow(-2.0).to_string(4) == "0.4444");
-            COMPARE (base.pow(-1.5), posnan);
+            COMPARE (base.pow(-1.5), std::pow(-1.5, -1.5));
             CHECK   (base.pow(-1.0).to_string(4) == "-0.6666");
-            COMPARE (base.pow(-0.5), posnan);
+            COMPARE (base.pow(-0.5), std::pow(-1.5, -0.5));
             COMPARE (base.pow(0.0), 1.0);
-            COMPARE (base.pow(0.5), posnan);
+            COMPARE (base.pow(0.5), std::pow(-1.5, 0.5));
             COMPARE (base.pow(1.0), -1.5);
-            COMPARE (base.pow(1.5), posnan);
+            COMPARE (base.pow(1.5), std::pow(-1.5, 1.5));
             COMPARE (base.pow(2.0), 2.25);
             COMPARE (base.pow(doubledouble::posinf()), posinf);
             COMPARE (base.pow(doubledouble::posnan()), posnan);
@@ -77,13 +77,13 @@ TEST_CASE("Power functions") {
 
             COMPARE (base.pow(doubledouble::neginf()), 1.0);
             COMPARE (base.pow(-2.0), 1.0);
-            COMPARE (base.pow(-1.5), posnan);
+            COMPARE (base.pow(-1.5), std::pow(-1.0, -1.5));
             COMPARE (base.pow(-1.0), -1.0);
-            COMPARE (base.pow(-0.5), posnan);
+            COMPARE (base.pow(-0.5), std::pow(-1.0, -0.5));
             COMPARE (base.pow(0.0), 1.0);
-            COMPARE (base.pow(0.5), posnan);
+            COMPARE (base.pow(0.5), std::pow(-1.0, 0.5));
             COMPARE (base.pow(1.0), -1.0);
-            COMPARE (base.pow(1.5), posnan);
+            COMPARE (base.pow(1.5), std::pow(-1.0, 1.5));
             COMPARE (base.pow(2.0), 1.0);
             COMPARE (base.pow(doubledouble::posinf()), 1.0);
             COMPARE (base.pow(doubledouble::posnan()), posnan);
@@ -92,13 +92,13 @@ TEST_CASE("Power functions") {
 
             COMPARE (base.pow(doubledouble::neginf()), posinf);
             COMPARE (base.pow(-2.0), 4.0);
-            COMPARE (base.pow(-1.5), posnan);
+            COMPARE (base.pow(-1.5), std::pow(-0.5, -1.5));
             COMPARE (base.pow(-1.0), -2.0);
-            COMPARE (base.pow(-0.5), posnan);
+            COMPARE (base.pow(-0.5), std::pow(-0.5, -0.5));
             COMPARE (base.pow(0.0), 1.0);
-            COMPARE (base.pow(0.5), posnan);
+            COMPARE (base.pow(0.5), std::pow(-0.5, 0.5));
             COMPARE (base.pow(1.0), -0.5);
-            COMPARE (base.pow(1.5), posnan);
+            COMPARE (base.pow(1.5), std::pow(-0.5, 1.5));
             COMPARE (base.pow(2.0), 0.25);
             COMPARE (base.pow(doubledouble::posinf()), 0.0);
             COMPARE (base.pow(doubledouble::posnan()), posnan);
@@ -106,10 +106,10 @@ TEST_CASE("Power functions") {
             base = doubledouble(0.0);
 
             COMPARE (base.pow(doubledouble::neginf()), posinf);
-            COMPARE (base.pow(-2.0), posinf);
-            COMPARE (base.pow(-1.5), posinf);
-            COMPARE (base.pow(-1.0), posinf);
-            COMPARE (base.pow(-0.5), posinf);
+            COMPARE (base.pow(-2.0), std::pow(0.0, -2.0));
+            COMPARE (base.pow(-1.5), std::pow(0.0, -1.5));
+            COMPARE (base.pow(-1.0), std::pow(0.0, -1.0));
+            COMPARE (base.pow(-0.5), std::pow(0.0, -0.5));
             COMPARE (base.pow(0.0), 1.0);
             COMPARE (base.pow(0.5), 0.0);
             COMPARE (base.pow(1.0), 0.0);
@@ -121,10 +121,10 @@ TEST_CASE("Power functions") {
             base = doubledouble(-0.0);
 
             COMPARE (base.pow(doubledouble::neginf()), posinf);
-            COMPARE (base.pow(-2.0), posinf);
-            COMPARE (base.pow(-1.5), posinf);
-            COMPARE (base.pow(-1.0), neginf);
-            COMPARE (base.pow(-0.5), posinf);
+            COMPARE (base.pow(-2.0), std::pow(-0.0, -2.0));
+            COMPARE (base.pow(-1.5), std::pow(-0.0, -1.5));
+            COMPARE (base.pow(-1.0), std::pow(-0.0, -1.0));
+            COMPARE (base.pow(-0.5), std::pow(-0.0, -0.5));
             COMPARE (base.pow(0.0), 1.0);
             COMPARE (base.pow(0.5), 0.0);
             COMPARE (base.pow(1.0), -0.0);
@@ -135,7 +135,7 @@ TEST_CASE("Power functions") {
 
             base = doubledouble(0.5);
 
-            COMPARE (base.pow(doubledouble::neginf()), posinf);
+            COMPARE (base.pow(doubledouble::neginf()), std::pow(0.5, neginf));
             COMPARE (base.pow(-2.0), 4.0);
             CHECK   (base.pow(-1.5).to_string(4) == "2.8284");
             COMPARE (base.pow(-1.0), 2.0);
@@ -145,12 +145,12 @@ TEST_CASE("Power functions") {
             COMPARE (base.pow(1.0), 0.5);
             CHECK   (base.pow(1.5).to_string(4) == "0.3535");
             COMPARE (base.pow(2.0), 0.25);
-            COMPARE (base.pow(doubledouble::posinf()), 0.0);
-            COMPARE (base.pow(doubledouble::posnan()), posnan);
+            COMPARE (base.pow(doubledouble::posinf()), std::pow(0.5, posinf));
+            COMPARE (base.pow(doubledouble::posnan()), std::pow(0.5, posnan));
 
             base = doubledouble(1.0);
 
-            COMPARE (base.pow(doubledouble::neginf()), 1.0);
+            COMPARE (base.pow(doubledouble::neginf()), std::pow(1.0, neginf));
             COMPARE (base.pow(-2.0), 1.0);
             COMPARE (base.pow(-1.5), 1.0);
             COMPARE (base.pow(-1.0), 1.0);
@@ -160,12 +160,12 @@ TEST_CASE("Power functions") {
             COMPARE (base.pow(1.0), 1.0);
             COMPARE (base.pow(1.5), 1.0);
             COMPARE (base.pow(2.0), 1.0);
-            COMPARE (base.pow(doubledouble::posinf()), 1.0);
-            COMPARE (base.pow(doubledouble::posnan()), 1.0);
+            COMPARE (base.pow(doubledouble::posinf()), std::pow(1.0, posinf));
+            COMPARE (base.pow(doubledouble::posnan()), std::pow(1.0, posnan));
 
             base = doubledouble(1.5);
 
-            COMPARE (base.pow(doubledouble::neginf()), 0.0);
+            COMPARE (base.pow(doubledouble::neginf()), std::pow(1.5, neginf));
             CHECK   (base.pow(-2.0).to_string(4) == "0.4444");
             CHECK   (base.pow(-1.5).to_string(4) == "0.5443");
             CHECK   (base.pow(-1.0).to_string(4) == "0.6666");
@@ -175,12 +175,12 @@ TEST_CASE("Power functions") {
             COMPARE (base.pow(1.0), 1.5);
             CHECK   (base.pow(1.5).to_string(4) == "1.8371");
             COMPARE (base.pow(2.0), 2.25);
-            COMPARE (base.pow(doubledouble::posinf()), posinf);
-            COMPARE (base.pow(doubledouble::posnan()), posnan);
+            COMPARE (base.pow(doubledouble::posinf()), std::pow(1.5, posinf));
+            COMPARE (base.pow(doubledouble::posnan()), std::pow(1.5, posnan));
 
             base = doubledouble(2.0);
 
-            COMPARE (base.pow(doubledouble::neginf()), 0.0);
+            COMPARE (base.pow(doubledouble::neginf()), std::pow(2.0, neginf));
             CHECK   (base.pow(-2.0).to_string(4) == "0.2500");
             CHECK   (base.pow(-1.5).to_string(4) == "0.3535");
             CHECK   (base.pow(-1.0).to_string(4) == "0.5000");
@@ -190,12 +190,12 @@ TEST_CASE("Power functions") {
             CHECK   (base.pow(1.0).to_string(4) == "2.0000");
             CHECK   (base.pow(1.5).to_string(4) == "2.8284");
             CHECK   (base.pow(2.0).to_string(4) == "4.0000");
-            COMPARE (base.pow(doubledouble::posinf()), posinf);
-            COMPARE (base.pow(doubledouble::posnan()), posnan);
+            COMPARE (base.pow(doubledouble::posinf()), std::pow(2.0, posinf));
+            COMPARE (base.pow(doubledouble::posnan()), std::pow(2.0, posnan));
 
-            base = doubledouble::inf();
+            base = doubledouble::posinf();
 
-            COMPARE (base.pow(doubledouble::neginf()), 0.0);
+            COMPARE (base.pow(doubledouble::neginf()), std::pow(posinf, neginf));
             COMPARE (base.pow(-2.0), 0.0);
             COMPARE (base.pow(-1.5), 0.0);
             COMPARE (base.pow(-1.0), 0.0);
@@ -205,8 +205,8 @@ TEST_CASE("Power functions") {
             COMPARE (base.pow(1.0), posinf);
             COMPARE (base.pow(1.5), posinf);
             COMPARE (base.pow(2.0), posinf);
-            COMPARE (base.pow(doubledouble::posinf()), posinf);
-            COMPARE (base.pow(doubledouble::posnan()), posnan);
+            COMPARE (base.pow(doubledouble::posinf()), std::pow(posinf, posinf));
+            COMPARE (base.pow(doubledouble::posnan()), std::pow(posinf, posnan));
         }
 
         SUBCASE("Fractional exponent") {

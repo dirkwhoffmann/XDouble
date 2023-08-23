@@ -2,7 +2,12 @@
 
 // #define DBL_DEBUG
 #define NUM_TESTS 1000
+
+#ifdef _MSC_VER
+#pragma fenv_access (on)
+#else
 #pragma STDC FENV_ACCESS ON
+#endif
 
 #include "doctest.h"
 #include "xdouble.h"

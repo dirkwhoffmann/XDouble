@@ -199,23 +199,23 @@ template <class T> struct XDouble {
 
     XDouble(const std::string &ls, const std::string &rs) noexcept : XDouble()
     {
-        XDouble<T> l, r;
+        XDouble<T> lval, rval;
 
         // Check if the number is positive or negative
         bool neg = ls.empty() ? false : ls[0] == '-';
 
         // Parse the integral digits
         for (auto it = ls.begin() ; it != ls.end(); ++it) {
-            if (*it >= '0' && *it <= '9') l = l * XDouble<T>(10) + XDouble<T>(*it - '0');
+            if (*it >= '0' && *it <= '9') lval = lval * XDouble<T>(10) + XDouble<T>(*it - '0');
         }
 
         // Parse the fractional digits (in reverse order)
         for (auto it = rs.crbegin() ; it != rs.crend(); ++it) {
-            if (*it >= '0' && *it <= '9') r = (r + XDouble<T>(*it - '0')) / XDouble<T>(10);
+            if (*it >= '0' && *it <= '9') rval = (rval + XDouble<T>(*it - '0')) / XDouble<T>(10);
         }
 
         // Assemble the result
-        *this = neg ? -(l + r) : (l + r);
+        *this = neg ? -(lval + rval) : (lval + rval);
     }
 
     friend void swap(XDouble<T>& first, XDouble<T>& second) noexcept
@@ -1163,10 +1163,7 @@ copysign(const XDouble<T> &x, const XDouble<T> &y)
     auto h = copysign(x.h, signbit(x.h) ? 1.0 : -1.0);
     auto l = copysign(x.l, signbit(x.l) ? 1.0 : -1.0);
 
-    return XDouble<T>(h, l);
-    /*
-    return xdb::signbit(x) == xdb::signbit(y) ? x : -x;
-    */
+    return XDouble<T>(T(h), T(l));
 }
 
 

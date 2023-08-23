@@ -25,7 +25,7 @@ TEST_CASE("Exponential and logarithmic functions") {
 
     SUBCASE("frexp") {
 
-        int e1, e2;
+        int e1 = 0, e2 = 0;
 
         for (int i = 0; i < NUM_TESTS; i++) {
 
@@ -34,6 +34,7 @@ TEST_CASE("Exponential and logarithmic functions") {
             CHECK (e1 == e2);
         }
 
+        e1 = 0;
         COMPARE (doubledouble::nan().frexp(&e1), posnan);
         CHECK   (e1 == 0);
         COMPARE (doubledouble::posinf().frexp(&e1), posinf);

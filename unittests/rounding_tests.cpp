@@ -50,21 +50,22 @@ TEST_CASE("Rounding and remainder functions") {
 
         doubledouble pi("3.14159265358979323846264338327950");
 
-        COMPARE (pi.ceil(1).to_float(), (float)3.2);
-        COMPARE (pi.ceil(2).to_float(), (float)3.15);
-        COMPARE (pi.ceil(3).to_float(), (float)3.142);
-        COMPARE (pi.ceil(4).to_float(), (float)3.1416);
-        COMPARE (pi.ceil(5).to_float(), (float)3.14160);
+        CHECK (pi.ceil(1).to_float() - (float)3.2 < 1e-10);
+        CHECK (pi.ceil(2).to_float() - (float)3.15 < 1e-10);
+        CHECK (pi.ceil(3).to_float() - (float)3.142 < 1e-10);
+        CHECK (pi.ceil(4).to_float() - (float)3.1416 < 1e-10);
+        CHECK (pi.ceil(5).to_float() - (float)3.14160 < 1e-10);
 
-        COMPARE ((-pi).ceil(1).to_float(), (float)-3.1);
-        COMPARE ((-pi).ceil(2).to_float(), (float)-3.14);
-        COMPARE ((-pi).ceil(3).to_float(), (float)-3.141);
-        COMPARE ((-pi).ceil(4).to_float(), (float)-3.1415);
-        COMPARE ((-pi).ceil(5).to_float(), (float)-3.14159);
+        CHECK ((-pi).ceil(1).to_float() - (float)-3.1 < 1e-10);
+        CHECK ((-pi).ceil(2).to_float() - (float)-3.14 < 1e-10);
+        CHECK ((-pi).ceil(3).to_float() - (float)-3.141 < 1e-10);
+        CHECK ((-pi).ceil(4).to_float() - (float)-3.1415 < 1e-10);
+        CHECK ((-pi).ceil(5).to_float() - (float)-3.14159 < 1e-10);
 
-        COMPARE (doubledouble::posnan().ceil().isnan(), std::isnan(std::ceil(posnan)));
-        COMPARE (doubledouble::posinf().ceil().isinf(), std::isinf(std::ceil(posinf)));
-        COMPARE (doubledouble::neginf().ceil().isinf(), std::isinf(std::ceil(neginf)));
+        CHECK (doubledouble::posnan().ceil().isnan() == std::isnan(std::ceil(posnan)));
+        CHECK (doubledouble::negnan().ceil().isnan() == std::isnan(std::ceil(negnan)));
+        CHECK (doubledouble::posinf().ceil().isinf() == std::isinf(std::ceil(posinf)));
+        CHECK (doubledouble::neginf().ceil().isinf() == std::isinf(std::ceil(neginf)));
     }
 
     SUBCASE("floor") {

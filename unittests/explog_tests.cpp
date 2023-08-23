@@ -154,7 +154,7 @@ TEST_CASE("Exponential and logarithmic functions") {
 
     SUBCASE("modf") {
 
-        doubledouble i1; double i2;
+        doubledouble i1; double i2 = 0.0;
 
         for (int i = 0; i < NUM_TESTS; i++) {
 

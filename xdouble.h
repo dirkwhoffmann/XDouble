@@ -1160,8 +1160,8 @@ copysign(const XDouble<T> &x, const XDouble<T> &y)
 {
     if (xdb::signbit(x) == xdb::signbit(y)) return x;
 
-    auto h = copysign(x.h, signbit(x.h) ? 1.0 : -1.0);
-    auto l = copysign(x.l, signbit(x.l) ? 1.0 : -1.0);
+    auto h = copysign(x.h, signbit(x.h) ? T(1.0) : T(-1.0));
+    auto l = copysign(x.l, signbit(x.l) ? T(1.0) : T(-1.0));
 
     return XDouble<T>(T(h), T(l));
 }

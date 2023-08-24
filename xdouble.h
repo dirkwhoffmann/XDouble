@@ -74,6 +74,7 @@ using std::lround;
 using std::llround;
 using std::rint;
 using std::lrint;
+using std::llrint;
 using std::nearbyint;
 
 using std::copysign;
@@ -1079,13 +1080,13 @@ roundEven(const XDouble<T> &x, int fracdigits)
 template <class T> inline long
 lround(const XDouble<T> &x)
 {
-    return round(x).to_long();
+    return x.isfinite() ? x.round().to_long() : lround(x.h);
 }
 
 template <class T> inline long long
 llround(const XDouble<T> &x)
 {
-    return round(x).to_long_double();
+    return x.isfinite() ? x.round().to_long_long() : llround(x.h);
 }
 
 template <class T> inline XDouble<T>
@@ -1117,13 +1118,13 @@ rint(const XDouble<T> &x, int fracdigits)
 template <class T> inline long
 lrint(const XDouble<T> &x)
 {
-    return x.rint().to_long();
+    return x.isfinite() ? x.rint().to_long() : lrint(x.h);
 }
 
 template <class T> inline long long
 llrint(const XDouble<T> &x)
 {
-    return x.rint().to_long_long();
+    return x.isfinite() ? x.rint().to_long_long() : llrint(x.h);
 }
 
 template <class T> inline XDouble<T>

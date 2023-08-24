@@ -12,9 +12,11 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_CXX_EXTENSIONS False)
 
-# Set the optimization level (if not specified on the command line)
+# Set the optimization level. By default, all regression tests are run in Debug
+# mode. When compiled with -O3, some regression might fail due to too aggressive
+# floating-point optimizations.
 if(NOT CMAKE_BUILD_TYPE)
-  set(CMAKE_BUILD_TYPE Release)
+  set(CMAKE_BUILD_TYPE Debug)
 endif()
 
 add_subdirectory(unittests)

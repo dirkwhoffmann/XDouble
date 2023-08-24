@@ -1,6 +1,6 @@
 # XDouble
 
-XDouble is a lightweight double-double arithmetic library written in C++. Double-double arithmetic increases the precision of floating-point operations by representing numbers as an unevaluated sum of two floating-point numbers of lower precision. The result is a floating-point format with nearly twice the accuracy of the base format and a performance considerably exceeding that of arbitrary-precision floating-point formats.
+XDouble is a lightweight double-double arithmetic library written in C++. Double-double arithmetic increases the precision of floating-point operations by representing numbers as an unevaluated sum of two floating-point numbers of lower precision. The result are floating-point formats with nearly twice the accuracy of the base formats and performance losses that are moderate compared to those of arbitrary precision floating point formats.
 
 ## Features
 

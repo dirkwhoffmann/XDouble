@@ -34,18 +34,19 @@ TEST_CASE("Exponential and logarithmic functions") {
             CHECK (e1 == e2);
         }
 
-        e1 = 0;
-        COMPARE (doubledouble::nan().frexp(&e1), posnan);
-        CHECK   (e1 == 0);
-        COMPARE (doubledouble::posinf().frexp(&e1), posinf);
-        CHECK   (e1 == 0);
-        COMPARE (doubledouble::neginf().frexp(&e1), neginf);
-        CHECK   (e1 == 0);
+        COMPARE (doubledouble::posnan().frexp(&e1), std::frexp(posnan, &e2));
+        CHECK   (e1 == e2);
+        COMPARE (doubledouble::negnan().frexp(&e1), std::frexp(negnan, &e2));
+        CHECK   (e1 == e2);
+        COMPARE (doubledouble::posinf().frexp(&e1), std::frexp(posinf, &e2));
+        CHECK   (e1 == e2);
+        COMPARE (doubledouble::neginf().frexp(&e1), std::frexp(neginf, &e2));
+        CHECK   (e1 == e2);
     }
 
     SUBCASE("frexp10") {
 
-        int e;
+        int e = 0;
 
         COMPARE (doubledouble(3141.5).frexp10(&e).to_float(), (float)0.31415);
         CHECK   (e == 4);
@@ -85,15 +86,16 @@ TEST_CASE("Exponential and logarithmic functions") {
         COMPARE (doubledouble(-0.0000).frexp10(&e).to_float(), (float)-0);
         CHECK   (e == 0);
 
-        e = 42;
-        COMPARE (doubledouble::nan().frexp10(&e), posnan);
-        CHECK   (e == 0);
-        e = 42;
-        COMPARE (doubledouble::posinf().frexp10(&e), posinf);
-        CHECK   (e == 0);
-        e = 42;
-        COMPARE (doubledouble::neginf().frexp10(&e), neginf);
-        CHECK   (e == 0);
+        int e1 = 0, e2 = 0;
+
+        COMPARE (doubledouble::posnan().frexp10(&e1), std::frexp(posnan, &e2));
+        CHECK   (e1 == e2);
+        COMPARE (doubledouble::negnan().frexp10(&e1), std::frexp(negnan, &e2));
+        CHECK   (e1 == e2);
+        COMPARE (doubledouble::posinf().frexp10(&e1), std::frexp(posinf, &e2));
+        CHECK   (e1 == e2);
+        COMPARE (doubledouble::neginf().frexp10(&e1), std::frexp(neginf, &e2));
+        CHECK   (e1 == e2);
     }
 
     SUBCASE("ldexp") {

@@ -50,17 +50,17 @@ TEST_CASE("Rounding and remainder functions") {
 
         doubledouble pi("3.14159265358979323846264338327950");
 
-        CHECK (pi.ceil(1).to_float() - (float)3.2 < 1e-10);
-        CHECK (pi.ceil(2).to_float() - (float)3.15 < 1e-10);
-        CHECK (pi.ceil(3).to_float() - (float)3.142 < 1e-10);
-        CHECK (pi.ceil(4).to_float() - (float)3.1416 < 1e-10);
-        CHECK (pi.ceil(5).to_float() - (float)3.14160 < 1e-10);
+        CHECK (pi.ceil(1).to_double() - (double)3.2 < 1e-10);
+        CHECK (pi.ceil(2).to_double() - (double)3.15 < 1e-10);
+        CHECK (pi.ceil(3).to_double() - (double)3.142 < 1e-10);
+        CHECK (pi.ceil(4).to_double() - (double)3.1416 < 1e-10);
+        CHECK (pi.ceil(5).to_double() - (double)3.14160 < 1e-10);
 
-        CHECK ((-pi).ceil(1).to_float() - (float)-3.1 < 1e-10);
-        CHECK ((-pi).ceil(2).to_float() - (float)-3.14 < 1e-10);
-        CHECK ((-pi).ceil(3).to_float() - (float)-3.141 < 1e-10);
-        CHECK ((-pi).ceil(4).to_float() - (float)-3.1415 < 1e-10);
-        CHECK ((-pi).ceil(5).to_float() - (float)-3.14159 < 1e-10);
+        CHECK ((-pi).ceil(1).to_double() - (double)-3.1 < 1e-10);
+        CHECK ((-pi).ceil(2).to_double() - (double)-3.14 < 1e-10);
+        CHECK ((-pi).ceil(3).to_double() - (double)-3.141 < 1e-10);
+        CHECK ((-pi).ceil(4).to_double() - (double)-3.1415 < 1e-10);
+        CHECK ((-pi).ceil(5).to_double() - (double)-3.14159 < 1e-10);
 
         CHECK (doubledouble::posnan().ceil().isnan() == std::isnan(std::ceil(posnan)));
         CHECK (doubledouble::negnan().ceil().isnan() == std::isnan(std::ceil(negnan)));
@@ -340,7 +340,7 @@ TEST_CASE("Rounding and remainder functions") {
         for (int i = 0; i < NUM_TESTS; i++) {
 
             double x = rand_double();
-            COMPARE (doubledouble(x).lround(), std::lround(x));
+            CHECK (doubledouble(x).lround() == std::lround(x));
         }
 
         CHECK (doubledouble::posnan().lround() == std::lround(posnan));
@@ -354,7 +354,7 @@ TEST_CASE("Rounding and remainder functions") {
         for (int i = 0; i < NUM_TESTS; i++) {
 
             double x = rand_double();
-            COMPARE (doubledouble(x).llround(), std::llround(x));
+            CHECK (doubledouble(x).llround() == std::llround(x));
         }
 
         CHECK (doubledouble::posnan().llround() == std::llround(posnan));
@@ -442,13 +442,13 @@ TEST_CASE("Rounding and remainder functions") {
         for (int i = 0; i < NUM_TESTS; i++) {
 
             double x = rand_double();
-            CHECK(doubledouble(x).lrint() == std::lrint(x));
+            CHECK (doubledouble(x).lrint() == std::lrint(x));
         }
 
-        CHECK(doubledouble::posnan().lrint() == std::lrint(posnan));
-        CHECK(doubledouble::negnan().lrint() == std::lrint(negnan));
-        CHECK(doubledouble::posinf().lrint() == std::lrint(posinf));
-        CHECK(doubledouble::neginf().lrint() == std::lrint(neginf));
+        CHECK (doubledouble::posnan().lrint() == std::lrint(posnan));
+        CHECK (doubledouble::negnan().lrint() == std::lrint(negnan));
+        CHECK (doubledouble::posinf().lrint() == std::lrint(posinf));
+        CHECK (doubledouble::neginf().lrint() == std::lrint(neginf));
     }
 
     SUBCASE("llrint") {
@@ -456,13 +456,13 @@ TEST_CASE("Rounding and remainder functions") {
         for (int i = 0; i < NUM_TESTS; i++) {
 
             double x = rand_double();
-            CHECK(doubledouble(x).llrint() == std::llrint(x));
+            CHECK (doubledouble(x).llrint() == std::llrint(x));
         }
 
-        CHECK(doubledouble::posnan().llrint() == std::llrint(posnan));
-        CHECK(doubledouble::negnan().llrint() == std::llrint(negnan));
-        CHECK(doubledouble::posinf().llrint() == std::llrint(posinf));
-        CHECK(doubledouble::neginf().llrint() == std::llrint(neginf));
+        CHECK (doubledouble::posnan().llrint() == std::llrint(posnan));
+        CHECK (doubledouble::negnan().llrint() == std::llrint(negnan));
+        CHECK (doubledouble::posinf().llrint() == std::llrint(posinf));
+        CHECK (doubledouble::neginf().llrint() == std::llrint(neginf));
     }
 
     SUBCASE("nearbyint") {

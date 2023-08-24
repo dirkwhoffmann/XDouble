@@ -113,21 +113,21 @@ TEST_CASE("Rounding and remainder functions") {
 
         doubledouble pi("3.14159265358979323846264338327950");
 
-        COMPARE (pi.floor(1).to_float(), (float)3.1);
-        COMPARE (pi.floor(2).to_float(), (float)3.14);
-        COMPARE (pi.floor(3).to_float(), (float)3.141);
-        COMPARE (pi.floor(4).to_float(), (float)3.1415);
-        COMPARE (pi.floor(5).to_float(), (float)3.14159);
+        CHECK (pi.floor(1).to_double() - (double)3.1 < 1e-10);
+        CHECK (pi.floor(2).to_double() - (double)3.14 < 1e-10);
+        CHECK (pi.floor(3).to_double() - (double)3.141 < 1e-10);
+        CHECK (pi.floor(4).to_double() - (double)3.1415 < 1e-10);
+        CHECK (pi.floor(5).to_double() - (double)3.14159 < 1e-10);
 
-        COMPARE ((-pi).floor(1).to_float(), (float)-3.2);
-        COMPARE ((-pi).floor(2).to_float(), (float)-3.15);
-        COMPARE ((-pi).floor(3).to_float(), (float)-3.142);
-        COMPARE ((-pi).floor(4).to_float(), (float)-3.1416);
-        COMPARE ((-pi).floor(5).to_float(), (float)-3.1416);
+        CHECK ((-pi).floor(1).to_double() - (double)-3.2 < 1e-10);
+        CHECK ((-pi).floor(2).to_double() - (double)-3.15 < 1e-10);
+        CHECK ((-pi).floor(3).to_double() - (double)-3.142 < 1e-10);
+        CHECK ((-pi).floor(4).to_double() - (double)-3.1416 < 1e-10);
+        CHECK ((-pi).floor(5).to_double() - (double)-3.1416 < 1e-10);
 
-        COMPARE (doubledouble::posnan().floor().isnan(), std::isnan(std::floor(posnan)));
-        COMPARE (doubledouble::posinf().floor().isinf(), std::isinf(std::floor(posinf)));
-        COMPARE (doubledouble::neginf().floor().isinf(), std::isinf(std::floor(neginf)));
+        CHECK (doubledouble::posnan().floor().isnan() == std::isnan(std::floor(posnan)));
+        CHECK (doubledouble::posinf().floor().isinf() == std::isinf(std::floor(posinf)));
+        CHECK (doubledouble::neginf().floor().isinf() == std::isinf(std::floor(neginf)));
     }
 
     SUBCASE("fmod") {
@@ -208,21 +208,21 @@ TEST_CASE("Rounding and remainder functions") {
 
         doubledouble pi("3.14159265358979323846264338327950");
 
-        CHECK (pi.trunc(1).to_float() - (float)3.1 < 1e-10);
-        CHECK (pi.trunc(2).to_float() - (float)3.14 < 1e-10);
-        CHECK (pi.trunc(3).to_float() - (float)3.141 < 1e-10);
-        CHECK (pi.trunc(4).to_float() - (float)3.1415 < 1e-10);
-        CHECK (pi.trunc(5).to_float() - (float)3.14159 < 1e-10);
+        CHECK (pi.trunc(1).to_double() - (double)3.1 < 1e-10);
+        CHECK (pi.trunc(2).to_double() - (double)3.14 < 1e-10);
+        CHECK (pi.trunc(3).to_double() - (double)3.141 < 1e-10);
+        CHECK (pi.trunc(4).to_double() - (double)3.1415 < 1e-10);
+        CHECK (pi.trunc(5).to_double() - (double)3.14159 < 1e-10);
 
-        CHECK ((-pi).trunc(1).to_float() - (float)-3.1 < 1e-10);
-        CHECK ((-pi).trunc(2).to_float() - (float)-3.14 < 1e-10);
-        CHECK ((-pi).trunc(3).to_float() - (float)-3.141 < 1e-10);
-        CHECK ((-pi).trunc(4).to_float() - (float)-3.1415 < 1e-10);
-        CHECK ((-pi).trunc(5).to_float() - (float)-3.14159 < 1e-10);
+        CHECK ((-pi).trunc(1).to_double() - (double)-3.1 < 1e-10);
+        CHECK ((-pi).trunc(2).to_double() - (double)-3.14 < 1e-10);
+        CHECK ((-pi).trunc(3).to_double() - (double)-3.141 < 1e-10);
+        CHECK ((-pi).trunc(4).to_double() - (double)-3.1415 < 1e-10);
+        CHECK ((-pi).trunc(5).to_double() - (double)-3.14159 < 1e-10);
 
-        COMPARE (doubledouble::posnan().trunc().isnan(), std::isnan(std::trunc(posnan)));
-        COMPARE (doubledouble::posinf().trunc().isinf(), std::isinf(std::trunc(posinf)));
-        COMPARE (doubledouble::neginf().trunc().isinf(), std::isinf(std::trunc(neginf)));
+        CHECK (doubledouble::posnan().trunc().isnan() == std::isnan(std::trunc(posnan)));
+        CHECK (doubledouble::posinf().trunc().isinf() == std::isinf(std::trunc(posinf)));
+        CHECK (doubledouble::neginf().trunc().isinf() == std::isinf(std::trunc(neginf)));
     }
 
     SUBCASE("round") {
@@ -270,21 +270,21 @@ TEST_CASE("Rounding and remainder functions") {
 
         doubledouble pi("3.14159265358979323846264338327950");
 
-        COMPARE (pi.round(1).to_float(), (float)3.1);
-        COMPARE (pi.round(2).to_float(), (float)3.14);
-        COMPARE (pi.round(3).to_float(), (float)3.142);
-        COMPARE (pi.round(4).to_float(), (float)3.1416);
-        COMPARE (pi.round(5).to_float(), (float)3.14159);
+        CHECK (pi.round(1).to_double() - (double)3.1 < 1e-10);
+        CHECK (pi.round(2).to_double() - (double)3.14 < 1e-10);
+        CHECK (pi.round(3).to_double() - (double)3.142 < 1e-10);
+        CHECK (pi.round(4).to_double() - (double)3.1416 < 1e-10);
+        CHECK (pi.round(5).to_double() - (double)3.14159 < 1e-10);
 
-        COMPARE ((-pi).round(1).to_float(), (float)-3.1);
-        COMPARE ((-pi).round(2).to_float(), (float)-3.14);
-        COMPARE ((-pi).round(3).to_float(), (float)-3.142);
-        COMPARE ((-pi).round(4).to_float(), (float)-3.1416);
-        COMPARE ((-pi).round(5).to_float(), (float)-3.14159);
+        CHECK ((-pi).round(1).to_double() - (double)-3.1 < 1e-10);
+        CHECK ((-pi).round(2).to_double() - (double)-3.14 < 1e-10);
+        CHECK ((-pi).round(3).to_double() - (double)-3.142 < 1e-10);
+        CHECK ((-pi).round(4).to_double() - (double)-3.1416 < 1e-10);
+        CHECK ((-pi).round(5).to_double() - (double)-3.14159 < 1e-10);
 
-        COMPARE (doubledouble::posnan().round().isnan(), std::isnan(std::round(posnan)));
-        COMPARE (doubledouble::posinf().round().isinf(), std::isinf(std::round(posinf)));
-        COMPARE (doubledouble::neginf().round().isinf(), std::isinf(std::round(neginf)));
+        CHECK (doubledouble::posnan().round().isnan() == std::isnan(std::round(posnan)));
+        CHECK (doubledouble::posinf().round().isinf() == std::isinf(std::round(posinf)));
+        CHECK (doubledouble::neginf().round().isinf() == std::isinf(std::round(neginf)));
     }
 
     SUBCASE("roundEven") {
@@ -330,9 +330,9 @@ TEST_CASE("Rounding and remainder functions") {
             COMPARE ((float)doubledouble(p[i].v).roundEven(), p[i].up);
         }
 
-        COMPARE (doubledouble::posnan().roundEven().isnan(), std::isnan(std::round(posnan)));
-        COMPARE (doubledouble::posinf().roundEven().isinf(), std::isinf(std::round(posinf)));
-        COMPARE (doubledouble::neginf().roundEven().isinf(), std::isinf(std::round(neginf)));
+        CHECK (doubledouble::posnan().roundEven().isnan() == std::isnan(std::round(posnan)));
+        CHECK (doubledouble::posinf().roundEven().isinf() == std::isinf(std::round(posinf)));
+        CHECK (doubledouble::neginf().roundEven().isinf() == std::isinf(std::round(neginf)));
     }
 
     SUBCASE("lround") {

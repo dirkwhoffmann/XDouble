@@ -103,7 +103,7 @@ TEST_CASE("Quad-double tests") {
         CHECK (multidouble::inf().isinf());
         CHECK (multidouble::nan().isnan());
         CHECK (x.isnormal());
-        CHECK (x.signbit() == 0);
+        CHECK (x.signbit() == false);
         CHECK (!x.iszero());
         CHECK (!x.isone());
         CHECK (!x.isnegative());

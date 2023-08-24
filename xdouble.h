@@ -562,7 +562,7 @@ template <class T> struct XDouble {
 
     XDouble<T> &operator/=(const XDouble<T> &rhs)
     {
-        if (isfinite() && rhs.isfinite() && !rhs.iszero()) {
+        if (isfinite() && !iszero() && rhs.isfinite() && !rhs.iszero()) {
 
             XDouble<T> r = *this;
             T q1 = r.h / rhs.h;

@@ -193,6 +193,14 @@ TEST_CASE("Basic arithmetic") {
 
                 auto x = rand_double(), y = rand_double();
                 if (y == 0.0) continue;
+                if (signbit((doubledouble(x) / doubledouble(y)).to_float()) != signbit(float(x / y))) {
+                    std::cout << "x = " << x << std::endl;
+                    std::cout << "y = " << y << std::endl;
+                    std::cout << "x / y = " << x / y << std::endl;
+                    std::cout << "s(x / y) = " << signbit(doubledouble(x) / doubledouble(y)) << std::endl;
+                    std::cout << "s(x / y) = " << signbit(float(x / y)) << std::endl;
+
+                }
                 COMPARE ((doubledouble(x) / doubledouble(y)).to_float(), float(x / y));
             }
         }

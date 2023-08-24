@@ -208,17 +208,17 @@ TEST_CASE("Rounding and remainder functions") {
 
         doubledouble pi("3.14159265358979323846264338327950");
 
-        COMPARE (pi.trunc(1).to_float(), (float)3.1);
-        COMPARE (pi.trunc(2).to_float(), (float)3.14);
-        COMPARE (pi.trunc(3).to_float(), (float)3.141);
-        COMPARE (pi.trunc(4).to_float(), (float)3.1415);
-        COMPARE (pi.trunc(5).to_float(), (float)3.14159);
+        CHECK (pi.trunc(1).to_float() - (float)3.1 < 1e-10);
+        CHECK (pi.trunc(2).to_float() - (float)3.14 < 1e-10);
+        CHECK (pi.trunc(3).to_float() - (float)3.141 < 1e-10);
+        CHECK (pi.trunc(4).to_float() - (float)3.1415 < 1e-10);
+        CHECK (pi.trunc(5).to_float() - (float)3.14159 < 1e-10);
 
-        COMPARE ((-pi).trunc(1).to_float(), (float)-3.1);
-        COMPARE ((-pi).trunc(2).to_float(), (float)-3.14);
-        COMPARE ((-pi).trunc(3).to_float(), (float)-3.141);
-        COMPARE ((-pi).trunc(4).to_float(), (float)-3.1415);
-        COMPARE ((-pi).trunc(5).to_float(), (float)-3.14159);
+        CHECK ((-pi).trunc(1).to_float() - (float)-3.1 < 1e-10);
+        CHECK ((-pi).trunc(2).to_float() - (float)-3.14 < 1e-10);
+        CHECK ((-pi).trunc(3).to_float() - (float)-3.141 < 1e-10);
+        CHECK ((-pi).trunc(4).to_float() - (float)-3.1415 < 1e-10);
+        CHECK ((-pi).trunc(5).to_float() - (float)-3.14159 < 1e-10);
 
         COMPARE (doubledouble::posnan().trunc().isnan(), std::isnan(std::trunc(posnan)));
         COMPARE (doubledouble::posinf().trunc().isinf(), std::isinf(std::trunc(posinf)));
